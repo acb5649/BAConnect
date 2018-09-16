@@ -92,7 +92,7 @@
 			Education:
 			<br />
 			Degree:
-			<input name = "addEntry" class = "btn" type = "button" onclick = "MakeDegreeEntry()" value = "Add degree" />
+			<input name = "addEntry" class = "btn" type = "button" value = "Add degree" onclick = "document.write('<?php MakeDegreeEntry()?>');" />
 			<fieldset>
 				<select name = "DegreeType">
 				 	<?php print DegreeTypeList(); ?>
