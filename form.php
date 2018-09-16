@@ -50,7 +50,7 @@
 			}
 		?>
 
-		<form action="testPage.php" method="post">
+		<form action="form.php" method="post">
 			<?php
 				print $msg;
 				$msg = "";
@@ -64,9 +64,7 @@
 		<!--	Confirm Email: <input type="text" maxlength = "50" value="" name="cemail" id="email"   /> <br /> -->
 
 			Password: <input type="text" maxlength = "50" value="" name="pwd" id="pwd"   />(Must be longer than 12 characters and contains at least 1 digit) <br />
-
 		<!--	Confirm Password: <input type="text" maxlength = "50" value="" name="confirmPwd" id="confirmPwd"   /> <br /> -->
-
 			Gender:
 				<input type = "radio" name = "gender" value = "Male" checked = "checked" />Male
 				<input type = "radio" name = "gender" value = "Female" />Female <br />
@@ -75,6 +73,10 @@
 				<?php print countryList(); ?>
 			</select>
 
+			<br />
+
+			Phone number:
+			<input type = "tel" value = "" name = "PhoneNumber" />
 			<br />
 
 			Status:
@@ -89,10 +91,25 @@
 
 			Education:
 			<br />
-			 Degree:
+			Degree:
+			<input name = "addEntry" class = "btn" type = "button" onclick = "MakeDegreeEntry()" value = "Add degree" />
+			<fieldset>
+				<select name = "DegreeType">
+				 	<?php print DegreeTypeList(); ?>
+				</select>
 
-
-
+				<input type = "text" maxlength = "50" value = "" placeholder = "School Name" name = "School" id = "School" />
+				<input type = "text" value = "" placeholder = "Major" name = "Major" id = "Major" />
+				Year Graduated:
+				<input type = "number" maxlength = "4" value = "2022" name = "gradYear" id = "gradYear" />
+		</fieldset>
+			<br />
+			<?php
+			//	if(isset($_POST['addEntry'])){
+		//			MakeDegreeEntry();
+		//		}
+			?>
+			<br />
 			<input name="enter" class="btn" type="submit" value="Submit" />
 		</form>
 	</body>
