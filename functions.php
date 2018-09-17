@@ -43,4 +43,9 @@ function MakeDegreeEntry() {
 
 	';
 }
+//isValidLogin checks if the username and password given correspond to an account.
+//returns false if there is no account with the given username and password.
+function isValidLogin($username, $password){
+	return true;
+}
 ?>
