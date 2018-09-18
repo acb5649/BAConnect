@@ -133,8 +133,7 @@
         <span onclick="document.getElementById('loginModal').style.display='none'" class="w3-button w3-pink w3-xlarge w3-display-topright">×</span>
         <h2 class="w3-wide"><i class="w3-margin-right"></i>Log In</h2>
       </header>
-      <form>
-      <div class="w3-container">
+      <form class="w3-container">
         <p><label><i class="fa fa-user"></i> Username or Email</label></p>
         <input class="w3-input w3-border" type="text" placeholder="">
         <p><label><i class="fa fa-lock"></i> Password</label></p>
@@ -142,8 +141,7 @@
         <button class="w3-button w3-block w3-pink w3-padding-16 w3-section w3-right">Log In <i class="fa fa-check"></i></button>
         <button class="w3-button w3-red w3-section" onclick="document.getElementById('loginModal').style.display='none'">Close <i class="fa fa-remove"></i></button>
         <p class="w3-right">Need an <a href="#" class="w3-text-blue" onclick="document.getElementById('registerModal').style.display='block'">account?</a></p>
-      </div>
-    </form>
+      </form>
     </div>
   </div>
 
@@ -153,35 +151,33 @@
         <span onclick="document.getElementById('registerModal').style.display='none'" class="w3-button w3-pink w3-xlarge w3-display-topright">×</span>
         <h2 class="w3-wide"><i class="w3-margin-right"></i>Register</h2>
       </header>
-      <form>
-      <div class="w3-container">
+      <form class="w3-container">
         <label>First name</label>
         <input class="w3-input w3-border" type="text" maxlength = "50" value="" name="firstName" id="firstName"/>
         <label>Last name</label>
         <input class="w3-input w3-border" type="text" maxlength = "50" value="" name="lastName" id="lastName"/>
-        <p><label>Email</label></p>
+        <label>Email</label>
         <input class="w3-input w3-border" type="text" maxlength = "50" value="" name="email" id="email"/>
-        <p><label>Password (Must be longer than 12 characters and contains at least 1 digit)</label></p>
+        <label>Password (Must be longer than 12 characters and contains at least 1 digit)</label>
         <input class="w3-input w3-border" type="password" maxlength = "50" value="" name="pwd" id="pwd"/>
-        <p><label>Gender</label></p>
+        <label>Gender</label>
         <label>Male</label><input class="w3-radio w3-border" type = "radio" name = "gender" value = "Male" checked = "checked"/>
 				<label>Female</label><input class="w3-radio w3-border" type = "radio" name = "gender" value = "Female"/>
-        <p><label>Country</label></p>
+        <label>Country</label>
         <select class="w3-select w3-border" name = "country">
   				<?php print countryList(); ?>
   			</select>
-        <p><label>Phone number</label></p>
+        <label>Phone number</label>
         <input class="w3-input w3-border" type = "tel" value = "" name = "PhoneNumber" />
-        <p><label>Status</label></p>
+        <label>Status</label>
         <label>Student</label><input class="w3-check w3-border" type="checkbox" name = "student" value=1 />
   			<label>Working Professional</label><input class="w3-check w3-border" type="checkbox" name = "Working Professional" value=1 />
-        <p><label>Education</label></p>
+        <label>Education</label>
         <input name = "addEntry" class="w3-button w3-block w3-pink w3-padding-16 w3-section w3-right" type = "button" value = "Add degree" onclick = "addField()" />
   			<fieldset id="education"></fieldset>
 
         <button class="w3-button w3-block w3-pink w3-padding-16 w3-section w3-right" type="submit">Register <i class="fa fa-check"></i></button>
         <button class="w3-button w3-red w3-section" onclick="document.getElementById('registerModal').style.display='none'">Close <i class="fa fa-remove"></i></button>
-      </div>
       </form>
     </div>
   </div>
