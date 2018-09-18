@@ -1,8 +1,8 @@
 <?php
-	require_once "functions.php";
+    require_once "functions.php";
 
-	$msg = "";
-	$term = "You must agree to the terms and conditions";
+    $msg = "";
+    $term = "You must agree to the terms and conditions";
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -90,36 +90,35 @@
 	<body onload="addField();">
 
 		<?php
-			if (isset($_POST['enter']))
-			{
-				//just naming the variables now
+            if (isset($_POST['enter'])) {
+                //just naming the variables now
 
-				$firstName = "";
-				$lastName = "";
-				$middleName = "";
-				$address = "";
-				$gender = "";
-				$phone = "";	//user may have multiple phone numbers
+                $firstName = "";
+                $lastName = "";
+                $middleName = "";
+                $address = "";
+                $gender = "";
+                $phone = "";	//user may have multiple phone numbers
 
-				$password = "";
-				$username = "";
+                $password = "";
+                $username = "";
 
-				$email = "";
-				$student = false;	//user can be a student, a working professional, or both
-				$working = false;
-				$field = "";	//field of profession, if working
-				$employer = "";	//name of employer, if working
-				$numDegrees = 0;
-				$Degrees[] = null; //array containing $Degrees
-												//degrees may need to be objects
-			}
-		?>
+                $email = "";
+                $student = false;	//user can be a student, a working professional, or both
+                $working = false;
+                $field = "";	//field of profession, if working
+                $employer = "";	//name of employer, if working
+                $numDegrees = 0;
+                $Degrees[] = null; //array containing $Degrees
+                                                //degrees may need to be objects
+            }
+        ?>
 
 		<form action="form.php" method="post">
 			<?php
-				print $msg;
-				$msg = "";
-			?>
+                print $msg;
+                $msg = "";
+            ?>
 			<br />
 
 			First Name: <input type="text" maxlength = "50" value="" name="firstName" id="firstName"   /> <br />
