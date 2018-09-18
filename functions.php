@@ -19,12 +19,7 @@ function CountryList() {
 }
 
 function DegreeTypeList() {
-	$list = '<option value = "HS">High School</option>
-					<option value = "BS">Bachelors Degree</option>
-					<option value = "MS">Masters Degree</option>
-					<option value = "PHD">PHD</option>';
-
-	return $list;
+	return '\n<option value = "HS">High School</option>\n<option value = "BS">Bachelors Degree</option>\n<option value = "MS">Masters Degree</option>\n<option value = "PHD">PHD</option>\n';
 }
 
 function MakeDegreeEntry() {

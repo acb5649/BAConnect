@@ -13,6 +13,8 @@
 
 <html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
 	<title>Functions Demo</title>
 	<style type = "text/css">
   		h1, h2 {
@@ -22,7 +24,8 @@
 	<script type='text/javascript'>
         	function addFields(){
            	 // Number of inputs to create
-            	var number = document.getElementById("educationMember").value;
+                var number = document.querySelectorAll(".educationMember").length + 1;
+                console.log("New education number: " + number);
             	// Container <div> where dynamic content will be placed
             	var container = document.getElementById("education");
             	// Clear previous contents of the container
@@ -32,10 +35,10 @@
             	for (i=0;i<number;i++){
                 	// Append a node with a random text
 			var parent = document.createElement("div")
-			parent.id = "educationMember"
+			parent.className = "educationMember"
 			
 			var select = document.createElement("select")
-			select.appendChild(document.createTextNode("<?php print DegreeTypeList(); ?>"))
+			select.innerHTML = '<?php print DegreeTypeList(); ?>'
 			parent.appendChild(select)
 			
 			var schoolNameInput = document.createElement("input");
@@ -147,7 +150,7 @@
 			Degree:
 			<input name = "addEntry" class = "btn" type = "button" value = "Add degree" onclick = "addFields()" />
 			<fieldset id="education">
-				<div id="educationMember">
+				<div class="educationMember">
 				<select name = "DegreeType">
 				 	<?php print DegreeTypeList(); ?>
 				</select>
