@@ -19,6 +19,59 @@
     		text-align: center;
   		}
 	</style>
+	<script type='text/javascript'>
+        	function addFields(){
+           	 // Number of inputs to create
+            	var number = document.getElementById("educationMember").value;
+            	// Container <div> where dynamic content will be placed
+            	var container = document.getElementById("education");
+            	// Clear previous contents of the container
+            	while (container.hasChildNodes()) {
+                	container.removeChild(container.lastChild);
+            	}
+            	for (i=0;i<number;i++){
+                	// Append a node with a random text
+			var parent = document.createElement("div")
+			parent.id = "educationMember"
+			
+			var select = document.createElement("select")
+			select.appendChild(document.createTextNode("<?php print DegreeTypeList(); ?>"))
+			parent.appendChild(select)
+			
+			var schoolNameInput = document.createElement("input");
+			schoolNameInput.type = "text"
+			schoolNameInput.maxlength = 50
+			schoolNameInput.value = ""
+			schoolNameInput.placeholder = "School Name"
+			schoolNameInput.name = "schoolName_" + i 
+			schoolNameInput.id = "schoolName_" + i
+			parent.appendChild(schoolNameInput)
+			
+			var majorInput = document.createElement("input");
+			majorInput.type = "text"
+			majorInput.maxlength = 50
+			majorInput.value = ""
+			majorInput.placeholder = "Major"
+			majorInput.name = "major_" + i 
+			majorInput.id = "major_" + i
+			parent.appendChild(majorInput)
+			
+			parent.appendChild(document.createTextNode("Year Graduated:"))
+			
+			var graduationYearInput = document.createElement("input")
+			graduationYearInput.type = "number"
+			graduationYearInput.maxlength = 4
+			graduationYearInput.value = 2022
+			graduationYearInput.name = "gradYear_" + i
+			graduationYearInput.id = "gradYear_" + i
+			parent.appendChild(graduationYearInput)
+		
+                	container.appendChild(parent);
+                	// Append a line break 
+                	container.appendChild(document.createElement("br"));
+            	}
+        }
+    </script>
 
 	</head>
 
@@ -92,8 +145,9 @@
 			Education:
 			<br />
 			Degree:
-			<input name = "addEntry" class = "btn" type = "button" value = "Add degree" onclick = "document.write('<?php MakeDegreeEntry()?>');" />
-			<fieldset>
+			<input name = "addEntry" class = "btn" type = "button" value = "Add degree" onclick = "addFields()" />
+			<fieldset id="education">
+				<div id="educationMember">
 				<select name = "DegreeType">
 				 	<?php print DegreeTypeList(); ?>
 				</select>
@@ -102,13 +156,8 @@
 				<input type = "text" value = "" placeholder = "Major" name = "Major" id = "Major" />
 				Year Graduated:
 				<input type = "number" maxlength = "4" value = "2022" name = "gradYear" id = "gradYear" />
-		</fieldset>
-			<br />
-			<?php
-			//	if(isset($_POST['addEntry'])){
-		//			MakeDegreeEntry();
-		//		}
-			?>
+				</div>
+			</fieldset>
 			<br />
 			<input name="enter" class="btn" type="submit" value="Submit" />
 		</form>
