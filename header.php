@@ -103,10 +103,46 @@
 
               container.appendChild(parent);
       }
+
+    function createWork(){
+        var container = document.getElementById("work");
+
+        var parent = document.createElement("div")
+        parent.className = "WorkSection"
+        parent.id = "WorkSection"
+
+        var placeOfEmployment = document.createElement("input")
+        placeOfEmployment.type = "text"
+        placeOfEmployment.maxlength = 50
+        placeOfEmployment.value = ""
+        placeOfEmployment.placeholder = "Name of Business"
+        placeOfEmployment.name = "businessName"
+        placeOfEmployment.id = "businessName"
+        placeOfEmployment.className = "w3-input w3-border"
+        parent.appendChild(placeOfEmployment)
+
+        var jobTitle = document.createElement("input")
+        jobTitle.type = "text"
+        jobTitle.maxlength = 50
+        jobTitle.value = ""
+        jobTitle.placeholder = "Job Title"
+        jobTitle.name = "jobTitle"
+        jobTitle.id = "jobTitle"
+        jobTitle.className = "w3-input w3-border"
+        parent.appendChild(jobTitle)
+
+        container.appendChild(parent);
+    }
+
+    function init(){
+        addField();
+        createWork();
+    }
+
   </script>
 </head>
 
-<body onload="addField();">
+<body onload="init();">
 
 <!-- Navbar -->
 <div class="w3-top">
@@ -175,6 +211,8 @@
         <label>Education</label>
         <input name = "addEntry" class="w3-button w3-block w3-pink w3-padding-16 w3-section w3-right" type = "button" value = "Add degree" onclick = "addField()" />
   			<fieldset id="education"></fieldset>
+        <label>Work</label>
+        <fieldset id="work"></fieldset>
 
         <button class="w3-button w3-block w3-pink w3-padding-16 w3-section w3-right" type="submit">Register <i class="fa fa-check"></i></button>
         <button class="w3-button w3-red w3-section" onclick="document.getElementById('registerModal').style.display='none'">Close <i class="fa fa-remove"></i></button>
