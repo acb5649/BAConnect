@@ -95,7 +95,7 @@
               //<input name = "addEntry" class = "btn" type = "button" value = "Add degree" onclick = "addField()" />
 
               var deleteInputFieldButton = document.createElement("input")
-              deleteInputFieldButton.className = "w3-button w3-pink w3-padding-16 w3-right"
+              deleteInputFieldButton.className = "w3-button w3-lime w3-padding-16 w3-right"
               deleteInputFieldButton.type = "button"
               deleteInputFieldButton.value = "Remove Degree"
               deleteInputFieldButton.onclick = function(){removeField(number);}
@@ -146,7 +146,7 @@
 
 <!-- Navbar -->
 <div class="w3-top">
-  <div class="w3-bar w3-pink w3-card">
+  <div class="w3-bar w3-lime w3-card">
     <!-- The homepage will have a feed of the newest users and updated users -->
     <a class="w3-bar-item w3-button w3-padding-large">BAConnect</a>
     <!-- If user is logged in, this link becomes a link to the user's profile -->
@@ -165,8 +165,8 @@
   <!-- Modals -->
   <div id="loginModal" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
-      <header class="w3-container w3-pink w3-center w3-padding-32">
-        <span onclick="document.getElementById('loginModal').style.display='none'" class="w3-button w3-pink w3-xlarge w3-display-topright">×</span>
+      <header class="w3-container w3-lime w3-center w3-padding-32">
+        <span onclick="document.getElementById('loginModal').style.display='none'" class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
         <h2 class="w3-wide"><i class="w3-margin-right"></i>Log In</h2>
       </header>
       <form class="w3-container">
@@ -174,7 +174,7 @@
         <input class="w3-input w3-border" type="text" placeholder="">
         <p><label><i class="fa fa-lock"></i> Password</label></p>
         <input class="w3-input w3-border" type="password" placeholder="">
-        <button class="w3-button w3-block w3-pink w3-padding-16 w3-section w3-right">Log In <i class="fa fa-check"></i></button>
+        <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right">Log In <i class="fa fa-check"></i></button>
         <button class="w3-button w3-red w3-section" onclick="document.getElementById('loginModal').style.display='none'">Close <i class="fa fa-remove"></i></button>
         <p class="w3-right">Need an <a href="#" class="w3-text-blue" onclick="document.getElementById('registerModal').style.display='block'">account?</a></p>
       </form>
@@ -183,8 +183,8 @@
 
   <div id="registerModal" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
-      <header class="w3-container w3-pink w3-center w3-padding-32">
-        <span onclick="document.getElementById('registerModal').style.display='none'" class="w3-button w3-pink w3-xlarge w3-display-topright">×</span>
+      <header class="w3-container w3-lime w3-center w3-padding-32">
+        <span onclick="document.getElementById('registerModal').style.display='none'" class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
         <h2 class="w3-wide"><i class="w3-margin-right"></i>Register</h2>
       </header>
       <form class="w3-container">
@@ -209,12 +209,12 @@
         <label>Student</label><input class="w3-check w3-border" type="checkbox" name = "student" value=1 />
   			<label>Working Professional</label><input class="w3-check w3-border" type="checkbox" name = "Working Professional" value=1 />
         <label>Education</label>
-        <input name = "addEntry" class="w3-button w3-block w3-pink w3-padding-16 w3-section w3-right" type = "button" value = "Add degree" onclick = "addField()" />
+        <input name = "addEntry" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type = "button" value = "Add degree" onclick = "addField()" />
   			<fieldset id="education"></fieldset>
         <label>Work</label>
         <fieldset id="work"></fieldset>
 
-        <button class="w3-button w3-block w3-pink w3-padding-16 w3-section w3-right" type="submit">Register <i class="fa fa-check"></i></button>
+        <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit">Register <i class="fa fa-check"></i></button>
         <button class="w3-button w3-red w3-section" onclick="document.getElementById('registerModal').style.display='none'">Close <i class="fa fa-remove"></i></button>
       </form>
     </div>

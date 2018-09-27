@@ -55,7 +55,7 @@ body, html {
 
 <!-- Navbar -->
 <div class="w3-top">
-  <div class="w3-bar w3-pink w3-card">
+  <div class="w3-bar w3-lime w3-card">
     <!-- The homepage will have a feed of the newest users and updated users -->
     <a class="w3-bar-item w3-button w3-padding-large">BAConnect</a>
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('editDataModal').style.display='block'">EDIT INFORMATION</a>
@@ -65,7 +65,7 @@ body, html {
 <!-- First Parallax Image with Logo Text -->
 <div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
   <div class="w3-display-middle" style="white-space:nowrap;">
-    <span class="w3-center w3-padding-large w3-pink w3-xlarge w3-wide w3-animate-opacity">SUCCESS!<span class="w3-hide-small"></span></span>
+    <span class="w3-center w3-padding-large w3-lime w3-xlarge w3-wide w3-animate-opacity">SUCCESS!<span class="w3-hide-small"></span></span>
   </div>
 </div>
 

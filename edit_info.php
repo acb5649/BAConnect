@@ -102,7 +102,7 @@
               //<input name = "addEntry" class = "btn" type = "button" value = "Add degree" onclick = "addField()" />
 
               var deleteInputFieldButton = document.createElement("input")
-              deleteInputFieldButton.className = "w3-button w3-pink w3-padding-16 w3-right"
+              deleteInputFieldButton.className = "w3-button w3-lime w3-padding-16 w3-right"
               deleteInputFieldButton.type = "button"
               deleteInputFieldButton.value = "Remove Degree"
               deleteInputFieldButton.onclick = function(){removeField(number);}
@@ -153,7 +153,7 @@
 
 <!-- Navbar -->
 <div class="w3-top">
-  <div class="w3-bar w3-pink w3-card">
+  <div class="w3-bar w3-lime w3-card">
     <!-- The homepage will have a feed of the newest users and updated users -->
     <a class="w3-bar-item w3-button w3-padding-large">BAConnect</a>
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('editDataModal').style.display='block'">EDIT INFORMATION</a>
@@ -166,8 +166,8 @@
   <!-- Modals -->
   <div id="editDataModal" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
-      <header class="w3-container w3-pink w3-center w3-padding-32">
-        <span onclick="document.getElementById('registerModal').style.display='none'" class="w3-button w3-pink w3-xlarge w3-display-topright">×</span>
+      <header class="w3-container w3-lime w3-center w3-padding-32">
+        <span onclick="document.getElementById('registerModal').style.display='none'" class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
         <h2 class="w3-wide"><i class="w3-margin-right"></i>Edit Information</h2>
       </header>
       <form class="w3-container">
@@ -193,12 +193,12 @@
         <label>Student</label><input class="w3-check w3-border" type="checkbox" name = "student" value=1 <?php if ($student) print 'checked="checked"'; ?> />
   			<label>Working Professional</label><input class="w3-check w3-border" type="checkbox" name = "Working Professional" value=1 <?php if ($working) print 'checked="checked"'; ?> />
         <label>Education</label>
-        <input name = "addEntry" class="w3-button w3-block w3-pink w3-padding-16 w3-section w3-right" type = "button" value = "Add degree" onclick = "addField()" />
+        <input name = "addEntry" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type = "button" value = "Add degree" onclick = "addField()" />
   			<fieldset id="education"></fieldset>
         <label>Work</label>
         <fieldset id="work"></fieldset>
 
-        <button class="w3-button w3-block w3-pink w3-padding-16 w3-section w3-right" type="submit">Save<i class="fa fa-check"></i></button>
+        <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit">Save<i class="fa fa-check"></i></button>
         <button class="w3-button w3-red w3-section" onclick="document.getElementById('editDataModal').style.display='none'">Close <i class="fa fa-remove"></i></button>
       </form>
     </div>
