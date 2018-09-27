@@ -153,7 +153,7 @@
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('loginModal').style.display='block'">LOG IN</a>
     <!-- If user is logged in, don't show this link -->
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('registerModal').style.display='block'">REGISTER</a>
-    <a class="w3-bar-item w3-button w3-padding-large w3-hide-small">CONTACT</a>
+    <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('forgotModal').style.display='block'">FORGOT LOGIN</a>
     <!-- Admin login button -->
     <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-cogs"></i></a>
   </div>
@@ -212,10 +212,27 @@
         <input name = "addEntry" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type = "button" value = "Add degree" onclick = "addField()" />
   			<fieldset id="education"></fieldset>
         <label>Work</label>
+        <input name = "addWorkEntry" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type = "button" value = "Add empoyment" onclick = "addWork()" />
         <fieldset id="work"></fieldset>
 
         <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit">Register <i class="fa fa-check"></i></button>
         <button class="w3-button w3-red w3-section" onclick="document.getElementById('registerModal').style.display='none'">Close <i class="fa fa-remove"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <div id="forgotModal" class="w3-modal">
+    <div class="w3-modal-content w3-animate-top w3-card-4">
+      <header class="w3-container w3-lime w3-center w3-padding-32">
+        <span onclick="document.getElementById('forgotModal').style.display='none'" class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
+        <h2 class="w3-wide"><i class="w3-margin-right"></i>Reset Password</h2>
+      </header>
+      <form class="w3-container">
+        <p><label><i class="fa fa-user"></i> Username or Email</label></p>
+        <input class="w3-input w3-border" type="text" placeholder="">
+        <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right">Reset Password <i class="fa fa-check"></i></button>
+        <button class="w3-button w3-red w3-section" onclick="document.getElementById('forgotModal').style.display='none'">Close <i class="fa fa-remove"></i></button>
+        <p class="w3-right">Need an <a href="#" class="w3-text-blue" onclick="document.getElementById('registerModal').style.display='block'">account?</a></p>
       </form>
     </div>
   </div>
@@ -236,6 +253,12 @@ var regModal = document.getElementById('registerModal');
 window.onclick = function(event) {
   if (event.target == modal) {
     regModal.style.display = "none";
+  }
+}
+var forgModal = document.getElementById('forgotModal');
+window.onclick = function(event) {
+  if (event.target == modal) {
+    forgModal.style.display = "none";
   }
 }
 </script>
