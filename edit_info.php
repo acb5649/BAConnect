@@ -171,31 +171,32 @@
         <h2 class="w3-wide"><i class="w3-margin-right"></i>Edit Information</h2>
       </header>
       <form class="w3-container">
-        <label>First name</label>
+        <p><label>First name</label></p>
         <input class="w3-input w3-border" type="text" maxlength = "50" value="<?php print $firstName; ?>" name="firstName" id="firstName"/>
-        <label>Last name</label>
+        <p><label>Last name</label></p>
         <input class="w3-input w3-border" type="text" maxlength = "50" value="<?php print $lastName; ?>" name="lastName" id="lastName"/>
-        <label>Email</label>
+        <p><label>Email</label></p>
         <input class="w3-input w3-border" type="text" maxlength = "50" value="<?php print $email; ?>" name="email" id="email"/>
-        <label>Password (Must be longer than 12 characters and contains at least 1 digit)</label>
+        <p><label>Password (Must be longer than 12 characters and contains at least 1 digit)</label></p>
         <input class="w3-input w3-border" type="password" maxlength = "50" value="<?php print $password; ?>" name="pwd" id="pwd"/>
-        <label>Gender</label>
+        <p><label>Gender</label></p>
         <label>Male</label><input class="w3-radio w3-border" type = "radio" name = "gender" value = "Male" <?php if ($gender == "Male") print 'checked = "checked"'; ?> />
 				<label>Female</label><input class="w3-radio w3-border" type = "radio" name = "gender" value = "Female" <?php if ($gender == "Female") print 'checked = "checked"'; ?> />
+				<label>Nonbinary</label><input class="w3-radio w3-border" type = "radio" name = "gender" value = "NB" <?php if ($gender == "NB") print 'checked = "checked"'; ?> />
         <!-- Need to change how country is prepared after there is a backend -->
-        <label>Country</label>
+        <p><label>Country</label></p>
         <select class="w3-select w3-border" name = "country">
   				<?php print countryList(); ?>
   			</select>
-        <label>Phone number</label>
+        <p><label>Phone number</label></p>
         <input class="w3-input w3-border" type = "tel" value = "<?php print $phone; ?>" name = "PhoneNumber" />
         <label>Status</label>
         <label>Student</label><input class="w3-check w3-border" type="checkbox" name = "student" value=1 <?php if ($student) print 'checked="checked"'; ?> />
   			<label>Working Professional</label><input class="w3-check w3-border" type="checkbox" name = "Working Professional" value=1 <?php if ($working) print 'checked="checked"'; ?> />
-        <label>Education</label>
+        <p><label>Education</label></p>
         <input name = "addEntry" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type = "button" value = "Add degree" onclick = "addField()" />
   			<fieldset id="education"></fieldset>
-        <label>Work</label>
+        <p><label>Work History</label></p>
         <fieldset id="work"></fieldset>
 
         <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit">Save<i class="fa fa-check"></i></button>
