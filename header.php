@@ -188,30 +188,31 @@
         <h2 class="w3-wide"><i class="w3-margin-right"></i>Register</h2>
       </header>
       <form class="w3-container">
-        <label>First name</label>
+        <p><label>First name</label></p>
         <input class="w3-input w3-border" type="text" maxlength = "50" value="" name="firstName" id="firstName"/>
-        <label>Last name</label>
+        <p><label>Last name</label></p>
         <input class="w3-input w3-border" type="text" maxlength = "50" value="" name="lastName" id="lastName"/>
-        <label>Email</label>
+        <p><label>Email</label></p>
         <input class="w3-input w3-border" type="text" maxlength = "50" value="" name="email" id="email"/>
-        <label>Password (Must be longer than 12 characters and contains at least 1 digit)</label>
+        <p><label>Password (Must be longer than 12 characters and contains at least 1 digit)</label></p>
         <input class="w3-input w3-border" type="password" maxlength = "50" value="" name="pwd" id="pwd"/>
-        <label>Gender</label>
+        <p><label>Gender</label></p>
         <label>Male</label><input class="w3-radio w3-border" type = "radio" name = "gender" value = "Male" checked = "checked"/>
 				<label>Female</label><input class="w3-radio w3-border" type = "radio" name = "gender" value = "Female"/>
-        <label>Country</label>
+        <label>Nonbinary</label><input class="w3-radio w3-border" type = "radio" name = "gender" value = "NB"/>
+        <p><label>Country</label></p>
         <select class="w3-select w3-border" name = "country">
   				<?php print countryList(); ?>
   			</select>
-        <label>Phone number</label>
+        <p><label>Phone number</label></p>
         <input class="w3-input w3-border" type = "tel" value = "" name = "PhoneNumber" />
-        <label>Status</label>
+        <p><label>Status</label></p>
         <label>Student</label><input class="w3-check w3-border" type="checkbox" name = "student" value=1 />
   			<label>Working Professional</label><input class="w3-check w3-border" type="checkbox" name = "Working Professional" value=1 />
-        <label>Education</label>
+        <p><label>Education</label></p>
         <input name = "addEntry" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type = "button" value = "Add degree" onclick = "addField()" />
   			<fieldset id="education"></fieldset>
-        <label>Work</label>
+        <p><label>Work History</label></p>
         <input name = "addWorkEntry" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type = "button" value = "Add empoyment" onclick = "addWork()" />
         <fieldset id="work"></fieldset>
 
