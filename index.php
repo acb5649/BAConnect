@@ -149,6 +149,7 @@
         <!-- Navbar -->
         <div class="w3-top">
             <div class="w3-bar w3-lime w3-card">
+                <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="toggleNav()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
                 <!-- The homepage will have a feed of the newest users and updated users -->
                 <a class="w3-bar-item w3-button w3-padding-large">BAConnect</a>
                 <!-- If user is logged in, this link becomes a link to the user's profile -->
@@ -156,19 +157,31 @@
                 <!-- If user is logged in, don't show this link -->
                 <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('registerModal').style.display='block'">REGISTER</a>
                 <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('forgotModal').style.display='block'">FORGOT LOGIN</a>
-				
-				<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('matchModal').style.display='block'">MATCH USERS</a>
-				<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('editModal').style.display='block'">EDIT ACCOUNTS </a>
-				<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('upgradeModal').style.display='block'">UPGRADE ACCOUNTS</a>
-				<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('searchModal').style.display='block'">USER SEARCH</a>
-				
-				
+				        <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('matchModal').style.display='block'">MATCH USERS</a>
+			          <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('editModal').style.display='block'">EDIT ACCOUNTS </a>
+	              <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('upgradeModal').style.display='block'">UPGRADE ACCOUNTS</a>
+                <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('searchModal').style.display='block'">USER SEARCH</a>
                 <!-- Admin login button -->
                 <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right">
                     <i class="fa fa-cogs"></i>
                 </a>
             </div>
         </div>
+
+        <div id="navMobile" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('loginModal').style.display='block'">LOG IN</a>
+          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('registerModal').style.display='block'">REGISTER</a>
+          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('forgotModal').style.display='block'">FORGOT LOGIN</a>
+          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('matchModal').style.display='block'">MATCH USERS</a>
+          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('editModal').style.display='block'">EDIT ACCOUNTS </a>
+          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('upgradeModal').style.display='block'">UPGRADE ACCOUNTS</a>
+          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('searchModal').style.display='block'">USER SEARCH</a>
+          <!-- Admin login button -->
+          <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right">
+              <i class="fa fa-cogs"></i>
+          </a>
+        </div>
+
         <!-- Page content -->
         <div class="w3-content" style="max-width:2000px;margin-top:46px">
             <!-- Modals -->
@@ -182,5 +195,15 @@
             <!-- End Page Content -->
         </div>
     </body>
-
-    </html>
+    <script>
+    // Used to toggle the menu on small screens when clicking on the menu button
+function toggleNav() {
+    var x = document.getElementById("navMobile");
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+    }
+}
+    </script>
+</html>
