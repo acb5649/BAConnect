@@ -1,5 +1,6 @@
 <?php
     require_once "functions.php";
+    require_once "card.php";
 
     $msg = "";
     $term = "You must agree to the terms and conditions";
@@ -192,6 +193,15 @@
 			<?php include "edit.php";?>
 			<?php include "upgrade.php";?>
 			<?php include "search.php";?>
+
+            <div class="w3-row-padding" id="mentorDisplay">
+              <?php for ($k = 0 ; $k < 15; $k++) {
+    $card = createCard(0);
+    echo '<div class="w3-col s4 w3-center">
+                '.$card.'
+                </div>';
+};?>
+            </div>
             <!-- End Page Content -->
         </div>
     </body>
