@@ -1,0 +1,39 @@
+<?php
+/*
+Name: Eric Strayer
+Date: 9/16/2018
+File Name: functions.php
+*/
+/* This function will generate the list of countries for a drop down list
+		I don't know if we'll add more countries or not. Depending on how many we add,
+		we'll need a more efficient way of making the list.
+*/
+function CountryList() {
+	$list["1"] = "United States";
+	$list["2"] = "Territory of United States";			
+	$list["3"] = "Russia";
+	$list["4"] = "Myanmar";
+	$list["5"] = "Japan";
+	$list["6"] = "China";
+	return $list;
+}
+
+function MakeDegreeEntry() {
+	echo '
+	<fieldset>
+		<select name = "DegreeType">
+			<?php print DegreeTypeList(); ?>
+		</select>
+		<input type = "text" maxlength = "50" value = "" placeholder = "School Name" name = "School" id = "School" />
+		<input type = "text" value = "" placeholder = "Major" name = "Major" id = "Major" />
+		Year Graduated:
+		<input type = "number" maxlength = "4" value = "2022" name = "gradYear" id = "gradYear" />
+	</fieldset>
+	';
+}
+//isValidLogin checks if the username and password given correspond to an account.
+//returns false if there is no account with the given username and password.
+function isValidLogin($username, $password){
+	return true;
+}
+?>
