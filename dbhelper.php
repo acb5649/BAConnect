@@ -7,10 +7,10 @@ try {
     echo $e->getMessage();
 }
 
-function registerUser($user, $address, $educationHistory, $workHistory) {
+function registerUser($user, $address, $educationHistory, $workHistory, $photo, $resume) {
   // First create an Account in the DB
   $stmt = $con->prepare("insert into Account (account_ID, username, password, type, active) values (?, ?, ?, ?, ?)");
-  $stmt->bind_param("issii", NULL, $user->username, $user->email, 0, 0);
+  $stmt->bind_param("issii", DEFAULT, $user->username, $user->email, 0, 0);
   $stmt->execute();
 
   // Now get account_ID to link with other tables.
@@ -26,7 +26,7 @@ function registerUser($user, $address, $educationHistory, $workHistory) {
 
   // make Address table entry, then get it's address_ID, then save that ID and the user ID to the Address History table.
   $stmt = $con->prepare("insert into Addresses (address_ID, country_ID, state/province, city, post_code, street_address) values (?, ?, ?, ?, ?, ?)");
-  $stmt->bind_param("iissis", NULL, $address->{getCountryCode()}, $address->state, $address->city, $address->postcode, $address->street);
+  $stmt->bind_param("iissis", DEFAULT, $address->{getCountryCode()}, $address->state, $address->city, $address->postcode, $address->street);
   $stmt->execute();
 
   $stmt = $con->prepare("select account_ID from Addresses where street_address = " . $address->street . " and post_code = " . $address->postcode . " and city = " . $address->city);
@@ -45,15 +45,34 @@ function registerUser($user, $address, $educationHistory, $workHistory) {
 
   // Third, send Education and Work History
   foreach($educationHistory as $educationElement) {
-
+    $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year) values (?, ?, ?, ?, ?)");
+    $stmt->bind_param("iissi", $account_id, $educationElement->{getDegreeType()}, $educationElement->schoolName, $educationElement->degreeMajor, $educationElement->gradYear);
+    $stmt->execute();
   }
 
   foreach($workHistory as $workElement) {
+    $stmt = $con->prepare("insert into Job (job_ID, employer, state/profession_field) values (?, ?, ?)");
+    $stmt->bind_param("iss", DEFAULT, $workElement->companyName, $workElement->jobTitle);
+    $stmt->execute();
 
+    $stmt = $con->prepare("select job_ID from Job where employer = " . $workElement->companyName . " and profession_field = " . $workElement->jobTitle);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $job_id = $row['job_id'];
+
+    $stmt = $con->prepare("insert into `Job History` (job_ID, account_ID, start, end) values (?, ?, ?, ?)");
+    $stmt->bind_param("iiss", $job_id, $account_id, $workElement->startYear, $workElement->endYear);
+    $stmt->execute();
   }
 
-  // Finally, upload photos and resumes
-  
+  // Finally, assign photos and resumes
+  $stmt = $con->prepare("insert into Pictures (picture_ID, account_ID, date_uploaded, picture) values (?, ?, ?, ?)");
+  $stmt->bind_param("iiss", DEFAULT, $account_id, now(), $picture);
+  $stmt->execute();
+
+  $stmt = $con->prepare("insert into Resumes (account_ID, resume_file) values (?, ?)");
+  $stmt->bind_param("is", $account_id, $resume);
+  $stmt->execute();
 
   // If all that went well, set the account to disabled, and only enable it once the user clicks the link to activate their account.
   $stmt = $con->prepare("insert into Registration (account_ID, registration_code) values (?, ?)");
@@ -111,40 +130,32 @@ class Address {
   }
 }
 
-class History {
-    public $startYear;
-    public $endYear;
-
-    function __construct($startYear, $endYear) {
-      $this->startYear = $startYear;
-      $this->endYear = $endYear;
-    }
-}
-
-class EducationHistoryEntry extends History {
+class EducationHistoryEntry {
   public $schoolName;
   public $degreeType;
   public $degreeMajor;
+  public $gradYear;
 
-  function __construct($schoolName, $degreeType, $degreeMajor, $startYear, $endYear) {
-    parent::__construct($startYear, $endYear);
-
+  function __construct($schoolName, $degreeType, $degreeMajor, $gradYear) {
     $this->schoolName = $schoolName;
     $this->degreeType = $degreeType;
     $this->degreeMajor = $degreeMajor;
+    $this->gradYear = $gradYear;
   }
 
 }
 
-class WorkHistoryEntry extends History {
+class WorkHistoryEntry {
   public $companyName;
   public $jobTitle;
+  public $startYear;
+  public $endYear;
 
   function __construct($companyName, $jobTitle, $startYear, $endYear) {
-    parent::__construct($startYear, $endYear);
-
     $this->companyName = $companyName;
     $this->jobTitle = $jobTitle;
+    $this->startYear = $startYear;
+    $this->endYear = $endYear;
   }
 }
 
