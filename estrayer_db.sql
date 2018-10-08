@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 08, 2018 at 02:14 PM
+-- Generation Time: Oct 08, 2018 at 02:58 PM
 -- Server version: 5.1.73
 -- PHP Version: 5.3.3
 
@@ -171,6 +171,19 @@ CREATE TABLE IF NOT EXISTS `Mentorship` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `Password Recovery`
+--
+
+CREATE TABLE IF NOT EXISTS `Password Recovery` (
+  `account_ID` int(6) NOT NULL,
+  `code` varchar(50) NOT NULL,
+  PRIMARY KEY (`account_ID`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `Pending Mentorship`
 --
 
@@ -297,6 +310,12 @@ ALTER TABLE `Job History`
 ALTER TABLE `Mentorship`
   ADD CONSTRAINT `Mentorship_ibfk_1` FOREIGN KEY (`mentor_ID`) REFERENCES `Account` (`account_ID`) ON UPDATE CASCADE,
   ADD CONSTRAINT `Mentorship_ibfk_2` FOREIGN KEY (`mentee_ID`) REFERENCES `Account` (`account_ID`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Password Recovery`
+--
+ALTER TABLE `Password Recovery`
+  ADD CONSTRAINT `Password Recovery_ibfk_1` FOREIGN KEY (`account_ID`) REFERENCES `Account` (`account_ID`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Pending Mentorship`
