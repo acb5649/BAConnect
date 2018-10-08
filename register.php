@@ -2,6 +2,7 @@
 
 if (isset($_POST['submit']))
 {
+  $error = false;
   // Collect Account data from Post
   $password = $_POST['password'];
   $confirmedPassword = $_POST['confirmedPassword'];
@@ -13,8 +14,7 @@ if (isset($_POST['submit']))
   $email = $_POST['email'];
   $gender = $_POST['gender'];
   $phone = $_POST['phoneNumber'];
-  $student = $_POST['student'];
-  $working = $_POST['workingProfessional'];
+  $status = $_POST['status'];
   // Collect Address data from Post
   $street = $_POST['street'];
   $city = $_POST['city'];
@@ -22,11 +22,30 @@ if (isset($_POST['submit']))
   $state = $_POST['state'];
   $country = $_POST['country'];
   // Collect Education and Work Histories
-  
+
+  // verify Information
+  if ($password != $confirmedPassword) {
+    $error = true;
+  }
+
+
+  if ($error == false) {
+    $user = new User($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phoneNumber, $status);
+    $address = new Address($street, $city, $postcode, $state, $country);
+
+  }
 
 }
 
+if (isset($_POST['upload_picture']))
+{
 
+}
+
+if (isset($_POST['upload_resume']))
+{
+
+}
 
 ?>
 
@@ -104,9 +123,9 @@ if (isset($_POST['submit']))
                             <label>Status</label>
                         </p>
                         <label>Student</label>
-                        <input class="w3-check w3-border" type="checkbox" name="student" value=1 />
+                        <input class="w3-check w3-border" type="checkbox" name="status" value=0 />
                         <label>Working Professional</label>
-                        <input class="w3-check w3-border" type="checkbox" name="workingProfessional" value=1 />
+                        <input class="w3-check w3-border" type="checkbox" name="status" value=1 />
                         <p>
                             <label>Education</label>
                         </p>
