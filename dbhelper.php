@@ -8,13 +8,57 @@ try {
 }
 
 function registerUser($user, $address, $educationHistory, $workHistory) {
-  // First create an Account in the DB, and get the Account_ID.
+  // First create an Account in the DB
+  $stmt = $con->prepare("insert into Account (account_ID, username, password, type, active) values (?, ?, ?, ?, ?)");
+  $stmt->bind_param("issii", NULL, $user->username, $user->email, 0, 0);
+  $stmt->execute();
+
+  // Now get account_ID to link with other tables.
+  $stmt = $con->prepare("select account_ID from Account where username = " . $user->username);
+  $stmt->execute();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $account_id = $row['account_ID'];
 
   // Next, send basic user information. Many things are stored in different tables, so this might be a little verbose.
+  $stmt = $con->prepare("insert into Information (account_ID, first_name, middle_name, last_name, gender, email) values (?, ?, ?, ?, ?, ?)");
+  $stmt->bind_param("isssis", $account_id, $user->firstName, $user->middleName, $user->lastName, $user->gender, $user->email);
+  $stmt->execute();
+
+  // make Address table entry, then get it's address_ID, then save that ID and the user ID to the Address History table.
+  $stmt = $con->prepare("insert into Addresses (address_ID, country_ID, state/province, city, post_code, street_address) values (?, ?, ?, ?, ?, ?)");
+  $stmt->bind_param("iissis", NULL, $address->{getCountryCode()}, $address->state, $address->city, $address->postcode, $address->street);
+  $stmt->execute();
+
+  $stmt = $con->prepare("select account_ID from Addresses where street_address = " . $address->street . " and post_code = " . $address->postcode . " and city = " . $address->city);
+  $stmt->execute();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $address_id = $row['address_ID'];
+
+  $stmt = $con->prepare("insert into `Address History` (address_ID, account_ID, start, end) values (?, ?, ?, ?)");
+  $stmt->bind_param("iiss", $address_id, $account_id, now(), DEFAULT);
+  $stmt->execute();
+
+  // send phone number info to db
+  $stmt = $con->prepare("insert into `Phone Numbers` (address_ID, phone_type_ID, phone_number) values (?, ?, ?)");
+  $stmt->bind_param("iii", $account_id, 0, $user->phoneNumber;
+  $stmt->execute();
 
   // Third, send Education and Work History
+  foreach($educationHistory as $educationElement) {
+
+  }
+
+  foreach($workHistory as $workElement) {
+
+  }
+
+  // Finally, upload photos and resumes
+  
 
   // If all that went well, set the account to disabled, and only enable it once the user clicks the link to activate their account.
+  $stmt = $con->prepare("insert into Registration (account_ID, registration_code) values (?, ?)");
+  $stmt->bind_param("is", $account_id, "TODO: MAKE RANDOM CODE GENERATOR");
+  $stmt->execute();
 
 }
 
@@ -54,14 +98,14 @@ class User extends Account {
 class Address {
   public $street;
   public $city;
-  public $zipcode;
+  public $postcode;
   public $state;
   public $country;
 
-  function __construct($street, $city, $zipcode, $state, $country) {
+  function __construct($street, $city, $postcode, $state, $country) {
     $this->street = $street;
     $this->city = $city;
-    $this->zipcode = $zipcode;
+    $this->postcode = $postcode;
     $this->state = $state;
     $this->country = $country;
   }
