@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 05, 2018 at 04:06 PM
+-- Generation Time: Oct 08, 2018 at 02:14 PM
 -- Server version: 5.1.73
 -- PHP Version: 5.3.3
 
@@ -232,6 +232,19 @@ CREATE TABLE IF NOT EXISTS `Pictures` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `Registration`
+--
+
+CREATE TABLE IF NOT EXISTS `Registration` (
+  `account_ID` int(6) NOT NULL,
+  `registration_code` varchar(50) NOT NULL,
+  PRIMARY KEY (`account_ID`),
+  UNIQUE KEY `registration_code` (`registration_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `Resumes`
 --
 
@@ -304,6 +317,12 @@ ALTER TABLE `Phone Numbers`
 --
 ALTER TABLE `Pictures`
   ADD CONSTRAINT `Pictures_ibfk_1` FOREIGN KEY (`account_ID`) REFERENCES `Account` (`account_ID`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Registration`
+--
+ALTER TABLE `Registration`
+  ADD CONSTRAINT `Registration_ibfk_1` FOREIGN KEY (`account_ID`) REFERENCES `Account` (`account_ID`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Resumes`
