@@ -1,4 +1,5 @@
 <?php
+
     require_once "functions.php";
     require_once "card.php";
 
@@ -18,7 +19,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script type='text/javascript'>
             function removeField(number) {
-                document.getElementById("member_" + number).remove()
+                document.getElementById("member_" + number).remove();
+                document.getElementById("break_" + number).remove();
             }
 
             function addField() {
@@ -28,7 +30,9 @@
                 var container = document.getElementById("education");
                 // Append a line break
                 if (number != 0) {
-                    container.appendChild(document.createElement("br"));
+                    var brk = document.createElement("br");
+                    brk.id = "break_" + number;
+                    container.appendChild(brk);
                 }
 
                 var parent = document.createElement("div")

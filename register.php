@@ -134,7 +134,6 @@ if (isset($_POST['upload_resume']))
                         <p>
                             <label>Work History</label>
                         </p>
-                        <input name="addWorkEntry" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="button" value="Add empoyment" onclick="addWork()" />
                         <fieldset id="work"></fieldset>
                         <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="submit">Register
                             <i class="fa fa-check"></i>
