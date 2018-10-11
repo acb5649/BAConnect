@@ -19,8 +19,36 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script type='text/javascript'>
             function removeField(number) {
+                console.log("Removing field " + number);
+
                 document.getElementById("member_" + number).remove();
                 document.getElementById("break_" + number).remove();
+
+                var fieldCount = 0;
+                var divs = document.querySelectorAll(".educationMember");
+                console.log(divs);
+
+                [].forEach.call(divs, function(div) {
+                  var newNum = fieldCount.valueOf();
+                  var oldNumber = div.id.substring(7);
+                  div.id = "member_" + fieldCount;
+
+                  var brk = document.getElementById("break_" + oldNumber);
+                  brk.id = "break_" + newNum;
+                  var schoolName = document.getElementById("schoolName_" + oldNumber);
+                  schoolName.id = "schoolName_" + newNum;
+                  var majorName = document.getElementById("major_" + oldNumber);
+                  majorName.id = "major_" + newNum;
+                  var year = document.getElementById("gradYear_" + oldNumber);
+                  year.id = "gradYear_" + newNum;
+                  var button = document.getElementById("deleteButton_" + oldNumber);
+                  button.id = "deleteButton_" + newNum;
+                  button.onclick = function() {
+                      console.log("deleting new number: " + newNum);
+                      removeField(newNum);
+                  }
+                  fieldCount = fieldCount + 1;
+                });
             }
 
             function addField() {
@@ -82,7 +110,9 @@
                 deleteInputFieldButton.className = "w3-button w3-lime w3-padding-16 w3-right"
                 deleteInputFieldButton.type = "button"
                 deleteInputFieldButton.value = "Remove Degree"
+                deleteInputFieldButton.id = "deleteButton_" + number
                 deleteInputFieldButton.onclick = function() {
+                    console.log("deleting: " + number);
                     removeField(number);
                 }
                 parent.appendChild(deleteInputFieldButton)

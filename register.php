@@ -148,7 +148,7 @@ if (isset($_POST['upload_resume']))
             // When the user clicks anywhere outside of the modal, close it
             var registerModal = document.getElementById('registerModal');
             window.onclick = function(event) {
-                if (event.target == modal) {
+                if (event.target == registerModal) {
                     registerModal.style.display = "none";
                 }
             }

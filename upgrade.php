@@ -43,7 +43,7 @@
    // When the user clicks anywhere outside of the modal, close it
    var upgradeModal = document.getElementById('upgradeModal');
    window.onclick = function(event) {
-       if (event.target == modal) {
+       if (event.target == upgradeModal) {
            upgradeModal.style.display = "none";
        }
    }

@@ -68,7 +68,7 @@
    // When the user clicks anywhere outside of the modal, close it
    var matchModal = document.getElementById('matchModal');
    window.onclick = function(event) {
-       if (event.target == modal) {
+       if (event.target == matchModal) {
            matchModal.style.display = "none";
        }
    }
