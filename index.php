@@ -37,9 +37,8 @@
 
                 var select = document.createElement("select")
                 select.className = "w3-select w3-border"
-                select.innerHTML = '
-                <?php print DegreeTypeList(); ?>
-                '
+                select.innerHTML = '<?php print DegreeTypeList(); ?>'
+
                 parent.appendChild(select)
 
                 var schoolNameInput = document.createElement("input");

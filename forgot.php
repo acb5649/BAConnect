@@ -14,7 +14,7 @@
                         <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right">Reset Password
                             <i class="fa fa-check"></i>
                         </button>
-                        <button class="w3-button w3-red w3-section" onclick="document.getElementById('forgotModal').style.display='none'">Close
+                        <button type="button" class="w3-button w3-red w3-section" onclick="document.getElementById('forgotModal').style.display='none'">Close
                             <i class="fa fa-remove"></i>
                         </button>
                         <p class="w3-right">Need an

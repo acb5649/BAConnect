@@ -139,7 +139,7 @@ if (isset($_POST['upload_resume']))
                         <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="submit">Register
                             <i class="fa fa-check"></i>
                         </button>
-                        <button class="w3-button w3-red w3-section" onclick="document.getElementById('registerModal').style.display='none'">Close
+                        <button type="button" class="w3-button w3-red w3-section" onclick="document.getElementById('registerModal').style.display='none'">Close
                             <i class="fa fa-remove"></i>
                         </button>
                     </form>
