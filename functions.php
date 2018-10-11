@@ -1,7 +1,6 @@
 <?php
 
 /*
-Name: Eric Strayer
 Date: 9/16/2018
 File Name: functions.php
 */
@@ -16,6 +15,10 @@ function CountryList() {
   		    <option value = "MYA">Myanmar</option>';
 
 	return $list;
+}
+
+function AddCountry($countryName){
+	
 }
 
 function DegreeTypeList() {
