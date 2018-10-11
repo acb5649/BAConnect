@@ -9,7 +9,7 @@ if (isset($_POST['submit']))
   $username = $_POST['username'];
   // Collect User data from Post
   $firstName = $_POST['firstName'];
-  $middleName = $_POST['middleName']
+  $middleName = $_POST['middleName'];
   $lastName = $_POST['lastName'];
   $email = $_POST['email'];
   $gender = $_POST['gender'];
