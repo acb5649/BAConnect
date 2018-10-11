@@ -49,6 +49,8 @@
                   }
                   fieldCount = fieldCount + 1;
                 });
+
+                document.getElementById("numDegs").value = document.querySelectorAll(".educationMember").length;
             }
 
             function addField() {
@@ -118,6 +120,8 @@
                 parent.appendChild(deleteInputFieldButton)
 
                 container.appendChild(parent);
+
+                document.getElementById("numDegs").value = number + 1;
             }
 
             function createWork() {

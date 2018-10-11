@@ -131,6 +131,7 @@ if (isset($_POST['upload_resume']))
                         </p>
                         <input name="addEntry" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="button" value="Add degree" onclick="addField()" />
                         <fieldset id="education"></fieldset>
+                        <input type="hidden" id="numDegs" name="numDegs" value="0">
                         <p>
                             <label>Work History</label>
                         </p>
