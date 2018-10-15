@@ -11,10 +11,6 @@ File Name: functions.php
 		we'll need a more efficient way of making the list.
 */
 function CountryList() {
-	/*
-	$list = '<option value = "USA">United States of America</option>
-  		    <option value = "MYA">Myanmar</option>';
-	*/
 	try {
 		$con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
 	} catch(PDOException $e){
@@ -23,6 +19,20 @@ function CountryList() {
 	}
 
 	$stmt = $con->prepare("SELECT country FROM Countries");
+	$list = $stmt->execute();
+
+	return $list;
+}
+
+function DegreeTypeList(){
+	try {
+		$con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
+	} catch(PDOException $e){
+		echo $e->getMessage();
+		return false;
+	}
+
+	$stmt = $con->prepare("SELECT degree FROM Degree Types");
 	$list = $stmt->execute();
 
 	return $list;
@@ -77,6 +87,30 @@ function AddCountry($countryName){
 	$con = null;
 
 	return true;
+}
+
+function EditCountry($oldName, $newName){
+	try {
+		$con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
+	} catch(PDOException $e){
+		echo $e->getMessage();
+		return false;
+	}
+
+	$stmt = $con->prepare("UPDATE Countries SET country = '" . $newName . "' WHERE country = '" . $oldName . "'");
+	$stmt->execute();
+}
+
+function DeleteCountry($countryName){
+	try {
+		$con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
+	} catch(PDOException $e){
+		echo $e->getMessage();
+		return false;
+	}
+
+	$stmt = $con->prepare("DELETE FROM Countries WHERE country = '" . $countryName . "'");
+	$stmt->execute();
 }
 
 function DegreeTypeList() {
