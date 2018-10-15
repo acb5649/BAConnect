@@ -76,8 +76,12 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
 
   // If all that went well, set the account to disabled, and only enable it once the user clicks the link to activate their account.
   $stmt = $con->prepare("insert into Registration (account_ID, registration_code) values (?, ?)");
-  $stmt->bind_param("is", $account_id, "TODO: MAKE RANDOM CODE GENERATOR");
+  $code = "TODO: MAKE RANDOM CODE GENERATOR";
+  $stmt->bind_param("is", $account_id, $code);
   $stmt->execute();
+
+  //Email a verification code to the email provided.
+  mail($user->email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://corsair.cs.iupui.edu:25345/courseproject/verify.php?code=" . $code);
 
 }
 
@@ -128,6 +132,11 @@ class Address {
     $this->state = $state;
     $this->country = $country;
   }
+
+  function getCountryCode() {
+
+  }
+  
 }
 
 class EducationHistoryEntry {
@@ -141,6 +150,10 @@ class EducationHistoryEntry {
     $this->degreeType = $degreeType;
     $this->degreeMajor = $degreeMajor;
     $this->gradYear = $gradYear;
+  }
+
+  function getDegreeType() {
+
   }
 
 }

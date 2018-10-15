@@ -26,8 +26,6 @@
 
                 var fieldCount = 0;
                 var divs = document.querySelectorAll(".educationMember");
-                console.log(divs);
-
                 [].forEach.call(divs, function(div) {
                   var newNum = fieldCount.valueOf();
                   var oldNumber = div.id.substring(7);
@@ -70,6 +68,8 @@
                 parent.id = "member_" + number
 
                 var select = document.createElement("select")
+                select.name = "degreeType_" + number
+                select.id = "degreeType_" + number
                 select.className = "w3-select w3-border"
                 select.innerHTML = '<?php print DegreeTypeList(); ?>'
 

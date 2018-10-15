@@ -1,4 +1,5 @@
 <?php
+require_once "dbhelper.php";
 
 if (isset($_POST['submit']))
 {
@@ -22,6 +23,16 @@ if (isset($_POST['submit']))
   $state = $_POST['state'];
   $country = $_POST['country'];
   // Collect Education and Work Histories
+  $numDegrees = $_POST['numDegs'];
+  for ($degreeNum = 0; $degreeNum < $numDegrees; $degreeNum++) {
+    $degree[$degreeNum] = new EducationHistoryEntry($_POST['schoolName_' . $degreeNum], $_POST['degreeType_' . $degreeNum], $_POST['major_' . $degreeNum], $_POST['gradYear_' . $degreeNum])
+  }
+
+  $businessName = $_POST['businessName'];
+  $jobTitle = $_POST['jobTitle'];
+  $startDate = $_POST['startDate'];
+  $endDate = $_POST['endDate'];
+  $workHistory = new WorkHistoryEntry($businessName, $jobTitle, $startDate, $endDate);
 
   // verify Information
   if ($password != $confirmedPassword) {
@@ -32,7 +43,7 @@ if (isset($_POST['submit']))
   if ($error == false) {
     $user = new User($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phoneNumber, $status);
     $address = new Address($street, $city, $postcode, $state, $country);
-
+    registerUser($user, $address, $degree, $workHistory);
   }
 
 }
