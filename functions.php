@@ -35,7 +35,7 @@ function DegreeTypeList(){
 		return null;
 	}
 
-	$stmt = $con->prepare("SELECT degree FROM Degree Types");
+	$stmt = $con->prepare("SELECT degree FROM `Degree Types`");
 	$list = $stmt->execute();
 
 	$con = null;
@@ -52,7 +52,7 @@ function AddDegreeType($degreeType){
 		return false;
 	}
 
-	$stmt = $con->prepare("SELECT * FROM Degree Types WHERE degree = " . $degreeType);
+	$stmt = $con->prepare("SELECT * FROM `Degree Types` WHERE degree = " . $degreeType);
 	$result = $stmt->execute();
 
 	if(!isset($result)){	//if there is already a degree type with the same name in the database
@@ -63,7 +63,7 @@ function AddDegreeType($degreeType){
 	$stmt = null;
 	$result = null;
 
-	$stmt = $con->prepare("INSERT INTO Degree Types (degree_type_ID, degree) values (?, ?)");
+	$stmt = $con->prepare("INSERT INTO `Degree Types` (degree_type_ID, degree) values (?, ?)");
 	$stmt->execute(null, $degreeType);
 
 
@@ -80,7 +80,7 @@ function EditDegreeType($oldName, $newName){
 		return false;
 	}
 
-	$stmt = $con->prepare("UPDATE Degree Types SET degree = '" . $newName . "' WHERE degree = '" . $oldName . "'");
+	$stmt = $con->prepare("UPDATE `Degree Types` SET degree = '" . $newName . "' WHERE degree = '" . $oldName . "'");
 	$stmt->execute();
 
 	$con = null;
@@ -99,7 +99,7 @@ function DeleteDegreeType($degreeTypeName){
 		return false;
 	}
 
-	$stmt = $con->prepare("SELECT degree_type_ID FROM Degree Types WHERE degree = '" . $degreeTypeName . "'");
+	$stmt = $con->prepare("SELECT degree_type_ID FROM `Degree Types` WHERE degree = '" . $degreeTypeName . "'");
 	$stmt->execute();
 	$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	if($row == null){
@@ -114,7 +114,7 @@ function DeleteDegreeType($degreeTypeName){
 	$row = null;
 	$id = null;
 
-	$stmt = $con->prepare("DELETE FROM Degree Types WHERE degree = '" . $degreeTypeName . "'");
+	$stmt = $con->prepare("DELETE FROM `Degree Types` WHERE degree = '" . $degreeTypeName . "'");
 	$stmt->execute();
 
 	$con = null;
@@ -197,9 +197,14 @@ function DeleteCountry($countryName){
 }
 
 function makeCode($email) {
-
+	return hash('md5', $email) . substr(str_shuffle(str_repeat($x='0123456789abcdef', ceil(18/strlen($x)) )), 1, 18);
 }
 
+function verifyCode($code, $email) {
+ 	$hash = hash('md5', $email);
+ 	$codeHash = substr($code, 0, 32);
+ 	return ($hash == $codeHash);
+}
 //isValidLogin checks if the username and password given correspond to an account.
 //returns false if there is no account with the given username and password.
 function isValidLogin($username, $password){
