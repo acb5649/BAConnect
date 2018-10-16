@@ -25,7 +25,7 @@ if (isset($_POST['submit']))
   // Collect Education and Work Histories
   $numDegrees = $_POST['numDegs'];
   for ($degreeNum = 0; $degreeNum < $numDegrees; $degreeNum++) {
-    $degree[$degreeNum] = new EducationHistoryEntry($_POST['schoolName_' . $degreeNum], $_POST['degreeType_' . $degreeNum], $_POST['major_' . $degreeNum], $_POST['gradYear_' . $degreeNum])
+    $degree[$degreeNum] = new EducationHistoryEntry($_POST['schoolName_' . $degreeNum], $_POST['degreeType_' . $degreeNum], $_POST['major_' . $degreeNum], $_POST['gradYear_' . $degreeNum]);
   }
 
   $businessName = $_POST['businessName'];
