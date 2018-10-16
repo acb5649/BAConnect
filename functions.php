@@ -196,7 +196,13 @@ function DeleteCountry($countryName){
 }
 
 function makeCode($email) {
+	return hash('md5', $email) . substr(str_shuffle(str_repeat($x='0123456789abcdef', ceil(18/strlen($x)) )), 1, 18);
+}
 
+function verifyCode($code, $email) {
+	$hash = hash('md5', $email);
+	$codeHash = substr($code, 0, 32);
+	return ($hash == $codeHash);
 }
 
 //isValidLogin checks if the username and password given correspond to an account.
