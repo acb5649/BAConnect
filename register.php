@@ -41,7 +41,7 @@ if (isset($_POST['submit']))
 
 
   if ($error == false) {
-    $user = new User($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phoneNumber, $status);
+    $user = new User($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phone, $status);
     $address = new Address($street, $city, $postcode, $state, $country);
     registerUser($user, $address, $degree, $workHistory, "", "");
     header("Location: created.php");
@@ -124,7 +124,7 @@ if (isset($_POST['upload_resume']))
                         <p>
                             <label>Country</label>
                         </p>
-                        <select class="w3-select w3-border" name="country">
+                        <select class="w3-select w3-border" name="country" id="country">
                             <?php print countryList(); ?>
                         </select>
                         <p>
