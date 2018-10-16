@@ -11,7 +11,7 @@ try {
 function registerUser($user, $address, $educationHistory, $workHistory, $photo, $resume) {
   // First create an Account in the DB
   $stmt = $con->prepare("insert into Account (account_ID, username, password, type, active) values (?, ?, ?, ?, ?)");
-  $stmt->bind_param("issii", DEFAULT, $user->username, $user->email, 0, 0);
+  $stmt->bind_param("issii", null, $user->username, $user->email, 0, 0);
   $stmt->execute();
 
   // Now get account_ID to link with other tables.
@@ -27,7 +27,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
 
   // make Address table entry, then get it's address_ID, then save that ID and the user ID to the Address History table.
   $stmt = $con->prepare("insert into Addresses (address_ID, country_ID, state/province, city, post_code, street_address) values (?, ?, ?, ?, ?, ?)");
-  $stmt->bind_param("iissis", DEFAULT, $address->{getCountryCode()}, $address->state, $address->city, $address->postcode, $address->street);
+  $stmt->bind_param("iissis", null, $address->{getCountryCode()}, $address->state, $address->city, $address->postcode, $address->street);
   $stmt->execute();
 
   $stmt = $con->prepare("select account_ID from Addresses where street_address = " . $address->street . " and post_code = " . $address->postcode . " and city = " . $address->city);
@@ -36,12 +36,12 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $address_id = $row['address_ID'];
 
   $stmt = $con->prepare("insert into `Address History` (address_ID, account_ID, start, end) values (?, ?, ?, ?)");
-  $stmt->bind_param("iiss", $address_id, $account_id, now(), DEFAULT);
+  $stmt->bind_param("iiss", $address_id, $account_id, now(), null);
   $stmt->execute();
 
   // send phone number info to db
   $stmt = $con->prepare("insert into `Phone Numbers` (address_ID, phone_type_ID, phone_number) values (?, ?, ?)");
-  $stmt->bind_param("iii", $account_id, 0, $user->phoneNumber;
+  $stmt->bind_param("iii", $account_id, 0, $user->phoneNumber);
   $stmt->execute();
 
   // Third, send Education and Work History
@@ -53,7 +53,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
 
   foreach($workHistory as $workElement) {
     $stmt = $con->prepare("insert into Job (job_ID, employer, state/profession_field) values (?, ?, ?)");
-    $stmt->bind_param("iss", DEFAULT, $workElement->companyName, $workElement->jobTitle);
+    $stmt->bind_param("iss", null, $workElement->companyName, $workElement->jobTitle);
     $stmt->execute();
 
     $stmt = $con->prepare("select job_ID from Job where employer = " . $workElement->companyName . " and profession_field = " . $workElement->jobTitle);
@@ -68,7 +68,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
 
   // Finally, assign photos and resumes
   $stmt = $con->prepare("insert into Pictures (picture_ID, account_ID, date_uploaded, picture) values (?, ?, ?, ?)");
-  $stmt->bind_param("iiss", DEFAULT, $account_id, now(), $picture);
+  $stmt->bind_param("iiss", null, $account_id, now(), $picture);
   $stmt->execute();
 
   $stmt = $con->prepare("insert into Resumes (account_ID, resume_file) values (?, ?)");

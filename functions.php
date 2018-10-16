@@ -64,7 +64,8 @@ function AddDegreeType($degreeType){
 	$result = null;
 
 	$stmt = $con->prepare("INSERT INTO Degree Types (degree_type_ID, degree) values (?, ?)");
-	$stmt->execute(DEFAULT, $degreeType);
+	$stmt->execute(null, $degreeType);
+
 
 	$stmt = null;
 	$con = null;
@@ -140,7 +141,7 @@ function AddCountry($countryName){
 	$result = null;
 
 	$stmt = $con->prepare("INSERT INTO Countries (country_ID, country) values (?, ?)");
-	$stmt->execute(DEFAULT, $countryName);
+	$stmt->execute(null, $countryName);
 
 	$stmt = null;
 	$con = null;
@@ -196,13 +197,7 @@ function DeleteCountry($countryName){
 }
 
 function makeCode($email) {
-	return hash('md5', $email) . substr(str_shuffle(str_repeat($x='0123456789abcdef', ceil(18/strlen($x)) )), 1, 18);
-}
 
-function verifyCode($code, $email) {
-	$hash = hash('md5', $email);
-	$codeHash = substr($code, 0, 32);
-	return ($hash == $codeHash);
 }
 
 //isValidLogin checks if the username and password given correspond to an account.
