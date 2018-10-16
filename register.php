@@ -43,7 +43,8 @@ if (isset($_POST['submit']))
   if ($error == false) {
     $user = new User($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phoneNumber, $status);
     $address = new Address($street, $city, $postcode, $state, $country);
-    registerUser($user, $address, $degree, $workHistory);
+    registerUser($user, $address, $degree, $workHistory, "", "");
+    header("Location: created.php");
   }
 
 }

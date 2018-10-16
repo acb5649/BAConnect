@@ -1,14 +1,14 @@
 <?php
 require_once "functions.php";
 
-try {
-    $con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
-    $isConnected = true;
-} catch (PDOException $e) {
-    echo $e->getMessage();
-}
-
 function registerUser($user, $address, $educationHistory, $workHistory, $photo, $resume) {
+  try {
+      $con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
+      $isConnected = true;
+  } catch (PDOException $e) {
+      echo $e->getMessage();
+  }
+
   // First create an Account in the DB
   $stmt = $con->prepare("insert into Account (account_ID, username, password, type, active) values (?, ?, ?, ?, ?)");
   $stmt->bind_param("issii", DEFAULT, $user->username, $user->email, 0, 0);
@@ -84,6 +84,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   //Email a verification code to the email provided.
   mail($user->email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code);
 
+  $con = null;
 }
 
 class Account {
