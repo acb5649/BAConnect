@@ -24,7 +24,7 @@ function CountryList() {
 	$con = null;
 	$stmt = null;
 
-	$html = ""
+	$html = "";
 	foreach ($list as $option) {
 		$html = $html . "<option value='" . $option . "'> " . $option . " </option>\n";
 	}
@@ -44,7 +44,7 @@ function DegreeTypeList(){
 	$stmt = $con->prepare("SELECT degree FROM `Degree Types`");
 	$list = $stmt->execute();
 
-	$html = ""
+	$html = "";
 	foreach ($list as $option) {
 		$html = $html . "<option value='" . $option . "'> " . $option . " </option>\n";
 	}
