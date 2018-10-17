@@ -2,9 +2,12 @@
 
     require_once "functions.php";
     require_once "card.php";
+	require_once "dbhelper.php";
 
     $msg = "";
     $term = "You must agree to the terms and conditions";
+	//base type to hide access to admin functions & logged in access
+	$type = -1;
 
 ?>
     <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
@@ -171,27 +174,54 @@
                 <!-- If user is logged in, this link becomes a link to the user's profile -->
                 <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('loginModal').style.display='block'">LOG IN</a>
                 <!-- If user is logged in, don't show this link -->
-                <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('registerModal').style.display='block'">REGISTER</a>
-                <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('forgotModal').style.display='block'">FORGOT LOGIN</a>
-				        <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('matchModal').style.display='block'">MATCH USERS</a>
-			          <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('editModal').style.display='block'">EDIT ACCOUNTS </a>
-	              <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('upgradeModal').style.display='block'">UPGRADE ACCOUNTS</a>
-                <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('searchModal').style.display='block'">USER SEARCH</a>
-                <!-- Admin login button -->
-                <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right">
-                    <i class="fa fa-cogs"></i>
-                </a>
+				<?php
+					//Hide upon login
+					if($type < 0){
+						$reg= "'registerModal'";
+						$block = "'block'";
+						$forgot = "'forgotModal'";
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$reg.').style.display='.$block.'">REGISTER</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$forgot.').style.display='.$block.'">FORGOT LOGIN</a>';
+						
+					}
+				?>
+				<?php
+					if($type >=0){
+						//user settings button?
+						print '<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-cogs"></i></a>';
+					}
+				?>
+				<?php
+					if($type > 1){
+						$block = "'block'";
+						$match="'matchModal'";
+						$edit="'editModal'";
+						$upgrade="'upgradeModal'";
+						$search="'searchModal'";
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$match.').style.display='.$block.'">MATCH USERS</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$edit.').style.display='.$block.'">EDIT ACCOUNTS </a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$upgrade.').style.display='.$block.'">UPGRADE ACCOUNTS</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$search.').style.display='.$block.'">USER SEARCH</a>';
+						
+					}
+				  ?>
+                
             </div>
         </div>
 
         <div id="navMobile" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
-          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('loginModal').style.display='block'">LOG IN</a>
-          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('registerModal').style.display='block'">REGISTER</a>
-          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('forgotModal').style.display='block'">FORGOT LOGIN</a>
-          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('matchModal').style.display='block'">MATCH USERS</a>
-          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('editModal').style.display='block'">EDIT ACCOUNTS </a>
-          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('upgradeModal').style.display='block'">UPGRADE ACCOUNTS</a>
-          <a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('searchModal').style.display='block'">USER SEARCH</a>
+          <?php
+			//Change to user profile?
+			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('loginModal').style.display='block''>LOG IN</a>";
+			//Hide after login
+			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('registerModal').style.display='block''>REGISTER</a>";
+			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('forgotModal').style.display='block''>FORGOT LOGIN</a>";
+			
+			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('matchModal').style.display='block''>MATCH USERS</a>";
+			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('editModal').style.display='block''>EDIT ACCOUNTS </a>";
+			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('upgradeModal').style.display='block''>UPGRADE ACCOUNTS</a>";
+			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('searchModal').style.display='block''>USER SEARCH</a>";
+			?>
           <!-- Admin login button -->
           <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right">
               <i class="fa fa-cogs"></i>
