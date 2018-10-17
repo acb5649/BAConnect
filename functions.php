@@ -23,7 +23,13 @@ function CountryList() {
 
 	$con = null;
 	$stmt = null;
-	return $list;
+
+	$html = ""
+	foreach ($list as $option) {
+		$html = $html . "<option value='" . $option . "'> " . $option . " </option>\n";
+	}
+
+	return $html;
 }
 
 // This function will generate a list of all the degree Types in the database
@@ -38,9 +44,14 @@ function DegreeTypeList(){
 	$stmt = $con->prepare("SELECT degree FROM `Degree Types`");
 	$list = $stmt->execute();
 
+	$html = ""
+	foreach ($list as $option) {
+		$html = $html . "<option value='" . $option . "'> " . $option . " </option>\n";
+	}
+
 	$con = null;
 	$stmt = null;
-	return $list;
+	return $html;
 }
 
 // This function will add a new degree type to the database, but will check if it's already in the database first
