@@ -66,13 +66,20 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   // Third, send Education and Work History
   foreach($educationHistory as $educationElement) {
     $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year) values (?, ?, ?, ?, ?)");
-    $stmt->bind_param("iissi", $account_id, $educationElement->{getDegreeType()}, $educationElement->schoolName, $educationElement->degreeMajor, $educationElement->gradYear);
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $stmt->bindValue(2, $educationElement->{getDegreeType()}, PDO::PARAM_INT);
+    $stmt->bindValue(3, $educationElement->schoolName, PDO::PARAM_STR);
+    $stmt->bindValue(4, $educationElement->degreeMajor, PDO::PARAM_STR);
+    $stmt->bindValue(5, $educationElement->gradYear, PDO::PARAM_INT);
     $stmt->execute();
   }
 
   foreach($workHistory as $workElement) {
     $stmt = $con->prepare("insert into Job (job_ID, employer, state/profession_field) values (?, ?, ?)");
     $stmt->bind_param("iss", null, $workElement->companyName, $workElement->jobTitle);
+    $stmt->bindValue(1, null, PDO::PARAM_NULL);
+    $stmt->bindValue(2, $workElement->companyName, PDO::PARAM_STR);
+    $stmt->bindValue(3, $workElement->jobTitle, PDO::PARAM_STR);
     $stmt->execute();
 
     $stmt = $con->prepare("select job_ID from Job where employer = " . $workElement->companyName . " and profession_field = " . $workElement->jobTitle);
@@ -81,23 +88,31 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
     $job_id = $row['job_id'];
 
     $stmt = $con->prepare("insert into `Job History` (job_ID, account_ID, start, end) values (?, ?, ?, ?)");
-    $stmt->bind_param("iiss", $job_id, $account_id, $workElement->startYear, $workElement->endYear);
+    $stmt->bindValue(1, $job_id, PDO::PARAM_INT);
+    $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
+    $stmt->bindValue(3, 2000, PDO::PARAM_STR);
+    $stmt->bindValue(4, 2018, PDO::PARAM_STR);
     $stmt->execute();
   }
 
   // Finally, assign photos and resumes
   $stmt = $con->prepare("insert into Pictures (picture_ID, account_ID, date_uploaded, picture) values (?, ?, ?, ?)");
-  $stmt->bind_param("iiss", null, $account_id, now(), $picture);
+  $stmt->bindValue(1, null, PDO::PARAM_NULL);
+  $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
+  $stmt->bindValue(3, now(), PDO::PARAM_STR);
+  $stmt->bindValue(4, $picture, PDO::PARAM_STR);
   $stmt->execute();
 
   $stmt = $con->prepare("insert into Resumes (account_ID, resume_file) values (?, ?)");
-  $stmt->bind_param("is", $account_id, $resume);
+  $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+  $stmt->bindValue(2, $resume, PDO::PARAM_STR);
   $stmt->execute();
 
   // If all that went well, set the account to disabled, and only enable it once the user clicks the link to activate their account.
   $stmt = $con->prepare("insert into Registration (account_ID, registration_code) values (?, ?)");
   $code = getCode($user->email);
-  $stmt->bind_param("is", $account_id, $code);
+  $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+  $stmt->bindValue(2, $code, PDO::PARAM_STR);
   $stmt->execute();
 
   //Email a verification code to the email provided.
