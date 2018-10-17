@@ -25,7 +25,7 @@ function CountryList() {
 	$con = null;
 	$stmt = null;
 
-	echo "<script>console.log(" . var_dump($list) . ")</script>"
+	echo "<script>console.log(" . var_dump($list) . ")</script>";
 
 	$html = "";
 	foreach ($list as $option) {
@@ -48,7 +48,7 @@ function DegreeTypeList(){
 	$stmt->execute();
 	$list = $stmt->fetchAll();
 
-	echo "<script>console.log(" . var_dump($list) . ")</script>"
+	echo "<script>console.log(" . var_dump($list) . ")</script>";
 
 	$html = "";
 	foreach ($list as $option) {
