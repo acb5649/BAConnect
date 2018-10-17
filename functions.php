@@ -25,11 +25,11 @@ function CountryList() {
 	$con = null;
 	$stmt = null;
 
-	echo "<script>console.log(" . var_dump($list) . ")</script>";
+	//echo "<script>console.log(" . var_dump($list) . ")</script>";
 
 	$html = "";
 	foreach ($list as $option) {
-		$html = $html . "<option value='" . $option . "'> " . $option . " </option>\n";
+		$html = $html . '<option value="' . $option["country"] . '"> ' . $option["country"] . ' </option> ';
 	}
 
 	return $html;
@@ -48,11 +48,11 @@ function DegreeTypeList(){
 	$stmt->execute();
 	$list = $stmt->fetchAll();
 
-	echo "<script>console.log(" . var_dump($list) . ")</script>";
+	//echo "<script>console.log(" . var_dump($list) . ")</script>";
 
 	$html = "";
 	foreach ($list as $option) {
-		$html = $html . "<option value='" . $option . "'> " . $option . " </option>\n";
+		$html = $html . '<option value="' . $option["degree"] . '"> ' . $option["degree"] . ' </option> ';
 	}
 
 	$con = null;

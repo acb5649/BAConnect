@@ -71,7 +71,7 @@
                 select.name = "degreeType_" + number
                 select.id = "degreeType_" + number
                 select.className = "w3-select w3-border"
-                select.innerHTML = '<?php print DegreeTypeList(); ?>'
+                select.innerHTML = '<?php print DegreeTypeList(); ?>';
 
                 parent.appendChild(select)
 
