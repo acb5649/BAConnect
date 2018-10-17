@@ -19,7 +19,8 @@ function CountryList() {
 	}
 
 	$stmt = $con->prepare("SELECT country FROM Countries");
-	$list = $stmt->execute();
+	$stmt->execute();
+	$list = $stmt->fetchAll();
 
 	$con = null;
 	$stmt = null;
@@ -42,7 +43,8 @@ function DegreeTypeList(){
 	}
 
 	$stmt = $con->prepare("SELECT degree FROM `Degree Types`");
-	$list = $stmt->execute();
+	$stmt->execute();
+	$list = $stmt->fetchAll();
 
 	$html = "";
 	foreach ($list as $option) {
