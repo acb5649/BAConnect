@@ -11,7 +11,11 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
 
   // First create an Account in the DB
   $stmt = $con->prepare("insert into Account (account_ID, username, password, type, active) values (?, ?, ?, ?, ?)");
-  $stmt->bind_param("issii", null, $user->username, $user->email, 0, 0);
+  $stmt->bindValue(1, null, PDO::PARAM_NULL);
+  $stmt->bindValue(2, $user->username, PDO::PARAM_STR);
+  $stmt->bindValue(3, $user->email, PDO::PARAM_STR);
+  $stmt->bindValue(4, 0, PDO::PARAM_INT);
+  $stmt->bindValue(5, 0, PDO::PARAM_INT);
   $stmt->execute();
 
   // Now get account_ID to link with other tables.
@@ -22,12 +26,22 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
 
   // Next, send basic user information. Many things are stored in different tables, so this might be a little verbose.
   $stmt = $con->prepare("insert into Information (account_ID, first_name, middle_name, last_name, gender, email) values (?, ?, ?, ?, ?, ?)");
-  $stmt->bind_param("isssis", $account_id, $user->firstName, $user->middleName, $user->lastName, $user->gender, $user->email);
+  $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+  $stmt->bindValue(2, $user->firstName, PDO::PARAM_STR);
+  $stmt->bindValue(3, $user->middleName, PDO::PARAM_STR);
+  $stmt->bindValue(4, $user->lastName, PDO::PARAM_STR);
+  $stmt->bindValue(5, $user->gender, PDO::PARAM_INT);
+  $stmt->bindValue(6, $user->email, PDO::PARAM_STR);
   $stmt->execute();
 
   // make Address table entry, then get it's address_ID, then save that ID and the user ID to the Address History table.
   $stmt = $con->prepare("insert into Addresses (address_ID, country_ID, state/province, city, post_code, street_address) values (?, ?, ?, ?, ?, ?)");
-  $stmt->bind_param("iissis", null, $address->{getCountryCode()}, $address->state, $address->city, $address->postcode, $address->street);
+  $stmt->bindValue(1, null, PDO::PARAM_NULL);
+  $stmt->bindValue(2, $address->{getCountryCode()}, PDO::PARAM_INT);
+  $stmt->bindValue(3, $address->state, PDO::PARAM_STR);
+  $stmt->bindValue(4, $address->city, PDO::PARAM_STR);
+  $stmt->bindValue(5, $address->postcode, PDO::PARAM_INT);
+  $stmt->bindValue(6, $address->street, PDO::PARAM_STR);
   $stmt->execute();
 
   $stmt = $con->prepare("select account_ID from Addresses where street_address = " . $address->street . " and post_code = " . $address->postcode . " and city = " . $address->city);
@@ -36,12 +50,17 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $address_id = $row['address_ID'];
 
   $stmt = $con->prepare("insert into `Address History` (address_ID, account_ID, start, end) values (?, ?, ?, ?)");
-  $stmt->bind_param("iiss", $address_id, $account_id, now(), null);
+  $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
+  $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
+  $stmt->bindValue(3, now(), PDO::PARAM_STR);
+  $stmt->bindValue(4, null, PDO::PARAM_NULL);
   $stmt->execute();
 
   // send phone number info to db
   $stmt = $con->prepare("insert into `Phone Numbers` (address_ID, phone_type_ID, phone_number) values (?, ?, ?)");
-  $stmt->bind_param("iii", $account_id, 0, $user->phoneNumber);
+  $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
+  $stmt->bindValue(2, 0, PDO::PARAM_INT);
+  $stmt->bindValue(3, $user->phoneNumber, PDO::PARAM_INT);
   $stmt->execute();
 
   // Third, send Education and Work History
@@ -163,14 +182,10 @@ class EducationHistoryEntry {
 class WorkHistoryEntry {
   public $companyName;
   public $jobTitle;
-  public $startYear;
-  public $endYear;
 
-  function __construct($companyName, $jobTitle, $startYear, $endYear) {
+  function __construct($companyName, $jobTitle) {
     $this->companyName = $companyName;
     $this->jobTitle = $jobTitle;
-    $this->startYear = $startYear;
-    $this->endYear = $endYear;
   }
 }
 

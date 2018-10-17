@@ -30,9 +30,7 @@ if (isset($_POST['submit']))
 
   $businessName = $_POST['businessName'];
   $jobTitle = $_POST['jobTitle'];
-  $startDate = $_POST['startDate'];
-  $endDate = $_POST['endDate'];
-  $workHistory = new WorkHistoryEntry($businessName, $jobTitle, $startDate, $endDate);
+  $workHistory = new WorkHistoryEntry($businessName, $jobTitle);
 
   // verify Information
   if ($password != $confirmedPassword) {
