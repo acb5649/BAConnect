@@ -38,7 +38,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $stmt->execute();
 
   // make Address table entry, then get it's address_ID, then save that ID and the user ID to the Address History table.
-  $stmt = $con->prepare("insert into Addresses (address_ID, country_ID, state/province, city, post_code, street_address, street_address2) values (?, ?, ?, ?, ?, ?, ?)");
+  $stmt = $con->prepare("insert into Addresses (address_ID, country_ID, state, city, post_code, street_address, street_address2) values (?, ?, ?, ?, ?, ?, ?)");
   $stmt->bindValue(1, null, PDO::PARAM_NULL);
   $stmt->bindValue(2, $address->country, PDO::PARAM_INT);
   $stmt->bindValue(3, $address->state, PDO::PARAM_STR);
@@ -63,7 +63,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   // send phone number info to db
   $stmt = $con->prepare("insert into `Phone Numbers` (account_ID, phone_type_ID, phone_number) values (?, ?, ?)");
   $stmt->bindValue(1, $account_ID, PDO::PARAM_INT);
-  $stmt->bindValue(2, 0, PDO::PARAM_INT);
+  $stmt->bindValue(2, 1, PDO::PARAM_INT);
   $stmt->bindValue(3, $user->phoneNumber, PDO::PARAM_INT);
   $stmt->execute();
 
@@ -80,7 +80,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   }
 
   // and Work History...
-  $stmt = $con->prepare("insert into Job (job_ID, employer, state/profession_field) values (?, ?, ?)");
+  $stmt = $con->prepare("insert into Job (job_ID, employer, profession_field) values (?, ?, ?)");
   $stmt->bindValue(1, null, PDO::PARAM_NULL);
   $stmt->bindValue(2, $workHistory->companyName, PDO::PARAM_STR);
   $stmt->bindValue(3, $workHistory->jobTitle, PDO::PARAM_STR);
@@ -94,8 +94,8 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $stmt = $con->prepare("insert into `Job History` (job_ID, account_ID, start, end) values (?, ?, ?, ?)");
   $stmt->bindValue(1, $job_id, PDO::PARAM_INT);
   $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-  $stmt->bindValue(3, 2000, PDO::PARAM_STR);
-  $stmt->bindValue(4, 2018, PDO::PARAM_STR);
+  $stmt->bindValue(3, "2000", PDO::PARAM_STR);
+  $stmt->bindValue(4, "2018", PDO::PARAM_STR);
   $stmt->execute();
 
   // Finally, assign photos and resumes
