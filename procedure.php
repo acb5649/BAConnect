@@ -25,13 +25,18 @@ class procedure{
 		$connectDB = mysql_connect("localhost", "youngjon", "young","youngjon_db");
 		mysql_select_db("youngjon_db");
 		$query = mysql_query("SELECT * FROM Account WHERE username='$username'");
-		$numrows = mysql_num_rows($query);
-		if ($numrows!=0){
+		$nRows = mysql_num_rows($query);
+		if ($nRows!=0){
 			//while loop
 			while ($row = mysql_fetch_assoc($query)){
-				$this->username = $row['username'];
-				$this->password = $row['password'];
-				$this->accountType = $row['type'];
+				if($password == $row['password']){
+					$this->username = $row['username'];
+					$this->accountNumber = $row['account_ID'];
+					$this->accountType = $row['type'];
+					ini_set('session.use_strict_mode',1);
+					$this->sessionID = session_start();
+					$row['session_ID'] = $this->sessionID;
+				}
 			}
 		}
 		$connectDB=null;
@@ -51,14 +56,16 @@ class procedure{
 	public function GetSESSIONID(){
 		if(isset($_GET['sd'])){
 			$this->sessionID= $_GET['sd'];
-			$connectDB = mysql_connect("localhost", "youngjon", "Jcyoung1","youngjon_db");
+			$connectDB = mysql_connect("localhost", "youngjon", "young","youngjon_db");
 			mysql_select_db("youngjon_db");
-			$query = mysql_query("SELECT * FROM Account WHERE sessionid='$this->sessionID'");
+			$query = mysql_query("SELECT * FROM Account WHERE session_ID='$this->sessionID'");
 			$nRows = mysql_num_rows($query);
 			if ($nRows!=0){
 				//while loop
 				while ($row = mysql_fetch_assoc($query)){
 					$this->accountNumber = $row['account_ID'];
+					$this->username= $row['username'];
+					$this->accountType = $row['type'];
 				}
 			}
 			$connectDB=null;
