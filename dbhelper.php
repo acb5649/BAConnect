@@ -38,14 +38,13 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $stmt->execute();
 
   // make Address table entry, then get it's address_ID, then save that ID and the user ID to the Address History table.
-  $stmt = $con->prepare("insert into Addresses (address_ID, country_ID, state, city, post_code, street_address, street_address2) values (?, ?, ?, ?, ?, ?, ?)");
-  $stmt->bindValue(1, null, PDO::PARAM_NULL);
-  $stmt->bindValue(2, $address->country, PDO::PARAM_INT);
-  $stmt->bindValue(3, $address->state, PDO::PARAM_STR);
-  $stmt->bindValue(4, $address->city, PDO::PARAM_STR);
-  $stmt->bindValue(5, $address->postcode, PDO::PARAM_INT);
+  $stmt = $con->prepare("insert into Addresses (country_ID, state, city, post_code, street_address, street_address2) values (?, ?, ?, ?, ?, ?)");
+  $stmt->bindValue(1, $address->country, PDO::PARAM_INT);
+  $stmt->bindValue(2, $address->state, PDO::PARAM_STR);
+  $stmt->bindValue(3, $address->city, PDO::PARAM_STR);
+  $stmt->bindValue(4, $address->postcode, PDO::PARAM_STR);
+  $stmt->bindValue(5, $address->street, PDO::PARAM_STR);
   $stmt->bindValue(6, $address->street, PDO::PARAM_STR);
-  $stmt->bindValue(7, "", PDO::PARAM_STR);
   $stmt->execute();
 
   $stmt = $con->prepare("select account_ID from Addresses where street_address = '" . $address->street . "' and post_code = '" . $address->postcode . "' and city = '" . $address->city . "'");

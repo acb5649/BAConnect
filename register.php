@@ -112,13 +112,13 @@ if (isset($_POST['upload_resume']))
                         </p>
                         <input class="w3-input w3-border" type="text" maxlength="50" value="" name="city" id="city" />
                         <p>
-                            <label>Postal Code</label>
-                        </p>
-                        <input class="w3-input w3-border" type="text" maxlength="50" value="" name="postcode" id="postcode" />
-                        <p>
                             <label>State/province</label>
                         </p>
                         <input class="w3-input w3-border" type="text" maxlength="50" value="" name="state" id="state" />
+                        <p>
+                            <label>Postal Code</label>
+                        </p>
+                        <input class="w3-input w3-border" type="text" maxlength="50" value="" name="postcode" id="postcode" />
                         <p>
                             <label>Country</label>
                         </p>
