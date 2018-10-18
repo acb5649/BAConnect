@@ -1,4 +1,6 @@
 <?php
+	session_set_cookie_params(3600, '/', 'corsair.cs.iupui.edu:22981');
+	session_start();
 
     require_once "functions.php";
     require_once "card.php";
@@ -16,6 +18,9 @@
 	//$checker->logout();
 	//$type = $checker->GetPrivelages();
 	$type=0;
+	if (isset($_SESSION['type'])) {
+		$type = $_SESSION['type'];
+	}
 	
 
 ?>

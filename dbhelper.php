@@ -299,7 +299,16 @@ function login($user_email, $password) {
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
 	$true_pass = $row['password'];
 
-	return ($password == $true_pass);
+	$stmt = $con->prepare("select type from Account where account_ID = '" . $account_id . "'");
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	$type = $row['type'];
+
+	if ($password == $true_pass) {
+		return $type;
+	} else {
+		return False;
+	}
 }
 
 ?>
