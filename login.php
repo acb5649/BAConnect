@@ -1,6 +1,10 @@
 <?php
-	//session_set_cookie_params(3600, '/', 'corsair.cs.iupui.edu:22891');
-	//session_start();
+	if (!isset($_SESSION)) {
+	$sess_name = session_name();
+        if (session_start()) {
+                setcookie($sess_name, session_id(), NULL, '/');
+        }
+	}
 
 if (isset($_POST['logIn'])) {
 	require_once "dbhelper.php";
@@ -10,7 +14,7 @@ if (isset($_POST['logIn'])) {
 	if ($type) {
 		$_SESSION['type'] = $type;
 	}
-	print '<meta http-equiv="refresh" content="0;url=/courseproject">';
+	print '<meta http-equiv="refresh" content="0;url=/courseProject">';
 }
 ?>
 

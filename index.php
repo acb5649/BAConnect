@@ -1,6 +1,8 @@
 <?php
-	session_set_cookie_params(3600, '/', 'corsair.cs.iupui.edu:22891');
-	session_start();
+	$sess_name = session_name();
+	if (session_start()) {
+		setcookie($sess_name, session_id(), NULL, '/');
+	}
 
     require_once "functions.php";
     require_once "card.php";
