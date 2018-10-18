@@ -1,4 +1,4 @@
-<?php session_start();
+<?php
 
     require_once "functions.php";
     require_once "card.php";
@@ -10,9 +10,13 @@
 	$checker = new procedure;
 	$user = "buster";
 	$pass = "man";
-	$checker->verify($user,$pass);
-	$checker->getSESSIONID();
-	$type = $checker->GetPrivelages();
+	//$checker->verify($user,$pass);<-LOGIN EQUIVLANT
+	//$checker->sendKeys();
+	//$checker->getAcc();
+	//$checker->logout();
+	//$type = $checker->GetPrivelages();
+	$type=0;
+	
 
 ?>
     <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
@@ -272,10 +276,4 @@ function toggleNav() {
     }
 }
     </script>
-	<?php
-	if(isset($_GET['reset_password'])){
-		include "reset_password.php";
-		print "<script type='text/javascript'>document.getElementById('resetPasswordModal').style.display='block';</script>";
-	}
-	?>
 </html>
