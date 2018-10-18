@@ -67,7 +67,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $stmt->bindValue(3, $user->phoneNumber, PDO::PARAM_INT);
   $stmt->execute();
 
-  // Third, send Education and Work History
+  // Third, send Education
   foreach($educationHistory as $educationElement) {
 
     $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year) values (?, ?, ?, ?, ?)");
@@ -79,27 +79,24 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
     $stmt->execute();
   }
 
-  foreach($workHistory as $workElement) {
-    if (is_object($workElement)) {
-      $stmt = $con->prepare("insert into Job (job_ID, employer, state/profession_field) values (?, ?, ?)");
-      $stmt->bindValue(1, null, PDO::PARAM_NULL);
-      $stmt->bindValue(2, $workElement->companyName, PDO::PARAM_STR);
-      $stmt->bindValue(3, $workElement->jobTitle, PDO::PARAM_STR);
-      $stmt->execute();
+  // and Work History...
+  $stmt = $con->prepare("insert into Job (job_ID, employer, state/profession_field) values (?, ?, ?)");
+  $stmt->bindValue(1, null, PDO::PARAM_NULL);
+  $stmt->bindValue(2, $workHistory->companyName, PDO::PARAM_STR);
+  $stmt->bindValue(3, $workHistory->jobTitle, PDO::PARAM_STR);
+  $stmt->execute();
 
-      $stmt = $con->prepare("select job_ID from Job where employer = '" . $workElement->companyName . "' and profession_field = '" . $workElement->jobTitle . "'");
-      $stmt->execute();
-      $row = $stmt->fetch(PDO::FETCH_ASSOC);
-      $job_id = $row['job_id'];
+  $stmt = $con->prepare("select job_ID from Job where employer = '" . $workHistory->companyName . "' and profession_field = '" . $workHistory->jobTitle . "'");
+  $stmt->execute();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $job_id = $row['job_id'];
 
-      $stmt = $con->prepare("insert into `Job History` (job_ID, account_ID, start, end) values (?, ?, ?, ?)");
-      $stmt->bindValue(1, $job_id, PDO::PARAM_INT);
-      $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-      $stmt->bindValue(3, 2000, PDO::PARAM_STR);
-      $stmt->bindValue(4, 2018, PDO::PARAM_STR);
-      $stmt->execute();
-    }
-  }
+  $stmt = $con->prepare("insert into `Job History` (job_ID, account_ID, start, end) values (?, ?, ?, ?)");
+  $stmt->bindValue(1, $job_id, PDO::PARAM_INT);
+  $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
+  $stmt->bindValue(3, 2000, PDO::PARAM_STR);
+  $stmt->bindValue(4, 2018, PDO::PARAM_STR);
+  $stmt->execute();
 
   // Finally, assign photos and resumes
   $stmt = $con->prepare("insert into Pictures (picture_ID, account_ID, date_uploaded, picture) values (?, ?, ?, ?)");
