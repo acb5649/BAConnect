@@ -7,7 +7,7 @@
         AddDegreeType($degreeTypeName);
     }
     elseif (isset($_POST['edit'])) {
-        $oldName = trim($_POST['degreeType'])
+        $oldName = trim($_POST['degreeType']);
         $newName = trim($_POST['editDegreeType']);
 
         EditDegreeType($oldName, $newName);

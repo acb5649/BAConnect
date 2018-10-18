@@ -7,7 +7,7 @@
         AddCountry($countryName);
     }
     elseif (isset($_POST['edit'])) {
-        $oldName = trim($_POST['country'])
+        $oldName = trim($_POST['country']);
         $newName = trim($_POST['editCountry']);
 
         EditCountry($oldName, $newName);
