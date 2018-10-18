@@ -14,7 +14,7 @@ if (isset($_POST['logIn'])) {
 	if ($type) {
 		$_SESSION['type'] = $type;
 	}
-	print '<meta http-equiv="refresh" content="0;url=/courseProject">';
+	print '<meta http-equiv="refresh" content="0;url=/courseproject">';
 }
 ?>
 
