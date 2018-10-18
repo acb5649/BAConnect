@@ -80,9 +80,9 @@ function AddDegreeType($degreeType){
 	$stmt = null;
 	$result = null;
 
-	$stmt = $con->prepare("INSERT INTO `Degree Types` (degree_type_ID, degree) values (?, ?)");
-	$stmt->execute(null, $degreeType);
-
+	$stmt = $con->prepare("INSERT INTO `Degree Types` (degree) values (?)");
+	$stmt->bindValue(1, $degreeType, PDO::PARAM_STR);
+	$stmt->execute();
 
 	$stmt = null;
 	$con = null;
@@ -157,8 +157,10 @@ function AddCountry($countryName){
 	$stmt = null;
 	$result = null;
 
-	$stmt = $con->prepare("INSERT INTO Countries (country_ID, country) values (?, ?)");
-	$stmt->execute(null, $countryName);
+	$stmt = $con->prepare("INSERT INTO Countries (country) values (?)");
+	$stmt->bindValue(1, $countryName, PDO::PARAM_STR);
+	$stmt->execute();
+
 
 	$stmt = null;
 	$con = null;
