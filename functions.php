@@ -18,7 +18,7 @@ function CountryList() {
 		return null;
 	}
 
-	$stmt = $con->prepare("SELECT country FROM Countries");
+	$stmt = $con->prepare("SELECT country, country_ID FROM Countries");
 	$stmt->execute();
 	$list = $stmt->fetchAll();
 
@@ -29,7 +29,7 @@ function CountryList() {
 
 	$html = "";
 	foreach ($list as $option) {
-		$html = $html . '<option value="' . $option["country"] . '"> ' . $option["country"] . ' </option> ';
+		$html = $html . '<option value="' . $option["country_id"] . '"> ' . $option["country"] . ' </option> ';
 	}
 
 	return $html;
@@ -44,7 +44,7 @@ function DegreeTypeList(){
 		return null;
 	}
 
-	$stmt = $con->prepare("SELECT degree FROM `Degree Types`");
+	$stmt = $con->prepare("SELECT degree, degree_type_ID FROM `Degree Types`");
 	$stmt->execute();
 	$list = $stmt->fetchAll();
 
@@ -52,7 +52,7 @@ function DegreeTypeList(){
 
 	$html = "";
 	foreach ($list as $option) {
-		$html = $html . '<option value="' . $option["degree"] . '"> ' . $option["degree"] . ' </option> ';
+		$html = $html . '<option value="' . $option["degree_type_ID"] . '"> ' . $option["degree"] . ' </option> ';
 	}
 
 	$con = null;

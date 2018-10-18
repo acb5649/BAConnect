@@ -2,12 +2,17 @@
 
     require_once "functions.php";
     require_once "card.php";
-	require_once "dbhelper.php";
+	require_once "procedure.php";
 
     $msg = "";
     $term = "You must agree to the terms and conditions";
 	//base type to hide access to admin functions & logged in access
-	$type = -2;
+	$checker = new procedure;
+	$user = "buster";
+	$pass = "man";
+	$checker->verify($user,$pass);
+	$checker->getSESSIONID();
+	$type = $checker->GetPrivelages();
 
 ?>
     <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
@@ -171,14 +176,20 @@
                 <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="toggleNav()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
                 <!-- The homepage will have a feed of the newest users and updated users -->
                 <a class="w3-bar-item w3-button w3-padding-large">BAConnect</a>
-                <!-- If user is logged in, this link becomes a link to the user's profile -->
-                <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('loginModal').style.display='block'">LOG IN</a>
                 <!-- If user is logged in, don't show this link -->
 				<?php
+					$block="'block'";
+					$firstBlock="";
+					$log= "'loginModal'";
+					if($type==1){
+						$firstBlock = "PROFILE";
+					}else{
+						$firstBlock = "LOG IN";
+					}
+					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$log.').style.display='.$block.'">'.$firstBlock.'</a>';
 					//Hide upon login
-					if($type < 0){
+					if($type <= 0){
 						$reg= "'registerModal'";
-						$block = "'block'";
 						$forgot = "'forgotModal'";
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$reg.').style.display='.$block.'">REGISTER</a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$forgot.').style.display='.$block.'">FORGOT LOGIN</a>';
@@ -186,14 +197,13 @@
 					}
 				?>
 				<?php
-					if($type >=0){
+					if($type >=1){
 						//user settings button?
 						print '<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-cogs"></i></a>';
 					}
 				?>
 				<?php
-					if($type >= 1){
-						$block = "'block'";
+					if($type > 1){
 						$match="'matchModal'";
 						$edit="'editModal'";
 						$upgrade="'upgradeModal'";
@@ -211,6 +221,7 @@
 
         <div id="navMobile" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
           <?php
+			
 			//Change to user profile?
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('loginModal').style.display='block''>LOG IN</a>";
 			//Hide after login

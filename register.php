@@ -98,11 +98,11 @@ if (isset($_POST['upload_resume']))
                             <label>Gender</label>
                         </p>
                         <label>Male</label>
-                        <input class="w3-radio w3-border" type="radio" name="gender" value="Male" checked="checked" />
+                        <input class="w3-radio w3-border" type="radio" name="gender" value="0" checked="checked" />
                         <label>Female</label>
-                        <input class="w3-radio w3-border" type="radio" name="gender" value="Female" />
+                        <input class="w3-radio w3-border" type="radio" name="gender" value="1" />
                         <label>Nonbinary</label>
-                        <input class="w3-radio w3-border" type="radio" name="gender" value="NB" />
+                        <input class="w3-radio w3-border" type="radio" name="gender" value="2" />
                         <p>
                             <label>Address Line 1</label>
                         </p>
@@ -112,13 +112,13 @@ if (isset($_POST['upload_resume']))
                         </p>
                         <input class="w3-input w3-border" type="text" maxlength="50" value="" name="city" id="city" />
                         <p>
-                            <label>Postal Code</label>
-                        </p>
-                        <input class="w3-input w3-border" type="text" maxlength="50" value="" name="postcode" id="postcode" />
-                        <p>
                             <label>State/province</label>
                         </p>
                         <input class="w3-input w3-border" type="text" maxlength="50" value="" name="state" id="state" />
+                        <p>
+                            <label>Postal Code</label>
+                        </p>
+                        <input class="w3-input w3-border" type="text" maxlength="50" value="" name="postcode" id="postcode" />
                         <p>
                             <label>Country</label>
                         </p>
