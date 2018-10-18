@@ -16,7 +16,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $stmt = $con->prepare("insert into Account (account_ID, username, password, type, active) values (?, ?, ?, ?, ?)");
   $stmt->bindValue(1, null, PDO::PARAM_NULL);
   $stmt->bindValue(2, $user->username, PDO::PARAM_STR);
-  $stmt->bindValue(3, $user->email, PDO::PARAM_STR);
+  $stmt->bindValue(3, $user->password, PDO::PARAM_STR);
   $stmt->bindValue(4, 0, PDO::PARAM_INT);
   $stmt->bindValue(5, 0, PDO::PARAM_INT);
   $stmt->execute();
@@ -172,10 +172,6 @@ class Address {
     $this->country = $country;
   }
 
-  function getCountryCode() {
-    return 0;
-  }
-
 }
 
 class EducationHistoryEntry {
@@ -189,10 +185,6 @@ class EducationHistoryEntry {
     $this->degreeType = $degreeType;
     $this->degreeMajor = $degreeMajor;
     $this->gradYear = $gradYear;
-  }
-
-  function getDegreeType() {
-    return 0;
   }
 
 }
