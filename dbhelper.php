@@ -267,4 +267,39 @@ function forgot_password($code, $password) {
 	return True;
 }
 
+function login($user_email, $password) {
+	try {
+		$con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
+		$isConnected = true;
+	} catch (PDOException $e) {
+		echo $e->getMessage();
+	}
+
+	$stmt = $con->prepare("select account_ID from Account where username = '" . $user_email . "'");
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	$account_id = $row['account_ID'];
+
+	$stmt = $con->prepare("select account_ID from Information where email_address = '" . $user_email . "'");
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	$temp = $row['account_ID'];
+
+
+	if($temp) {
+		$account_id = $temp;
+	}
+	if(!$account_id){
+		$con = null;
+		return False;
+	}
+
+	$stmt = $con->prepare("select password from Account where account_ID = '" . $account_id . "'");
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	$true_pass = $row['password'];
+
+	return ($password == $true_pass);
+}
+
 ?>
