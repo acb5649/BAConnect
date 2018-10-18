@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 
     require_once "functions.php";
     require_once "card.php";
@@ -7,7 +7,7 @@
     $msg = "";
     $term = "You must agree to the terms and conditions";
 	//base type to hide access to admin functions & logged in access
-	$type = -1;
+	$type = -2;
 
 ?>
     <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
@@ -192,7 +192,7 @@
 					}
 				?>
 				<?php
-					if($type > 1){
+					if($type >= 1){
 						$block = "'block'";
 						$match="'matchModal'";
 						$edit="'editModal'";
@@ -261,4 +261,10 @@ function toggleNav() {
     }
 }
     </script>
+	<?php
+	if(isset($_GET['reset_password'])){
+		include "reset_password.php";
+		print "<script type='text/javascript'>document.getElementById('resetPasswordModal').style.display='block';</script>";
+	}
+	?>
 </html>

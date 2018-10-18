@@ -209,4 +209,73 @@ class WorkHistoryEntry {
   }
 }
 
+function reset_password($user_email) {
+	try {
+		$con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
+		$isConnected = true;
+	} catch (PDOException $e) {
+		echo $e->getMessage();
+	}
+
+	$stmt = $con->prepare("select account_ID from Account where username = '" . $user_email . "'");
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	$account_id = $row['account_ID'];
+
+	$stmt = $con->prepare("select account_ID from Information where email_address = '" . $user_email . "'");
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	$temp = $row['account_ID'];
+
+
+	if($temp) {
+		$account_id = $temp;
+	}
+	if(!$account_id){
+		$con = null;
+		return False;
+	}
+
+	$stmt = $con->prepare("select email_address from Information where account_ID = '" . $account_id . "'");
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	$email = $row['email_address'];
+
+	$code = makeCode($email);
+	$stmt = $con->prepare("insert into `Password Recovery` (account_ID, code) values (?, ?)");
+	$stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+	$stmt->bindValue(2, $code, PDO::PARAM_STR);
+	$stmt->execute();
+
+	mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://corsair.cs.iupui.edu:22891/courseproject/index.php?reset_password=" . $code);
+
+	$con = null;
+	return True;
+}
+
+function forgot_password($code, $password) {
+	try {
+		$con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
+		$isConnected = true;
+	} catch (PDOException $e) {
+		echo $e->getMessage();
+	}
+
+	$stmt = $con->prepare("select account_ID from `Password Recovery` where code = '".$code."'");
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	$account_id = $row['account_ID'];
+
+	if (!$account_id) {
+		return False;
+	}
+
+	$stmt = $con->prepare("update Account set password=? where account_ID=?");
+	$stmt->bindValue(1, $password, PDO::PARAM_STR);
+	$stmt->bindValue(2, $account_id, PDO::PARAM_INT);
+	$stmt->execute();
+
+	return True;
+}
+
 ?>
