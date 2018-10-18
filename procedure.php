@@ -54,6 +54,7 @@ class procedure{
 					$row['session_ID'] = $this->sessionID;
 				}
 			}
+			}
 		}
 		$connectDB=null;
 		
