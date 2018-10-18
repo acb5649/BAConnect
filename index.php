@@ -14,12 +14,12 @@
 	$checker = new procedure;
 	$user = "buster";
 	$pass = "man";
-	
+
 	$type=0;
 	if (isset($_SESSION['type'])) {
 		$type = $_SESSION['type'];
 	}
-	
+
 
 ?>
     <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
@@ -187,7 +187,7 @@
 				<?php
 					$block="'block'";
 					$firstBlock="";
-					
+
 					if($type==1){
 						$prof= "'profileModal'";
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$prof.').style.display='.$block.'">PROFILE</a>';
@@ -195,14 +195,14 @@
 						$log= "'loginModal'";
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$log.').style.display='.$block.'">LOG IN</a>';
 					}
-			
+
 					//Hide upon login
 					if($type <= 0){
 						$reg= "'registerModal'";
 						$forgot = "'forgotModal'";
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$reg.').style.display='.$block.'">REGISTER</a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$forgot.').style.display='.$block.'">FORGOT LOGIN</a>';
-						
+
 					}
 				?>
 				<?php
@@ -221,10 +221,11 @@
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$edit.').style.display='.$block.'">EDIT ACCOUNTS </a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$upgrade.').style.display='.$block.'">UPGRADE ACCOUNTS</a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$search.').style.display='.$block.'">USER SEARCH</a>';
-						
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="addCountry.php">ADD COUNTRY</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="addDegreeType.php">ADD DEGREE TYPE</a>';
 					}
 				  ?>
-                
+
             </div>
         </div>
 
@@ -232,7 +233,7 @@
 			<?php
 					$block="'block'";
 					$firstBlock="";
-					
+
 					if($type==1){
 						$prof= "'profileModal'";
 						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('.$prof.').style.display='.$block.'">PROFILE</a>';
@@ -240,14 +241,14 @@
 						$log= "'loginModal'";
 						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('.$log.').style.display='.$block.'">LOG IN</a>';
 					}
-			
+
 					//Hide upon login
 					if($type <= 0){
 						$reg= "'registerModal'";
 						$forgot = "'forgotModal'";
 						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('.$reg.').style.display='.$block.'">REGISTER</a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('.$forgot.').style.display='.$block.'">FORGOT LOGIN</a>';
-						
+
 					}
 			?>
 			<?php
@@ -266,7 +267,7 @@
 					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="toggleNav();document.getElementById('.$edit.').style.display='.$block.'">EDIT ACCOUNTS </a>';
 					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="toggleNav();document.getElementById('.$upgrade.').style.display='.$block.'">UPGRADE ACCOUNTS</a>';
 					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="toggleNav();document.getElementById('.$search.').style.display='.$block.'">USER SEARCH</a>';
-						
+
 				}
 			?>
         </div>
