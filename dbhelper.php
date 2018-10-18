@@ -68,6 +68,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
 
   // Third, send Education and Work History
   foreach($educationHistory as $educationElement) {
+
     $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year) values (?, ?, ?, ?, ?)");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->bindValue(2, $educationElement->degreeType, PDO::PARAM_INT);
@@ -78,23 +79,25 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   }
 
   foreach($workHistory as $workElement) {
-    $stmt = $con->prepare("insert into Job (job_ID, employer, state/profession_field) values (?, ?, ?)");
-    $stmt->bindValue(1, null, PDO::PARAM_NULL);
-    $stmt->bindValue(2, $workElement->companyName, PDO::PARAM_STR);
-    $stmt->bindValue(3, $workElement->jobTitle, PDO::PARAM_STR);
-    $stmt->execute();
+    if (is_object($workElement)) {
+      $stmt = $con->prepare("insert into Job (job_ID, employer, state/profession_field) values (?, ?, ?)");
+      $stmt->bindValue(1, null, PDO::PARAM_NULL);
+      $stmt->bindValue(2, $workElement->companyName, PDO::PARAM_STR);
+      $stmt->bindValue(3, $workElement->jobTitle, PDO::PARAM_STR);
+      $stmt->execute();
 
-    $stmt = $con->prepare("select job_ID from Job where employer = " . $workElement->companyName . " and profession_field = " . $workElement->jobTitle);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $job_id = $row['job_id'];
+      $stmt = $con->prepare("select job_ID from Job where employer = " . $workElement->companyName . " and profession_field = " . $workElement->jobTitle);
+      $stmt->execute();
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $job_id = $row['job_id'];
 
-    $stmt = $con->prepare("insert into `Job History` (job_ID, account_ID, start, end) values (?, ?, ?, ?)");
-    $stmt->bindValue(1, $job_id, PDO::PARAM_INT);
-    $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-    $stmt->bindValue(3, 2000, PDO::PARAM_STR);
-    $stmt->bindValue(4, 2018, PDO::PARAM_STR);
-    $stmt->execute();
+      $stmt = $con->prepare("insert into `Job History` (job_ID, account_ID, start, end) values (?, ?, ?, ?)");
+      $stmt->bindValue(1, $job_id, PDO::PARAM_INT);
+      $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
+      $stmt->bindValue(3, 2000, PDO::PARAM_STR);
+      $stmt->bindValue(4, 2018, PDO::PARAM_STR);
+      $stmt->execute();
+    }
   }
 
   // Finally, assign photos and resumes
@@ -112,7 +115,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
 
   // If all that went well, set the account to disabled, and only enable it once the user clicks the link to activate their account.
   $stmt = $con->prepare("insert into Registration (account_ID, registration_code) values (?, ?)");
-  $code = getCode($user->email);
+  $code = makeCode($user->email);
   $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
   $stmt->bindValue(2, $code, PDO::PARAM_STR);
   $stmt->execute();
