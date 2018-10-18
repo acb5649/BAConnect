@@ -36,6 +36,8 @@
 
                   var brk = document.getElementById("break_" + oldNumber);
                   brk.id = "break_" + newNum;
+                  var type = document.getElementById("degreeType_" + oldNumber);
+                  type.id = "degreeType_" + newNum;
                   var schoolName = document.getElementById("schoolName_" + oldNumber);
                   schoolName.id = "schoolName_" + newNum;
                   var majorName = document.getElementById("major_" + oldNumber);
@@ -182,7 +184,7 @@
 						$forgot = "'forgotModal'";
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$reg.').style.display='.$block.'">REGISTER</a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$forgot.').style.display='.$block.'">FORGOT LOGIN</a>';
-						
+
 					}
 				?>
 				<?php
@@ -202,10 +204,10 @@
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$edit.').style.display='.$block.'">EDIT ACCOUNTS </a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$upgrade.').style.display='.$block.'">UPGRADE ACCOUNTS</a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$search.').style.display='.$block.'">USER SEARCH</a>';
-						
+
 					}
 				  ?>
-                
+
             </div>
         </div>
 
@@ -216,7 +218,7 @@
 			//Hide after login
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('registerModal').style.display='block''>REGISTER</a>";
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('forgotModal').style.display='block''>FORGOT LOGIN</a>";
-			
+
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('matchModal').style.display='block''>MATCH USERS</a>";
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('editModal').style.display='block''>EDIT ACCOUNTS </a>";
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('upgradeModal').style.display='block''>UPGRADE ACCOUNTS</a>";
