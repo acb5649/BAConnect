@@ -9,6 +9,9 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
       echo $e->getMessage();
   }
 
+  $date = new Datetime('NOW');
+  $dateStr = $date->format('Y-m-d H:i:s');
+
   // First create an Account in the DB
   $stmt = $con->prepare("insert into Account (account_ID, username, password, type, active) values (?, ?, ?, ?, ?)");
   $stmt->bindValue(1, null, PDO::PARAM_NULL);
@@ -37,7 +40,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   // make Address table entry, then get it's address_ID, then save that ID and the user ID to the Address History table.
   $stmt = $con->prepare("insert into Addresses (address_ID, country_ID, state/province, city, post_code, street_address) values (?, ?, ?, ?, ?, ?)");
   $stmt->bindValue(1, null, PDO::PARAM_NULL);
-  $stmt->bindValue(2, $address->{getCountryCode()}, PDO::PARAM_INT);
+  $stmt->bindValue(2, $address->country, PDO::PARAM_INT);
   $stmt->bindValue(3, $address->state, PDO::PARAM_STR);
   $stmt->bindValue(4, $address->city, PDO::PARAM_STR);
   $stmt->bindValue(5, $address->postcode, PDO::PARAM_INT);
@@ -52,7 +55,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $stmt = $con->prepare("insert into `Address History` (address_ID, account_ID, start, end) values (?, ?, ?, ?)");
   $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
   $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-  $stmt->bindValue(3, now(), PDO::PARAM_STR);
+  $stmt->bindValue(3, $dateStr, PDO::PARAM_STR);
   $stmt->bindValue(4, null, PDO::PARAM_NULL);
   $stmt->execute();
 
@@ -67,7 +70,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   foreach($educationHistory as $educationElement) {
     $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year) values (?, ?, ?, ?, ?)");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
-    $stmt->bindValue(2, $educationElement->{getDegreeType()}, PDO::PARAM_INT);
+    $stmt->bindValue(2, $educationElement->degreeType, PDO::PARAM_INT);
     $stmt->bindValue(3, $educationElement->schoolName, PDO::PARAM_STR);
     $stmt->bindValue(4, $educationElement->degreeMajor, PDO::PARAM_STR);
     $stmt->bindValue(5, $educationElement->gradYear, PDO::PARAM_INT);
@@ -76,7 +79,6 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
 
   foreach($workHistory as $workElement) {
     $stmt = $con->prepare("insert into Job (job_ID, employer, state/profession_field) values (?, ?, ?)");
-    $stmt->bind_param("iss", null, $workElement->companyName, $workElement->jobTitle);
     $stmt->bindValue(1, null, PDO::PARAM_NULL);
     $stmt->bindValue(2, $workElement->companyName, PDO::PARAM_STR);
     $stmt->bindValue(3, $workElement->jobTitle, PDO::PARAM_STR);
@@ -99,7 +101,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $stmt = $con->prepare("insert into Pictures (picture_ID, account_ID, date_uploaded, picture) values (?, ?, ?, ?)");
   $stmt->bindValue(1, null, PDO::PARAM_NULL);
   $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-  $stmt->bindValue(3, now(), PDO::PARAM_STR);
+  $stmt->bindValue(3, $dateStr, PDO::PARAM_STR);
   $stmt->bindValue(4, $picture, PDO::PARAM_STR);
   $stmt->execute();
 
@@ -170,7 +172,7 @@ class Address {
   }
 
   function getCountryCode() {
-
+    return 0;
   }
 
 }
@@ -189,7 +191,7 @@ class EducationHistoryEntry {
   }
 
   function getDegreeType() {
-
+    return 0;
   }
 
 }
