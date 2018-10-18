@@ -267,7 +267,8 @@
 					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="toggleNav();document.getElementById('.$edit.').style.display='.$block.'">EDIT ACCOUNTS </a>';
 					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="toggleNav();document.getElementById('.$upgrade.').style.display='.$block.'">UPGRADE ACCOUNTS</a>';
 					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="toggleNav();document.getElementById('.$search.').style.display='.$block.'">USER SEARCH</a>';
-
+					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="addCountry.php">ADD COUNTRY</a>';
+					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="addDegreeType.php">ADD DEGREE TYPE</a>';
 				}
 			?>
         </div>
