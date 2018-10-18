@@ -8,11 +8,11 @@
     $term = "You must agree to the terms and conditions";
 	//base type to hide access to admin functions & logged in access
 	$checker = new procedure;
-	if(isset($checker->sessionID)){
-		$type = $checker->GetPrivelages;
-	}else{
-		$type=-1;
-	}
+	$user = "buster";
+	$pass = "man";
+	$checker->verify($user,$pass);
+	$checker->getSESSIONID();
+	$type = $checker->GetPrivelages();
 
 ?>
     <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
@@ -181,14 +181,14 @@
 					$block="'block'";
 					$firstBlock="";
 					$log= "'loginModal'";
-					if($type==0){
+					if($type==1){
 						$firstBlock = "PROFILE";
 					}else{
 						$firstBlock = "LOG IN";
 					}
 					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$log.').style.display='.$block.'">'.$firstBlock.'</a>';
 					//Hide upon login
-					if($type < 0){
+					if($type <= 0){
 						$reg= "'registerModal'";
 						$forgot = "'forgotModal'";
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$reg.').style.display='.$block.'">REGISTER</a>';
@@ -197,7 +197,7 @@
 					}
 				?>
 				<?php
-					if($type >=0){
+					if($type >=1){
 						//user settings button?
 						print '<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-cogs"></i></a>';
 					}
