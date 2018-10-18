@@ -22,7 +22,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $stmt->execute();
 
   // Now get account_ID to link with other tables.
-  $stmt = $con->prepare("select account_ID from Account where username = " . $user->username);
+  $stmt = $con->prepare("select account_ID from Account where username = '" . $user->username . "'");
   $stmt->execute();
   $row = $stmt->fetch(PDO::FETCH_ASSOC);
   $account_id = $row['account_ID'];
@@ -47,7 +47,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $stmt->bindValue(6, $address->street, PDO::PARAM_STR);
   $stmt->execute();
 
-  $stmt = $con->prepare("select account_ID from Addresses where street_address = " . $address->street . " and post_code = " . $address->postcode . " and city = " . $address->city);
+  $stmt = $con->prepare("select account_ID from Addresses where street_address = '" . $address->street . "' and post_code = '" . $address->postcode . "' and city = '" . $address->city . "'");
   $stmt->execute();
   $row = $stmt->fetch(PDO::FETCH_ASSOC);
   $address_id = $row['address_ID'];
@@ -86,7 +86,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
       $stmt->bindValue(3, $workElement->jobTitle, PDO::PARAM_STR);
       $stmt->execute();
 
-      $stmt = $con->prepare("select job_ID from Job where employer = " . $workElement->companyName . " and profession_field = " . $workElement->jobTitle);
+      $stmt = $con->prepare("select job_ID from Job where employer = '" . $workElement->companyName . "' and profession_field = '" . $workElement->jobTitle . "'");
       $stmt->execute();
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
       $job_id = $row['job_id'];
@@ -121,7 +121,7 @@ function registerUser($user, $address, $educationHistory, $workHistory, $photo, 
   $stmt->execute();
 
   //Email a verification code to the email provided.
-  mail($user->email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code);
+  mail($user->email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . $user->email);
 
   $con = null;
 }
