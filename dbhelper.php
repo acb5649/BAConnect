@@ -305,6 +305,7 @@ function login($user_email, $password) {
 	$type = $row['type'];
 
 	if ($password == $true_pass) {
+		$_SESSION['account_ID'] = $account_id;
 		return $type;
 	} else {
 		return False;
