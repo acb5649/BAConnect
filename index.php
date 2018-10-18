@@ -23,7 +23,7 @@
 	if (isset($_SESSION['type'])) {
 		$type = $_SESSION['type'];
 	}
-	
+
 
 ?>
     <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
@@ -33,7 +33,7 @@
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Themed Demo</title>
+        <title>BAConnect Home</title>
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script type='text/javascript'>
@@ -204,7 +204,7 @@
 						$forgot = "'forgotModal'";
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$reg.').style.display='.$block.'">REGISTER</a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$forgot.').style.display='.$block.'">FORGOT LOGIN</a>';
-						
+
 					}
 				?>
 				<?php
@@ -223,22 +223,22 @@
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$edit.').style.display='.$block.'">EDIT ACCOUNTS </a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$upgrade.').style.display='.$block.'">UPGRADE ACCOUNTS</a>';
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$search.').style.display='.$block.'">USER SEARCH</a>';
-						
+
 					}
 				  ?>
-                
+
             </div>
         </div>
 
         <div id="navMobile" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
           <?php
-			
+
 			//Change to user profile?
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('loginModal').style.display='block''>LOG IN</a>";
 			//Hide after login
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('registerModal').style.display='block''>REGISTER</a>";
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('forgotModal').style.display='block''>FORGOT LOGIN</a>";
-			
+
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('matchModal').style.display='block''>MATCH USERS</a>";
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('editModal').style.display='block''>EDIT ACCOUNTS </a>";
 			print "<a class='w3-bar-item w3-button w3-padding-large' onclick='toggleNav();document.getElementById('upgradeModal').style.display='block''>UPGRADE ACCOUNTS</a>";
