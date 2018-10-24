@@ -176,38 +176,27 @@
 					$block="'block'";
 					$firstBlock="";
 
-					if($type==1){
-						$prof= "'profileModal'";
-						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$prof.').style.display='.$block.'">PROFILE</a>';
-					}else{
-						$log= "'loginModal'";
-						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$log.').style.display='.$block.'">LOG IN</a>';
+					if($type == 1){
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'profileModal'".').style.display='.$block.'">PROFILE</a>';
 					}
 
-					//Hide upon login
-					if($type <= 0){
-						$reg= "'registerModal'";
-						$forgot = "'forgotModal'";
-						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$reg.').style.display='.$block.'">REGISTER</a>';
-						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$forgot.').style.display='.$block.'">FORGOT LOGIN</a>';
-
+					if($type == 0){
+                        print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'loginModal'".').style.display='.$block.'">LOG IN</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'registerModal'".').style.display='.$block.'">REGISTER</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'forgotModal'".').style.display='.$block.'">FORGOT LOGIN</a>';
 					}
 
-                if($type >=1){
-                    print '<a class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right" href="logout.php">LOG OUT</a>';
-                }
+                    if($type > 0){
+                        print '<a class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right" href="logout.php">LOG OUT</a>';
+                    }
 
 					if($type > 1){
-						$match="'matchModal'";
-						$edit="'editModal'";
-						$upgrade="'upgradeModal'";
-						$search="'searchModal'";
-						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$match.').style.display='.$block.'">MATCH USERS</a>';
-						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$edit.').style.display='.$block.'">EDIT ACCOUNTS </a>';
-						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$upgrade.').style.display='.$block.'">UPGRADE ACCOUNTS</a>';
-						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$search.').style.display='.$block.'">USER SEARCH</a>';
-						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="addCountry.php">ADD COUNTRY</a>';
-						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="addDegreeType.php">ADD DEGREE TYPE</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'matchModal'".').style.display='.$block.'">MATCH USERS</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'editModal'".').style.display='.$block.'">EDIT ACCOUNTS </a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'upgradeModal'".').style.display='.$block.'">UPGRADE ACCOUNTS</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'searchModal'".').style.display='.$block.'">USER SEARCH</a>';
+                        print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addCountryModal'".').style.display='.$block.'">ADD COUNTRY</a>';
+                        print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addDegreeModal'".').style.display='.$block.'">ADD DEGREE TYPE</a>';
 					}
 				  ?>
 
@@ -219,39 +208,28 @@
 					$block="'block'";
 					$firstBlock="";
 
-					if($type==1){
-						$prof= "'profileModal'";
-						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('.$prof.').style.display='.$block.'">PROFILE</a>';
-					}else{
-						$log= "'loginModal'";
-						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('.$log.').style.display='.$block.'">LOG IN</a>';
+					if($type == 1){
+						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'profileModal'".').style.display='.$block.'">PROFILE</a>';
 					}
 
-					//Hide upon login
-					if($type <= 0){
-						$reg= "'registerModal'";
-						$forgot = "'forgotModal'";
-						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('.$reg.').style.display='.$block.'">REGISTER</a>';
-						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('.$forgot.').style.display='.$block.'">FORGOT LOGIN</a>';
-
+					if($type == 0){
+                        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'loginModal'".').style.display='.$block.'">LOG IN</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'registerModal'".').style.display='.$block.'">REGISTER</a>';
+						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'forgotModal'".').style.display='.$block.'">FORGOT LOGIN</a>';
 					}
 
-				if($type >=1){
-                    print '<a class="w3-bar-item w3-button w3-padding-large" href="logout.php">LOG OUT</a>';
-				}
+				    if($type > 0){
+                        print '<a class="w3-bar-item w3-button w3-padding-large" href="logout.php">LOG OUT</a>';
+				    }
 
-				if($type > 1){
-					$match="'matchModal'";
-					$edit="'editModal'";
-					$upgrade="'upgradeModal'";
-					$search="'searchModal'";
-					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="toggleNav();document.getElementById('.$match.').style.display='.$block.'">MATCH USERS</a>';
-					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="toggleNav();document.getElementById('.$edit.').style.display='.$block.'">EDIT ACCOUNTS </a>';
-					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="toggleNav();document.getElementById('.$upgrade.').style.display='.$block.'">UPGRADE ACCOUNTS</a>';
-					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="toggleNav();document.getElementById('.$search.').style.display='.$block.'">USER SEARCH</a>';
-					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="addCountry.php">ADD COUNTRY</a>';
-					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="addDegreeType.php">ADD DEGREE TYPE</a>';
-				}
+				    if($type > 1){
+					    print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'matchModal'".').style.display='.$block.'">MATCH USERS</a>';
+					    print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'editModal'".').style.display='.$block.'">EDIT ACCOUNTS </a>';
+					    print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'upgradeModal'".').style.display='.$block.'">UPGRADE ACCOUNTS</a>';
+					    print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'searchModal'".').style.display='.$block.'">USER SEARCH</a>';
+					    print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addCountryModal'".').style.display='.$block.'">ADD COUNTRY</a>';
+					    print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addDegreeModal'".').style.display='.$block.'">ADD DEGREE TYPE</a>';
+				    }
 
 
 			?>
@@ -267,14 +245,14 @@
 			<?php include "edit.php";?>
 			<?php include "upgrade.php";?>
 			<?php include "search.php";?>
+            <?php include "addCountry.php";?>
+            <?php include "addDegreeType.php";?>
 
             <div class="w3-row-padding" id="mentorDisplay">
               <?php for ($k = 0 ; $k < 15; $k++) {
-    $card = createCard(0);
-    echo '<div class="w3-col s4 w3-center">
-                '.$card.'
-                </div>';
-};?>
+                        $card = createCard(0);
+                        echo '<div class="w3-col m4 l3 w3-center">'.$card.'</div>';
+                    };?>
             </div>
             <!-- End Page Content -->
         </div>
