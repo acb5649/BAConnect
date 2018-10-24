@@ -18,7 +18,6 @@
     <html>
     <head>
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-        <meta content="utf-8" http-equiv="encoding">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>BAConnect Home</title>
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -112,8 +111,6 @@
                 graduationYearInput.className = "w3-input w3-border";
                 parent.appendChild(graduationYearInput);
 
-                // < input name = "addEntry" class = "btn" type = "button" value = "Add degree" onclick = "addField()" />
-
                 var deleteInputFieldButton = document.createElement("input");
                 deleteInputFieldButton.className = "w3-button w3-lime w3-padding-16 w3-right";
                 deleteInputFieldButton.type = "button";
@@ -196,10 +193,9 @@
 
 					}
 
-					if($type >=1){
-						//user settings button?
-						print '<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-cogs"></i></a>';
-					}
+                if($type >=1){
+                    print '<a class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right" href="logout.php">LOG OUT</a>';
+                }
 
 					if($type > 1){
 						$match="'matchModal'";
@@ -241,8 +237,7 @@
 					}
 
 				if($type >=1){
-					//user settings button?
-					print '<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-cogs"></i></a>';
+                    print '<a class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right" href="logout.php">LOG OUT</a>';
 				}
 
 				if($type > 1){
@@ -257,6 +252,8 @@
 					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="addCountry.php">ADD COUNTRY</a>';
 					print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="addDegreeType.php">ADD DEGREE TYPE</a>';
 				}
+
+
 			?>
         </div>
 
