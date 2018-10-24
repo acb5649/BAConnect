@@ -1,20 +1,19 @@
 <?php
-	if (!isset($_SESSION)) {
-	$sess_name = session_name();
-        if (session_start()) {
-                setcookie($sess_name, session_id(), NULL, '/');
-        }
-	}
+require_once "session.php";
 
-if (isset($_POST['logIn'])) {
-	require_once "dbhelper.php";
-	$user_email = $_POST['user_email'];
+if (isset($_POST['login'])) {
+	require_once "database.php";
+
+	$username = $_POST['username'];
 	$password = $_POST['password'];
-	$type = login($user_email, $password);
-	if ($type) {
-		$_SESSION['type'] = $type;
-	}
-	print '<meta http-equiv="refresh" content="0;url=/courseproject">';
+	if (login($username, $password)) {
+	    $account_id = getAccountIDFromUsername($username);
+        $_SESSION['account_ID'] = $account_id;
+        $_SESSION['type'] = getAccountTypeFromAccountID($account_id);
+
+        header('Location: index.php');
+        die;
+    }
 }
 ?>
 
@@ -29,17 +28,17 @@ if (isset($_POST['logIn'])) {
                     <form method="post" action="login.php" class="w3-container">
                         <p>
                             <label>
-                                <i class="fa fa-user"></i> Username or Email
+                                <i class="fa fa-user"></i> Username
                             </label>
                         </p>
-                        <input class="w3-input w3-border" type="text" placeholder="" name="user_email" id="user_email">
+                        <input class="w3-input w3-border" type="text" placeholder="" name="username" id="username">
                         <p>
                             <label>
                                 <i class="fa fa-lock"></i> Password
                             </label>
                         </p>
                         <input class="w3-input w3-border" type="password" placeholder="" name="password" id="password">
-                        <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="logIn" id="logIn">Log In
+                        <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="login" id="login">Log In
                             <i class="fa fa-check"></i>
                         </button>
                         <button type="button" class="w3-button w3-red w3-section" onclick="document.getElementById('loginModal').style.display='none'">Close

@@ -1,21 +1,19 @@
 <?php
-    require_once "functions.php";
+    require_once "database.php";
 
     if(isset($_POST['add'])){
         $countryName = trim($_POST['addCountry']);
 
-        AddCountry($countryName);
-    }
-    elseif (isset($_POST['edit'])) {
+        addCountry($countryName);
+    } elseif (isset($_POST['edit'])) {
         $oldName = trim($_POST['country']);
         $newName = trim($_POST['editCountry']);
 
-        EditCountry($oldName, $newName);
-    }
-    elseif (isset($_POST['delete'])) {
+        editCountry($oldName, $newName);
+    } elseif (isset($_POST['delete'])) {
         $countryName = trim($_POST['country']);
 
-        DeleteCountry($countryName);
+        deleteCountry($countryName);
     }
 
 ?>
@@ -38,7 +36,7 @@
     </p>
 
     <select class="w3-select w3-border" name="country">
-        <?php print countryList(); ?>
+        <?php print listCountries(); ?>
     </select>
 
     <p>

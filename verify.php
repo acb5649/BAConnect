@@ -1,17 +1,12 @@
 <?php
-require_once "functions.php";
+require_once "database.php";
 
 $code = filter_input(INPUT_GET, "code");
 $email = filter_input(INPUT_GET, "email", FILTER_VALIDATE_EMAIL);
 
 if ($code && $email) {
   if (verifyCode($code, $email)) {
-    try {
-        $con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
-
+    $con = Connection::connect();
     $stmt = $con->prepare("select account_ID from Information where email_address = '" . $email . "'");
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);

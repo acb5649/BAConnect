@@ -123,7 +123,7 @@ if (isset($_POST['upload_resume']))
                             <label>Country</label>
                         </p>
                         <select class="w3-select w3-border" name="country" id="country">
-                            <?php print CountryList(); ?>
+                            <?php print listCountries(); ?>
                         </select>
                         <p>
                             <label>Phone number</label>

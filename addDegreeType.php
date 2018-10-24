@@ -1,16 +1,16 @@
 <?php
-    require_once "functions.php";
+    require_once "database.php";
 
     if(isset($_POST['add'])){
         $degreeTypeName = trim($_POST['addDegreeType']);
 
-        AddDegreeType($degreeTypeName);
+        addDegreeType($degreeTypeName);
     }
     elseif (isset($_POST['edit'])) {
         $oldName = trim($_POST['degreeType']);
         $newName = trim($_POST['editDegreeType']);
 
-        EditDegreeType($oldName, $newName);
+        editDegreeType($oldName, $newName);
     }
     elseif (isset($_POST['delete'])) {
         $degreeTypeName = trim($_POST['degreeType']);
@@ -38,7 +38,7 @@
     </p>
 
     <select class="w3-select w3-border" name="degreeType">
-        <?php print degreeTypeList(); ?>
+        <?php print listDegreeTypes(); ?>
     </select>
 
     <p>

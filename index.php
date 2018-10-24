@@ -1,25 +1,16 @@
 <?php
-	$sess_name = session_name();
-	if (session_start()) {
-		setcookie($sess_name, session_id(), NULL, '/');
-	}
-
-    require_once "functions.php";
+    require_once "session.php";
+    require_once "database.php";
     require_once "card.php";
-	require_once "procedure.php";
 
-    $msg = "";
-    $term = "You must agree to the terms and conditions";
-	//base type to hide access to admin functions & logged in access
-	$checker = new procedure;
-	$user = "buster";
-	$pass = "man";
 
-	$type=0;
 	if (isset($_SESSION['type'])) {
 		$type = $_SESSION['type'];
-	}
+	} else {
+        $type=0;
+    }
 
+	echo $type;
 
 ?>
     <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
@@ -59,7 +50,7 @@
                   button.onclick = function() {
                       console.log("deleting new number: " + newNum);
                       removeField(newNum);
-                  }
+                  };
                   fieldCount = fieldCount + 1;
                 });
 
@@ -78,61 +69,61 @@
                     container.appendChild(brk);
                 }
 
-                var parent = document.createElement("div")
-                parent.className = "educationMember"
-                parent.id = "member_" + number
+                var parent = document.createElement("div");
+                parent.className = "educationMember";
+                parent.id = "member_" + number;
 
-                var select = document.createElement("select")
-                select.name = "degreeType_" + number
-                select.id = "degreeType_" + number
-                select.className = "w3-select w3-border"
-                select.innerHTML = '<?php print DegreeTypeList(); ?>';
+                var select = document.createElement("select");
+                select.name = "degreeType_" + number;
+                select.id = "degreeType_" + number;
+                select.className = "w3-select w3-border";
+                select.innerHTML = '<?php print listDegreeTypes(); ?>';
 
-                parent.appendChild(select)
+                parent.appendChild(select);
 
                 var schoolNameInput = document.createElement("input");
-                schoolNameInput.type = "text"
-                schoolNameInput.maxlength = 50
-                schoolNameInput.value = ""
-                schoolNameInput.placeholder = "School Name"
-                schoolNameInput.name = "schoolName_" + number
-                schoolNameInput.id = "schoolName_" + number
-                schoolNameInput.className = "w3-input w3-border"
-                parent.appendChild(schoolNameInput)
+                schoolNameInput.type = "text";
+                schoolNameInput.maxlength = 50;
+                schoolNameInput.value = "";
+                schoolNameInput.placeholder = "School Name";
+                schoolNameInput.name = "schoolName_" + number;
+                schoolNameInput.id = "schoolName_" + number;
+                schoolNameInput.className = "w3-input w3-border";
+                parent.appendChild(schoolNameInput);
 
                 var majorInput = document.createElement("input");
-                majorInput.type = "text"
-                majorInput.maxlength = 50
-                majorInput.value = ""
-                majorInput.placeholder = "Major"
-                majorInput.name = "major_" + number
-                majorInput.id = "major_" + number
-                majorInput.className = "w3-input w3-border"
-                parent.appendChild(majorInput)
+                majorInput.type = "text";
+                majorInput.maxlength = 50;
+                majorInput.value = "";
+                majorInput.placeholder = "Major";
+                majorInput.name = "major_" + number;
+                majorInput.id = "major_" + number;
+                majorInput.className = "w3-input w3-border";
+                parent.appendChild(majorInput);
 
-                parent.appendChild(document.createTextNode("Year Graduated:"))
+                parent.appendChild(document.createTextNode("Year Graduated:"));
 
-                var graduationYearInput = document.createElement("input")
-                graduationYearInput.type = "number"
-                graduationYearInput.maxlength = 4
-                graduationYearInput.value = 2022
-                graduationYearInput.name = "gradYear_" + number
-                graduationYearInput.id = "gradYear_" + number
-                graduationYearInput.className = "w3-input w3-border"
-                parent.appendChild(graduationYearInput)
+                var graduationYearInput = document.createElement("input");
+                graduationYearInput.type = "number";
+                graduationYearInput.maxlength = 4;
+                graduationYearInput.value = 2022;
+                graduationYearInput.name = "gradYear_" + number;
+                graduationYearInput.id = "gradYear_" + number;
+                graduationYearInput.className = "w3-input w3-border";
+                parent.appendChild(graduationYearInput);
 
                 // < input name = "addEntry" class = "btn" type = "button" value = "Add degree" onclick = "addField()" />
 
-                var deleteInputFieldButton = document.createElement("input")
-                deleteInputFieldButton.className = "w3-button w3-lime w3-padding-16 w3-right"
-                deleteInputFieldButton.type = "button"
-                deleteInputFieldButton.value = "Remove Degree"
-                deleteInputFieldButton.id = "deleteButton_" + number
+                var deleteInputFieldButton = document.createElement("input");
+                deleteInputFieldButton.className = "w3-button w3-lime w3-padding-16 w3-right";
+                deleteInputFieldButton.type = "button";
+                deleteInputFieldButton.value = "Remove Degree";
+                deleteInputFieldButton.id = "deleteButton_" + number;
                 deleteInputFieldButton.onclick = function() {
                     console.log("deleting: " + number);
                     removeField(number);
-                }
-                parent.appendChild(deleteInputFieldButton)
+                };
+                parent.appendChild(deleteInputFieldButton);
 
                 container.appendChild(parent);
 
@@ -142,29 +133,29 @@
             function createWork() {
                 var container = document.getElementById("work");
 
-                var parent = document.createElement("div")
-                parent.className = "WorkSection"
-                parent.id = "WorkSection"
+                var parent = document.createElement("div");
+                parent.className = "WorkSection";
+                parent.id = "WorkSection";
 
-                var placeOfEmployment = document.createElement("input")
-                placeOfEmployment.type = "text"
-                placeOfEmployment.maxlength = 50
-                placeOfEmployment.value = ""
-                placeOfEmployment.placeholder = "Name of Business"
-                placeOfEmployment.name = "businessName"
-                placeOfEmployment.id = "businessName"
-                placeOfEmployment.className = "w3-input w3-border"
-                parent.appendChild(placeOfEmployment)
+                var placeOfEmployment = document.createElement("input");
+                placeOfEmployment.type = "text";
+                placeOfEmployment.maxlength = 50;
+                placeOfEmployment.value = "";
+                placeOfEmployment.placeholder = "Name of Business";
+                placeOfEmployment.name = "businessName";
+                placeOfEmployment.id = "businessName";
+                placeOfEmployment.className = "w3-input w3-border";
+                parent.appendChild(placeOfEmployment);
 
-                var jobTitle = document.createElement("input")
-                jobTitle.type = "text"
-                jobTitle.maxlength = 50
-                jobTitle.value = ""
-                jobTitle.placeholder = "Job Title"
-                jobTitle.name = "jobTitle"
-                jobTitle.id = "jobTitle"
-                jobTitle.className = "w3-input w3-border"
-                parent.appendChild(jobTitle)
+                var jobTitle = document.createElement("input");
+                jobTitle.type = "text";
+                jobTitle.maxlength = 50;
+                jobTitle.value = "";
+                jobTitle.placeholder = "Job Title";
+                jobTitle.name = "jobTitle";
+                jobTitle.id = "jobTitle";
+                jobTitle.className = "w3-input w3-border";
+                parent.appendChild(jobTitle);
 
                 container.appendChild(parent);
             }
@@ -204,14 +195,12 @@
 						print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('.$forgot.').style.display='.$block.'">FORGOT LOGIN</a>';
 
 					}
-				?>
-				<?php
+
 					if($type >=1){
 						//user settings button?
 						print '<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-cogs"></i></a>';
 					}
-				?>
-				<?php
+
 					if($type > 1){
 						$match="'matchModal'";
 						$edit="'editModal'";
@@ -250,14 +239,12 @@
 						print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('.$forgot.').style.display='.$block.'">FORGOT LOGIN</a>';
 
 					}
-			?>
-			<?php
+
 				if($type >=1){
 					//user settings button?
 					print '<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-cogs"></i></a>';
 				}
-			?>
-			<?php
+
 				if($type > 1){
 					$match="'matchModal'";
 					$edit="'editModal'";
