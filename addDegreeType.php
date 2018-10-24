@@ -15,7 +15,7 @@
     elseif (isset($_POST['delete'])) {
         $degreeTypeName = trim($_POST['degreeType']);
 
-        DeleteDegreeType($degreeTypeName);
+        deleteDegreeType($degreeTypeName);
     }
 
 ?>

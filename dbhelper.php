@@ -75,30 +75,3 @@ class WorkHistoryEntry {
         $this->jobTitle = $jobTitle;
     }
 }
-
-function forgot_password($code, $password) {
-    try {
-        $con = new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
-        $isConnected = true;
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
-
-    $stmt = $con->prepare("select account_ID from `Password Recovery` where code = '".$code."'");
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $account_id = $row['account_ID'];
-
-    if (!$account_id) {
-        return False;
-    }
-
-    $stmt = $con->prepare("update Account set password=? where account_ID=?");
-    $stmt->bindValue(1, $password, PDO::PARAM_STR);
-    $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    return True;
-}
-
-?>

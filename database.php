@@ -194,7 +194,7 @@ function finalizeRegistration($account_id, $email) {
     $con = null;
 
     //Email a verification code to the email provided.
-    mail($email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . $email);
+    mail($email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . $email . "&type=reg");
 }
 
 function resetPassword($email) {
@@ -208,7 +208,28 @@ function resetPassword($email) {
     $stmt->execute();
     $con = null;
 
-    mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://corsair.cs.iupui.edu:22891/courseproject/index.php?reset_password=" . $code);
+    mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . $email . "&type=reset");
+
+    return TRUE;
+}
+
+function changePassword($email, $code, $newPassword) {
+    if (verifyCode($code, $email)) {
+        $con = Connection::connect();
+        $stmt = $con->prepare("select account_ID from `Password Recovery` where code = '".$code."'");
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $account_id = $row['account_ID'];
+
+        if (!$account_id) {
+            return False;
+        }
+
+        $stmt = $con->prepare("UPDATE Account set password = '" . $newPassword . "' where account_ID = '" . $account_id . "'");
+        $stmt->execute();
+
+        return True;
+    }
 }
 
 function login($username, $password) {
@@ -290,7 +311,7 @@ function editDegreeType($oldName, $newName){
 }
 
 // This function will delete a degree type from the database
-function DeleteDegreeType($degreeTypeName){
+function deleteDegreeType($degreeTypeName){
     $con = Connection::connect();
     $stmt = $con->prepare("SELECT degree_type_ID FROM `Degree Types` WHERE degree = '" . $degreeTypeName . "'");
     $stmt->execute();
