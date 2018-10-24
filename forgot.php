@@ -37,12 +37,3 @@ if (isset($_POST['submit'])) {
                     </form>
                 </div>
             </div>
-<script>
-            // When the user clicks anywhere outside of the modal, close it
-            var forgotModal = document.getElementById('forgotModal');
-            window.onclick = function(event) {
-                if (event.target == forgotModal) {
-                    forgotModal.style.display = "none";
-                }
-            }
-</script>

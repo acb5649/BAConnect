@@ -64,12 +64,3 @@
         </form>
     </div>
 </div>
-<script>
-    // When the user clicks anywhere outside of the modal, close it
-    var addCountryModal = document.getElementById('addCountryModal');
-    window.onclick = function(event) {
-        if (event.target == addCountryModal) {
-            addCountryModal.style.display = "none";
-        }
-    }
-</script>

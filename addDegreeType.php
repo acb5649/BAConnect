@@ -66,12 +66,3 @@
         </form>
     </div>
 </div>
-<script>
-    // When the user clicks anywhere outside of the modal, close it
-    var addDegreeModal = document.getElementById('addDegreeModal');
-    window.onclick = function(event) {
-        if (event.target == addDegreeModal) {
-            addDegreeModal.style.display = "none";
-        }
-    }
-</script>
