@@ -41,7 +41,7 @@ function registerNewAccount($user) {
     $stmt->bindValue(1, null, PDO::PARAM_NULL);
     $stmt->bindValue(2, $user->username, PDO::PARAM_STR);
     $stmt->bindValue(3, $user->password, PDO::PARAM_STR);
-    $stmt->bindValue(4, 0, PDO::PARAM_INT);
+    $stmt->bindValue(4, 1, PDO::PARAM_INT);
     $stmt->bindValue(5, 0, PDO::PARAM_INT);
     $stmt->execute();
     $con = null;
@@ -406,7 +406,7 @@ function getName($account_id) {
     if($row == null){
         return "Missing Name";
     }
-
+    $con = null;
     return $row['first_name'] . " " . $row['middle_name'] . " " . $row['last_name'];
 }
 
@@ -418,6 +418,57 @@ function getEmail($account_id) {
     if($row == null){
         return "Missing Email";
     }
-
+    $con = null;
     return $row['email_address'];
+}
+
+function getApproximateLocation($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select address_ID from `Address History` where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row == null){
+        return "Somewhere over the rainbow";
+    }
+
+    $address_id = $row['address_ID'];
+    $stmt = $con->prepare("select * from `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row == null){
+        return "Somewhere over the rainbow";
+    }
+
+    return $row['city'] . ", " . $row['state'];
+}
+
+function getStatus($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select status from Information where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row == null){
+        return "Missing Status";
+    }
+    $con = null;
+    $status = (int) $row['status'];
+    if ($status == 0) {
+        return "Student";
+    } elseif ($status == 1) {
+        return "Working Professional";
+    } else {
+        return "Unknown Status";
+    }
+}
+
+function getPhoneNumber($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select phone_number from `Phone Numbers` where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row == null){
+        return "Missing Phone Number";
+    }
+    $con = null;
+    return $row['phone_number'];
 }

@@ -28,16 +28,19 @@ require_once "database.php";
 
             <div class="w3-white w3-text-grey w3-card-4">
                 <div class="w3-display-container">
-                    <img src="https://www.w3schools.com/w3images/avatar_hat.jpg" style="width:100%" alt="Avatar">
+                    <img src="https://soulcore.com/wp-content/uploads/2018/01/profile-placeholder.png" style="width:100%" alt="Avatar">
                     <div class="w3-display-bottomleft w3-container w3-text-black">
                         <h2><?php echo getName($_SESSION["account_ID"]) ?></h2>
                     </div>
                 </div>
                 <div class="w3-container">
-                    <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i>Designer</p>
-                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>London, UK</p>
+                    <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo getStatus($_SESSION["account_ID"]) ?></p>
+                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo getApproximateLocation($_SESSION["account_ID"]) ?></p>
                     <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo getEmail($_SESSION["account_ID"]) ?></p>
-                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i>1224435534</p>
+                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo getPhoneNumber($_SESSION["account_ID"]) ?></p>
+                    <hr>
+
+                    <button class="w3-button w3-block w3-dark-grey">+ Connect</button>
                     <hr>
 
                     <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-lime"></i>Skills</b></p>

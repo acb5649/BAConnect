@@ -1,11 +1,13 @@
 <?php
-function createCard($userID)
-{
+
+include_once "database.php";
+
+function createCard($account_id) {
     // get database entries for user
     // final product looks like this: https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_cards_buttons2
     $firstName = "Fakey";
     $lastName = "McPerson";
-    $userPicture = "https://www.21andmarried.com/wp-content/uploads/2014/11/angry-man.jpg";
+    $userPicture = "https://soulcore.com/wp-content/uploads/2018/01/profile-placeholder.png";
     $educationHistory = "2001-2005 BS in Computer Science at IUPUI";
     $workHistory = "2005-2015 Sales Associate at Store";
     $userAge = "30";
