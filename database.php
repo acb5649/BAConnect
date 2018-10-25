@@ -496,3 +496,22 @@ function getPhoneNumber($account_id) {
     $con = null;
     return $row['phone_number'];
 }
+
+function getGender($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select gender from `Information` where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row == null){
+        return "Missing Gender";
+    }
+    $con = null;
+    $gender = (int) $row['gender'];
+    if ($gender == 0) {
+        return "Male";
+    } elseif ($gender == 1) {
+        return "Female";
+    } else {
+        return "Nonbinary";
+    }
+}

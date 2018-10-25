@@ -1,2 +1,14 @@
 
 .DS_Store
+
+.idea/deployment.xml
+
+.idea/misc.xml
+
+.idea/modules.xml
+
+.idea/N324-BAConnect.iml
+
+.idea/vcs.xml
+
+.idea/workspace.xml

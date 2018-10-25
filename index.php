@@ -39,10 +39,16 @@ if ($type > 1) {
 ?>
 <!-- Page content -->
 <div style="position: fixed;" class="w3-row-padding" id="mentorDisplay">
-    <?php for ($k = 0; $k < 15; $k++) {
-        $card = createCard(0);
+    <?php
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT `account_ID` FROM Information");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($result as $user) {
+        $card = createCard($user["account_ID"]);
         echo '<div class="w3-col m4 l3 w3-center">' . $card . '</div>';
-    }; ?>
+    }
+     ?>
 </div>
 
 <!-- End Page Content -->
