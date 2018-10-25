@@ -1,6 +1,25 @@
 <?php
 require_once "session.php";
 require_once "database.php";
+
+if (isset($_POST['submit'])) {
+
+    $image_dir = 'images';
+    $image_dir_path = getcwd() . DIRECTORY_SEPARATOR . $image_dir;
+
+    $file_name = $_FILES['profile']['name'];
+    $file_size = $_FILES['profile']['size'];
+    $file_tmp = $_FILES['profile']['tmp_name'];
+    $file_type = $_FILES['profile']['type'];
+    $file_ext=strtolower(end(explode('.',$_FILES['profile']['name'])));
+
+    $target = $image_dir_path . DIRECTORY_SEPARATOR . $file_name;
+    move_uploaded_file($file_tmp, $target);
+
+    registerNewPicture($_SESSION["account_ID"], $target);
+    header("location: profile.php");
+}
+
 ?>
 <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
 <!DOCTYPE html>
@@ -11,6 +30,7 @@ require_once "database.php";
     <title>BAConnect Profile</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="js/closeModals.js"></script>
 </head>
 
 <body class="w3-light-grey" onload="init();">
@@ -28,7 +48,10 @@ require_once "database.php";
 
             <div class="w3-white w3-text-grey w3-card-4">
                 <div class="w3-display-container">
-                    <img src="https://soulcore.com/wp-content/uploads/2018/01/profile-placeholder.png" style="width:100%" alt="Avatar">
+                    <img src="data:image/jpeg;base64,<?php echo file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $_SESSION["account_ID"]); ?>" style="width:100%;" alt="Avatar">
+                    <div class="w3-display-middle w3-display-hover w3-xlarge">
+                        <button class="w3-button w3-black" onclick="document.getElementById('uploadPicModal').style.display='block'">Change Picture...</button>
+                    </div>
                     <div class="w3-display-bottomleft w3-container w3-text-black">
                         <h2><?php echo getName($_SESSION["account_ID"]) ?></h2>
                     </div>
@@ -134,6 +157,33 @@ require_once "database.php";
 
         <!-- End Grid -->
     </div>
+
+    <div id="uploadPicModal" class="w3-modal">
+        <div class="w3-modal-content w3-animate-top w3-card-4">
+            <header class="w3-container w3-lime w3-center w3-padding-32">
+            <span onclick="document.getElementById('uploadPicModal').style.display='none'"
+                  class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
+                <h2 class="w3-wide"><i class="w3-margin-right"></i>Change Profile Picture </h2>
+            </header>
+            <form method="post" action="profile.php" enctype='multipart/form-data' class="w3-container">
+                <p>
+                    <label>
+                        <i class="fa fa-user"></i> New picture:
+                    </label>
+                </p>
+                <input class="w3-input w3-border" type="file" placeholder="" name="profile" id="profile" accept="image/png, image/jpeg">
+                <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="submit">
+                    Submit New Photo
+                    <i class="fa fa-check"></i>
+                </button>
+                <button type="button" class="w3-button w3-red w3-section"
+                        onclick="document.getElementById('uploadPicModal').style.display='none'">Close
+                    <i class="fa fa-remove"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
 
     <!-- End Page Container -->
 </div>

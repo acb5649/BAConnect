@@ -154,26 +154,50 @@ function registerNewWork($account_id, $workHistory) {
     $con = null;
 }
 
+function compressImage($originalImage, $outputImage, $quality) {
+    list($width, $height, $type, $attr) = getimagesize($originalImage);
+    if ($type == IMAGETYPE_PNG) {
+        $imageTmp=imagecreatefrompng($originalImage);
+    } elseif ($type = IMAGETYPE_JPEG) {
+        $imageTmp=imagecreatefromjpeg($originalImage);
+    } else {
+        return 0;
+    }
+
+    // quality is a value from 0 (worst) to 100 (best)
+    imagejpeg($imageTmp, $outputImage, $quality);
+    imagedestroy($imageTmp);
+
+    return 1;
+}
+
 function registerNewPicture($account_id, $picture) {
 
     $date = new Datetime('NOW');
     $dateStr = $date->format('Y-m-d H:i:s');
+    //compressImage($picture, $picture, 15);
+    $file = fopen($picture,'rb');
 
     $con = Connection::connect();
+    $stmt = $con->prepare("delete from Pictures where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+
     $stmt = $con->prepare("insert into Pictures (picture_ID, account_ID, date_uploaded, picture) values (?, ?, ?, ?)");
     $stmt->bindValue(1, null, PDO::PARAM_NULL);
     $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
     $stmt->bindValue(3, $dateStr, PDO::PARAM_STR);
-    $stmt->bindValue(4, $picture, PDO::PARAM_STR);
+    $stmt->bindValue(4, $file, PDO::PARAM_LOB);
     $stmt->execute();
     $con = null;
 }
 
 function registerNewResume($account_id, $resume) {
+    $file = fopen($resume,'rb');
+
     $con = Connection::connect();
     $stmt = $con->prepare("insert into Resumes (account_ID, resume_file) values (?, ?)");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
-    $stmt->bindValue(2, $resume, PDO::PARAM_STR);
+    $stmt->bindValue(2, $file, PDO::PARAM_LOB);
     $stmt->execute();
     $con = null;
 }

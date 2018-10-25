@@ -30,28 +30,21 @@ if (isset($_POST['submit'])) {
     $businessName = $_POST['businessName'];
     $jobTitle = $_POST['jobTitle'];
     $workHistory = new WorkHistoryEntry($businessName, $jobTitle);
+    // handle files
+    $picturePath = $_FILES['profile']['tmp_name'];
+    $resumePath = $_FILES['resume']['tmp_name'];
 
     // verify Information
     if ($password != $confirmedPassword) {
         $error = true;
     }
 
-
     if ($error == false) {
         $user = new User($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phone, $status);
         $address = new Address($street, $city, $postcode, $state, $country);
-        registerUser($user, $address, $degree, $workHistory, "", "");
+        registerUser($user, $address, $degree, $workHistory, $picturePath, $resumePath);
         header("Location: created.php");
     }
-
-}
-
-if (isset($_POST['upload_picture'])) {
-
-}
-
-if (isset($_POST['upload_resume'])) {
-
 }
 
 ?>
@@ -63,7 +56,7 @@ if (isset($_POST['upload_resume'])) {
                   class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
             <h2 class="w3-wide"><i class="w3-margin-right"></i>Register </h2>
         </header>
-        <form method='post' action="register.php" class="w3-container">
+        <form method='post' action="register.php" enctype='multipart/form-data' class="w3-container">
             <p>
                 <label>First name</label>
             </p>
@@ -146,6 +139,17 @@ if (isset($_POST['upload_resume'])) {
                 <label>Work History</label>
             </p>
             <fieldset id="work"></fieldset>
+
+            <p>
+                <label>Profile Picture</label>
+            </p>
+            <input class="w3-input w3-border" type="file" id="profile" name="profile" accept="image/png, image/jpeg" />
+
+            <p>
+                <label>Resume</label>
+            </p>
+            <input class="w3-input w3-border" type="file" id="resume" name="resume" accept=".doc, .docx, .pdf" />
+
             <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="submit">
                 Register
                 <i class="fa fa-check"></i>
