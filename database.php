@@ -66,13 +66,14 @@ function getAccountIDFromEmail($email) {
 
 function applyUserInformation($account_id, $user) {
     $con = Connection::connect();
-    $stmt = $con->prepare("insert into Information (account_ID, first_name, middle_name, last_name, gender, email_address) values (?, ?, ?, ?, ?, ?)");
+    $stmt = $con->prepare("insert into Information (account_ID, first_name, middle_name, last_name, gender, email_address, status) values (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->bindValue(2, $user->firstName, PDO::PARAM_STR);
     $stmt->bindValue(3, $user->middleName, PDO::PARAM_STR);
     $stmt->bindValue(4, $user->lastName, PDO::PARAM_STR);
     $stmt->bindValue(5, $user->gender, PDO::PARAM_INT);
     $stmt->bindValue(6, $user->email, PDO::PARAM_STR);
+    $stmt->bindValue(7, $user->status, PDO::PARAM_INT);
     $stmt->execute();
     $con = null;
 }
@@ -92,7 +93,7 @@ function registerNewAddress($address) {
 
 function getAddressID($address) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select account_ID from Addresses where street_address = '" . $address->street . "' and post_code = '" . $address->postcode . "' and city = '" . $address->city . "'");
+    $stmt = $con->prepare("select address_ID from Addresses where street_address = '" . $address->street . "' and post_code = '" . $address->postcode . "' and city = '" . $address->city . "'");
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     return $row['address_ID'];
@@ -101,17 +102,12 @@ function getAddressID($address) {
 function updateUserAddress($account_id, $address) {
     registerNewAddress($address);
 
-    $date = new Datetime('NOW');
-    $dateStr = $date->format('Y-m-d H:i:s');
-
     $address_id = getAddressID($address);
 
     $con = Connection::connect();
-    $stmt = $con->prepare("insert into `Address History` (address_ID, account_ID, start, end) values (?, ?, ?, ?)");
+    $stmt = $con->prepare("insert into `Address History` (`address_ID`, `account_ID`, `start`) values (?, ?, CURRENT_TIMESTAMP)");
     $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
     $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-    $stmt->bindValue(3, $dateStr, PDO::PARAM_STR);
-    $stmt->bindValue(4, null, PDO::PARAM_NULL);
     $stmt->execute();
     $con = null;
 }
@@ -149,13 +145,11 @@ function registerNewWork($account_id, $workHistory) {
     $stmt = $con->prepare("select job_ID from Job where employer = '" . $workHistory->companyName . "' and profession_field = '" . $workHistory->jobTitle . "'");
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $job_id = $row['job_id'];
+    $job_id = $row['job_ID'];
 
-    $stmt = $con->prepare("insert into `Job History` (job_ID, account_ID, start, end) values (?, ?, ?, ?)");
+    $stmt = $con->prepare("insert into `Job History` (`job_ID`, `account_ID`, `start`) values (?, ?, CURRENT_TIMESTAMP)");
     $stmt->bindValue(1, $job_id, PDO::PARAM_INT);
     $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-    $stmt->bindValue(3, "2000", PDO::PARAM_STR);
-    $stmt->bindValue(4, "2018", PDO::PARAM_STR);
     $stmt->execute();
     $con = null;
 }
@@ -194,7 +188,7 @@ function finalizeRegistration($account_id, $email) {
     $con = null;
 
     //Email a verification code to the email provided.
-    mail($email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . $email . "&type=reg");
+    mail($email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . urlencode($email) . "&type=reg");
 }
 
 function resetPassword($email) {
@@ -208,7 +202,7 @@ function resetPassword($email) {
     $stmt->execute();
     $con = null;
 
-    mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . $email . "&type=reset");
+    mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
 
     return TRUE;
 }
@@ -260,7 +254,7 @@ function listCountries() {
     $con = null;
     $html = "";
     foreach ($list as $option) {
-        $html = $html . '<option value="' . $option["country_id"] . '"> ' . $option["country"] . ' </option> ';
+        $html = $html . '<option value="' . $option["country_ID"] . '"> ' . $option["country"] . ' </option> ';
     }
     return $html;
 }
@@ -402,4 +396,28 @@ function verifyCode($code, $email) {
     $hash = hash('md5', $email);
     $codeHash = substr($code, 0, 32);
     return ($hash == $codeHash);
+}
+
+function getName($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select * from Information where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row == null){
+        return "Missing Name";
+    }
+
+    return $row['first_name'] . " " . $row['middle_name'] . " " . $row['last_name'];
+}
+
+function getEmail($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select * from Information where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row == null){
+        return "Missing Email";
+    }
+
+    return $row['email_address'];
 }

@@ -9,6 +9,7 @@ $type = filter_input(INPUT_GET, "type");
 if ($code && $email) {
     if ($type == "reg") {
         if (verifyCode($code, $email)) {
+            echo "<script> console.log(" . $email . ") </script>";
             $con = Connection::connect();
             $stmt = $con->prepare("select account_ID from Information where email_address = '" . $email . "'");
             $stmt->execute();
@@ -27,8 +28,6 @@ if ($code && $email) {
         $_SESSION['code'] = $code;
         header("Location: changePassword.php");
     }
-
-
 } else {
     header("Location: failed.php");
 }

@@ -16,14 +16,11 @@ require_once "card.php";
     <script src="js/closeModals.js"></script>
 </head>
 
-<body onload="init();">
+<body class="w3-light-grey" onload="init();">
 <!-- Navbar -->
 <?php include "header.php"; ?>
 <!-- modals -->
 <?php
-if ($type == 1) {
-    include "profile.php";
-}
 
 if ($type == 0) {
     include "login.php";

@@ -18,11 +18,11 @@ require_once "session.php";
     <div class="w3-bar w3-lime w3-card">
         <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="toggleNav()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
         <!-- The homepage will have a feed of the newest users and updated users -->
-        <a class="w3-bar-item w3-button w3-padding-large">BAConnect</a>
+        <a class="w3-bar-item w3-button w3-padding-large" href="/courseproject">BAConnect</a>
         <!-- If user is logged in, don't show this link -->
         <?php
         if($type == 1){
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'profileModal'".').style.display='."'block'".'">PROFILE</a>';
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="profile.php">PROFILE</a>';
         }
 
         if($type == 0){
@@ -50,7 +50,7 @@ require_once "session.php";
 <div id="navMobile" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
     <?php
     if($type == 1){
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'profileModal'".').style.display='."'block'".'">PROFILE</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="profile.php">PROFILE</a>';
     }
 
     if($type == 0){

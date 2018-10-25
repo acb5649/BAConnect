@@ -10,10 +10,9 @@ if (isset($_POST['login'])) {
         $account_id = getAccountIDFromUsername($username);
         $_SESSION['account_ID'] = $account_id;
         $_SESSION['type'] = getAccountTypeFromAccountID($account_id);
-
-        header('Location: index.php');
-        die;
     }
+    header('Location: index.php');
+    die;
 }
 ?>
 

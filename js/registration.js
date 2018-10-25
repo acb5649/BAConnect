@@ -1,3 +1,4 @@
+/*
 function removeField(number) {
     console.log("Removing field " + number);
 
@@ -136,3 +137,4 @@ function init() {
     addField();
     createWork();
 }
+*/

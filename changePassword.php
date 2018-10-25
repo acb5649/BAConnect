@@ -31,7 +31,7 @@ if (isset($_POST['submit'])) {
     <script src="js/closeModals.js"></script>
 </head>
 
-<body onload="document.getElementById('changePassModal').style.display='block';">
+<body class="w3-light-grey" onload="document.getElementById('changePassModal').style.display='block';">
 <!-- Navbar -->
 <?php include "header.php"; ?>
 <!-- modals -->

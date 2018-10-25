@@ -13,7 +13,7 @@ function createCard($userID)
     $userCity = "Indianapolis";
 
     return '<div class="w3-card-4 w3-margin-bottom">
-  <header class="w3-container w3-light-grey">
+  <header class="w3-container w3-pale-red">
     <h3>'.$firstName.' '.$lastName.'</h3>
   </header>
   <div class="w3-container">
