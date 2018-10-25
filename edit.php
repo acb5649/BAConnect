@@ -21,12 +21,3 @@
       </form>
    </div>
 </div>
-<script>
-   // When the user clicks anywhere outside of the modal, close it
-   var editModal = document.getElementById('editModal');
-   window.onclick = function(event) {
-       if (event.target == editModal) {
-           editModal.style.display = "none";
-       }
-   }
-</script>
