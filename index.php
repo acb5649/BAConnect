@@ -48,6 +48,7 @@ if ($type > 1) {
         $card = createCard($user["account_ID"]);
         echo '<div class="w3-col m4 l3 w3-center">' . $card . '</div>';
     }
+    $con = null;
      ?>
 </div>
 

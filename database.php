@@ -515,3 +515,33 @@ function getGender($account_id) {
         return "Nonbinary";
     }
 }
+
+function getDegrees($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT * FROM Degrees where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $degrees = array();
+    foreach ($result as $degree) {
+        array_push($degrees, array($degree['school'], $degree['major'], $degree['graduation_year']));
+    }
+    $con = null;
+    return $degrees;
+}
+
+function getJobs($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT job_ID FROM `Job History` where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $jobs = array();
+    foreach ($result as $job_id) {
+        $stmt = $con->prepare("SELECT * FROM `Job` where job_ID = '" . $job_id['job_ID'] . "'");
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        array_push($jobs, array($result['employer'], $result['profession_field']));
+    }
+    $con = null;
+    return $jobs;
+}

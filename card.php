@@ -9,8 +9,8 @@ function createCard($account_id) {
     $name = getName($account_id);
 
     $imageSrc = file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id);
-    $educationHistory = "2001-2005 BS in Computer Science at IUPUI";
-    $workHistory = "2005-2015 Sales Associate at Store";
+    $degrees = getDegrees($account_id);
+    $jobs = getJobs($account_id);
     $userGender = getGender($account_id);
     $userCity = getApproximateLocation($account_id);
 
@@ -18,10 +18,20 @@ function createCard($account_id) {
   <header class="w3-container w3-pale-red">
     <h3>'.$name.'</h3>
   </header>
-  <div class="w3-container">
-  <img class="w3-left w3-circle" src="data:image/jpeg;base64,' . $imageSrc . '" style="width:10%;" alt="Avatar">
-  <p>'.$educationHistory.'</p>
-  <p>'.$workHistory.'</p>
+  <div class="w3-container w3-text-grey w3-white">
+  <div class="w3-row-padding">
+    <div class="w3-third">
+        <div style="position: relative; top: 100%; transform: translateY(50%); -webkit-transform: translateY(50%); -moz-transform: translateY(50%);">
+                <img class="w3-circle w3-border" src="data:image/jpeg;base64,' . $imageSrc . '" style="width:100%;" alt="Avatar">
+        </div>
+    </div>
+    <div class="w3-twothird w3-small">
+        <p>'.$degrees[0][2].'</p>
+        <p>'.$degrees[0][1].'</p>
+        <p>'.$degrees[0][0].'</p>
+        <p>'.$jobs[0][0] . " at " . $jobs[0][1].'</p>
+    </div>
+  </div>
   <hr>
   <p>'.$userGender.' '.$userCity.'</p>
   </div>
