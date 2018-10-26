@@ -21,8 +21,8 @@ function createCard($account_id) {
   <div class="w3-container w3-text-grey w3-white">
   <div class="w3-row-padding">
     <div class="w3-third">
-        <div style="position: relative; top: 100%; transform: translateY(50%); -webkit-transform: translateY(50%); -moz-transform: translateY(50%);">
-                <img class="w3-circle w3-border" src="data:image/jpeg;base64,' . $imageSrc . '" style="width:100%;" alt="Avatar">
+        <div style="position: relative; top: 50%; /*transform: translateY(-50%); -webkit-transform: translateY(-50%); -moz-transform: translateY(-50%);*/">
+                <img class="w3-circle w3-border" src="data:image/jpeg;base64,' . $imageSrc . '" style="width: 100%;" alt="Avatar">
         </div>
     </div>
     <div class="w3-twothird w3-small">

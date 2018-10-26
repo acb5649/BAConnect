@@ -27,7 +27,9 @@ function registerUser($user, $address, $educationHistory, $workHistory, $picture
         registerNewDegree($account_id, $educationElement);
     }
     // and Work History...
-    registerNewWork($account_id, $workHistory);
+    foreach($workHistory as $workElement) {
+        registerNewWork($account_id, $workElement);
+    }
     // Finally, assign photos and resumes
     registerNewPicture($account_id, $picture);
     registerNewResume($account_id, $resume);
@@ -147,9 +149,11 @@ function registerNewWork($account_id, $workHistory) {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $job_id = $row['job_ID'];
 
-    $stmt = $con->prepare("insert into `Job History` (`job_ID`, `account_ID`, `start`) values (?, ?, CURRENT_TIMESTAMP)");
+    $stmt = $con->prepare("insert into `Job History` (`job_ID`, `account_ID`, `start`, `end`) values (?, ?, ?, ?)");
     $stmt->bindValue(1, $job_id, PDO::PARAM_INT);
     $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
+    $stmt->bindValue(3, $workHistory->startYear, PDO::PARAM_INT);
+    $stmt->bindValue(4, $workHistory->endYear, PDO::PARAM_INT);
     $stmt->execute();
     $con = null;
 }

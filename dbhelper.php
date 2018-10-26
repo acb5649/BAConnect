@@ -55,12 +55,14 @@ class EducationHistoryEntry {
     public $schoolName;
     public $degreeType;
     public $degreeMajor;
+    public $enrollmentYear;
     public $gradYear;
 
-    function __construct($schoolName, $degreeType, $degreeMajor, $gradYear) {
+    function __construct($schoolName, $degreeType, $degreeMajor, $enrollmentYear, $gradYear) {
         $this->schoolName = $schoolName;
         $this->degreeType = $degreeType;
         $this->degreeMajor = $degreeMajor;
+        $this->enrollmentYear = $enrollmentYear;
         $this->gradYear = $gradYear;
     }
 
@@ -69,9 +71,13 @@ class EducationHistoryEntry {
 class WorkHistoryEntry {
     public $companyName;
     public $jobTitle;
+    public $startYear;
+    public $endYear;
 
-    function __construct($companyName, $jobTitle) {
+    function __construct($companyName, $jobTitle, $startYear, $endYear) {
         $this->companyName = $companyName;
         $this->jobTitle = $jobTitle;
+        $this->startYear = $startYear;
+        $this->endYear = $endYear;
     }
 }

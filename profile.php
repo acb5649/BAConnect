@@ -23,9 +23,11 @@ if (isset($_POST['submit'])) {
 if (isset($_GET['user'])) {
     $account_id = $_GET['user'];
     $allowEdit = FALSE;
-} else {
+} elseif (isset($_SESSION["account_ID"])) {
     $account_id = $_SESSION["account_ID"];
     $allowEdit = TRUE;
+} else {
+    header("location: index.php");
 }
 
 ?>
