@@ -2,18 +2,6 @@
 require_once "session.php";
 ?>
 
-<script>
-    // Used to toggle the menu on small screens when clicking on the menu button
-    function toggleNav() {
-        let x = document.getElementById("navMobile");
-        if (x.className.indexOf("w3-show") == -1) {
-            x.className += " w3-show";
-        } else {
-            x.className = x.className.replace(" w3-show", "");
-        }
-    }
-</script>
-
 <div style="position: sticky; position: -webkit-sticky; padding-bottom: 16px;" class="w3-top">
     <div class="w3-bar w3-lime w3-card">
         <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="toggleNav()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>

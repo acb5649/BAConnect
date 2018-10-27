@@ -15,11 +15,36 @@ include "extras/fakegen.php";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="js/registration.js"></script>
     <script src="js/closeModals.js"></script>
+    <script>
+        // Used to toggle the menu on small screens when clicking on the menu button
+        function toggleNav() {
+            let x = document.getElementById("navMobile");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+    </script>
 </head>
 
 <body class="w3-light-grey" onload="init();">
 <!-- Navbar -->
 <?php include "header.php"; ?>
+<!-- Page content -->
+<div id="mentorDisplay">
+    <?php
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT `account_ID` FROM Information limit 90");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($result as $user) {
+        $card = createCard($user["account_ID"]);
+        echo '<span class="w3-container" style="display: inline-block; text-align: center; vertical-align: middle;">' . $card . '</span>';
+    }
+    $con = null;
+    ?>
+</div>
 <!-- modals -->
 <?php
 
@@ -38,21 +63,5 @@ if ($type > 1) {
     include "addDegreeType.php";
 }
 ?>
-<!-- Page content -->
-<div style="position: fixed; overflow: scroll;" class="w3-row-padding" id="mentorDisplay">
-    <?php
-    $con = Connection::connect();
-    $stmt = $con->prepare("SELECT `account_ID` FROM Information");
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($result as $user) {
-        $card = createCard($user["account_ID"]);
-        echo '<div class="w3-col m4 l3 w3-center">' . $card . '</div>';
-    }
-    $con = null;
-     ?>
-</div>
-
-<!-- End Page Content -->
 </body>
 </html>

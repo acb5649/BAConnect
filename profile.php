@@ -41,6 +41,17 @@ if (isset($_GET['user'])) {
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="js/closeModals.js"></script>
+    <script>
+        // Used to toggle the menu on small screens when clicking on the menu button
+        function toggleNav() {
+            let x = document.getElementById("navMobile");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+    </script>
 </head>
 
 <body class="w3-light-grey" onload="init();">
