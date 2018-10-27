@@ -2,6 +2,20 @@
 
 include_once "database.php";
 
+function formatDegreesAndJobs($degrees, $jobs) {
+    $result = "";
+
+    foreach($degrees as $degree) {
+        $result = $result . "<p>" . $degree[2] . " - " . $degree[1] ."</p>";
+        $result = $result . "<p>" . $degree[0] . "</p>";
+    }
+    $result = $result . "<hr>";
+    foreach($jobs as $job) {
+        $result = $result . "<p>" . $job[1] . " at " . $job[0]. "</p>";
+    }
+    return $result;
+}
+
 function createCard($account_id) {
     // get database entries for user
     // final product looks like this: https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_cards_buttons2
@@ -32,18 +46,4 @@ function createCard($account_id) {
   </div>
   <a class="w3-button w3-block w3-dark-grey" href="profile.php?user=' . $account_id . '">+ Connect</a>
   </div>';
-}
-
-function formatDegreesAndJobs($degrees, $jobs) {
-    $result = "";
-
-    foreach($degrees as $degree) {
-        $result = $result . "<p>" . $degree[2] . " - " . $degree[1] ."</p>";
-        $result = $result . "<p>" . $degree[0] . "</p>";
-    }
-    $result = $result . "<hr>";
-    foreach($jobs as $job) {
-        $result = $result . "<p>" . $job[1] . " at " . $job[0]. "</p>";
-    }
-    return $result;
 }

@@ -529,6 +529,7 @@ function getDegrees($account_id) {
     $stmt = $con->prepare("SELECT * FROM Degrees where account_ID = '" . $account_id . "'");
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     $degrees = array();
     foreach ($result as $degree) {
         array_push($degrees, array($degree['school'], $degree['major'], $degree['graduation_year']));
