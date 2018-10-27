@@ -2,6 +2,7 @@
 require_once "session.php";
 require_once "database.php";
 require_once "card.php";
+include "extras/fakegen.php";
 ?>
 <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
 <!DOCTYPE html>
@@ -38,7 +39,7 @@ if ($type > 1) {
 }
 ?>
 <!-- Page content -->
-<div style="position: fixed;" class="w3-row-padding" id="mentorDisplay">
+<div style="position: fixed; overflow: scroll;" class="w3-row-padding" id="mentorDisplay">
     <?php
     $con = Connection::connect();
     $stmt = $con->prepare("SELECT `account_ID` FROM Information");

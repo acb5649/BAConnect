@@ -196,6 +196,10 @@ function registerNewPicture($account_id, $picture) {
 }
 
 function registerNewResume($account_id, $resume) {
+    if ($resume == "") {
+        return;
+    }
+
     $file = fopen($resume,'rb');
 
     $con = Connection::connect();

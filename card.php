@@ -25,17 +25,25 @@ function createCard($account_id) {
                 <img class="w3-circle w3-border" src="data:image/jpeg;base64,' . $imageSrc . '" style="width: 100%;" alt="Avatar">
         </div>
     </div>
-    <div class="w3-twothird w3-small">
-        <p>'.$degrees[0][2].'</p>
-        <p>'.$degrees[0][1].'</p>
-        <p>'.$degrees[0][0].'</p>
-        <p>'.$jobs[0][0] . " at " . $jobs[0][1].'</p>
-    </div>
+    <div class="w3-twothird w3-small">' . formatDegreesAndJobs($degrees, $jobs) . '</div>
   </div>
   <hr>
   <p>'.$userGender.' '.$userCity.'</p>
   </div>
   <a class="w3-button w3-block w3-dark-grey" href="profile.php?user=' . $account_id . '">+ Connect</a>
-  </div>
-  ';
-};
+  </div>';
+}
+
+function formatDegreesAndJobs($degrees, $jobs) {
+    $result = "";
+
+    foreach($degrees as $degree) {
+        $result = $result . "<p>" . $degree[2] . " - " . $degree[1] ."</p>";
+        $result = $result . "<p>" . $degree[0] . "</p>";
+    }
+    $result = $result . "<hr>";
+    foreach($jobs as $job) {
+        $result = $result . "<p>" . $job[1] . " at " . $job[0]. "</p>";
+    }
+    return $result;
+}
