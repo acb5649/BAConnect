@@ -126,12 +126,13 @@ function registerNewPhoneNumber($account_id, $phoneNumber) {
 
 function registerNewDegree($account_id, $educationElement) {
     $con = Connection::connect();
-    $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year) values (?, ?, ?, ?, ?)");
+    $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year, enrollment_year) values (?, ?, ?, ?, ?, ?)");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->bindValue(2, $educationElement->degreeType, PDO::PARAM_INT);
     $stmt->bindValue(3, $educationElement->schoolName, PDO::PARAM_STR);
     $stmt->bindValue(4, $educationElement->degreeMajor, PDO::PARAM_STR);
     $stmt->bindValue(5, $educationElement->gradYear, PDO::PARAM_INT);
+    $stmt->bindValue(6, $educationElement->enrollmentYear, PDO::PARAM_INT);
     $stmt->execute();
     $con = null;
 }
@@ -532,7 +533,7 @@ function getDegrees($account_id) {
 
     $degrees = array();
     foreach ($result as $degree) {
-        array_push($degrees, array($degree['school'], $degree['major'], $degree['graduation_year']));
+        array_push($degrees, array($degree['school'], $degree['major'], $degree['graduation_year'], $degree['enrollment_year']));
     }
     $con = null;
     return $degrees;
@@ -546,10 +547,17 @@ function getJobs($account_id) {
 
     $jobs = array();
     foreach ($result as $job_id) {
+        $stmt = $con->prepare("SELECT start, end FROM `Job History` where job_ID = '" . $job_id['job_ID'] . "'");
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $start = $result['start'];
+        $end = $result['end'];
+
         $stmt = $con->prepare("SELECT * FROM `Job` where job_ID = '" . $job_id['job_ID'] . "'");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        array_push($jobs, array($result['employer'], $result['profession_field']));
+
+        array_push($jobs, array($result['employer'], $result['profession_field'], $start, $end));
     }
     $con = null;
     return $jobs;

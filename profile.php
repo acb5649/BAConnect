@@ -36,7 +36,7 @@ function formatDegrees($degrees) {
         $result .= '<div class="w3-container"><h5 class="w3-opacity"><b>';
         $result .= $degree[1] . " / " . $degree[0];
         $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
-        $result .= $degree[2];
+        $result .= $degree[3] . " - " . $degree[2];
         $result .= '</h6><hr></div>';
     }
     return $result;
@@ -48,7 +48,7 @@ function formatJobs($jobs) {
         $result .= '<div class="w3-container"><h5 class="w3-opacity"><b>';
         $result .= $job[1] . " / " . $job[0];
         $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
-        $result .= "(time range here)";
+        $result .= $job[2] . " - " . $job[3];
         $result .= '</h6><hr></div>';
     }
     return $result;
