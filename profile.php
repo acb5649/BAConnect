@@ -30,6 +30,18 @@ if (isset($_GET['user'])) {
     header("location: index.php");
 }
 
+function makeEditable($allowEdit, $id) {
+    if ($allowEdit) {
+        return ' <a class="w3-button" onclick="enterEditState(\'' . $id . '\');"><i class="fa fa-pencil fa-fw w3-large w3-text-lime w3-opacity"></i></a>';
+    } else {
+        return "";
+    }
+}
+
+function putItInASpan($thing) {
+    return "<span>" . $thing . "</span>";
+}
+
 function formatDegrees($degrees) {
     $result = "";
     foreach($degrees as $degree) {
@@ -74,6 +86,70 @@ function formatJobs($jobs) {
                 x.className = x.className.replace(" w3-show", "");
             }
         }
+        
+        function init() {
+
+        }
+
+        function enterEditState(id) {
+            if (id == "gender") {
+                document.getElementById(id).innerHTML = `
+                    <p><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i>Gender:</p>
+                    <form style="display: inline-block;" method="post" action="updateProfile.php">
+                    <select class="w3-select w3-border" name="gender" id="gender">
+                        <option value="0"> Male </option>
+                        <option value="1"> Female </option>
+                        <option value="2"> Nonbinary/Other </option>
+                    </select>
+                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Gender</button>
+                    </form>`;
+            } else if (id == "status") {
+                document.getElementById(id).innerHTML = `
+                    <p><i class="fa fa-briefcase fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Status:</p>
+                    <form style="display: inline-block;" method="post" action="updateProfile.php">
+                    <select class="w3-select w3-border" name="status" id="status">
+                        <option value="0"> Student </option>
+                        <option value="1"> Working Professional </option>
+                    </select>
+                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Status</button>
+                    </form>`;
+            } else if (id == "email") {
+                document.getElementById(id).innerHTML = `
+                    <p><i class="fa fa-envelope fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Email:</p>
+                    <form style="display: inline-block;" method="post" action="updateProfile.php">
+                    <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo getEmail($account_id); ?>" name="email" id="email"/>
+                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Email</button>
+                    </form>`;
+            } else if (id == "phone") {
+                document.getElementById(id).innerHTML = `
+                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Phone Number:</p>
+                    <form style="display: inline-block;" method="post" action="updateProfile.php">
+                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Phone</button>
+                    </form>`;
+            } else if (id == "location") {
+                document.getElementById(id).innerHTML = `
+                    <form style="display: inline-block;" method="post" action="updateProfile.php">
+                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Address Line 1:</p>
+                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+
+                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Address Line 2:</p>
+                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+
+                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>City:</p>
+                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+
+                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>State:</p>
+                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+
+                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Post code:</p>
+                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+
+                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Location</button>
+                    </form>`;
+            }
+        }
+
     </script>
 </head>
 
@@ -101,11 +177,12 @@ function formatJobs($jobs) {
                     </div>
                 </div>
                 <div class="w3-container">
-                    <p><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo getGender($account_id) ?></p>
-                    <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo getStatus($account_id) ?></p>
-                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo getApproximateLocation($account_id) ?></p>
-                    <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo getEmail($account_id) ?></p>
-                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo getPhoneNumber($account_id) ?></p>
+
+                    <p id="gender"><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getGender($account_id)) . makeEditable($allowEdit, "gender")?></p>
+                    <p id="status"><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($account_id)) . makeEditable($allowEdit, "status")?></p>
+                    <p id="location"><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($account_id)) . makeEditable($allowEdit, "location")?></p>
+                    <p id="email"><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($account_id)) . makeEditable($allowEdit, "email")?></p>
+                    <p id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($account_id)) . makeEditable($allowEdit, "phone")?></p>
                     <hr>
 
                     <button class="w3-button w3-block w3-dark-grey">+ Connect</button>

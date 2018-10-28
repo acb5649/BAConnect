@@ -30,6 +30,7 @@ require_once "session.php";
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'searchModal'".').style.display='."'block'".'">USER SEARCH</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addCountryModal'".').style.display='."'block'".'">ADD COUNTRY</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addDegreeModal'".').style.display='."'block'".'">ADD DEGREE TYPE</a>';
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addStateModal'".').style.display='."'block'".'">ADD STATE</a>';
         }
         ?>
     </div>
@@ -58,6 +59,7 @@ require_once "session.php";
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'searchModal'".').style.display='."'block'".'">USER SEARCH</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addCountryModal'".').style.display='."'block'".'">ADD COUNTRY</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addDegreeModal'".').style.display='."'block'".'">ADD DEGREE TYPE</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addStateModal'".').style.display='."'block'".'">ADD STATE</a>';
     }
     ?>
 </div>

@@ -61,6 +61,7 @@ if ($type > 1) {
     include "search.php";
     include "addCountry.php";
     include "addDegreeType.php";
+    include "addState.php";
 }
 ?>
 </body>

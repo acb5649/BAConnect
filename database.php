@@ -139,22 +139,14 @@ function registerNewDegree($account_id, $educationElement) {
 
 function registerNewWork($account_id, $workHistory) {
     $con = Connection::connect();
-    $stmt = $con->prepare("insert into Job (job_ID, employer, profession_field) values (?, ?, ?)");
-    $stmt->bindValue(1, null, PDO::PARAM_NULL);
+    $stmt = $con->prepare("insert into `Job History` (`account_ID`, employer, profession_field, `start`, `end`) values (?, ?, ?, ?, ?)");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->bindValue(2, $workHistory->companyName, PDO::PARAM_STR);
     $stmt->bindValue(3, $workHistory->jobTitle, PDO::PARAM_STR);
-    $stmt->execute();
-
-    $stmt = $con->prepare("select job_ID from Job where employer = '" . $workHistory->companyName . "' and profession_field = '" . $workHistory->jobTitle . "'");
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $job_id = $row['job_ID'];
-
-    $stmt = $con->prepare("insert into `Job History` (`job_ID`, `account_ID`, `start`, `end`) values (?, ?, ?, ?)");
-    $stmt->bindValue(1, $job_id, PDO::PARAM_INT);
-    $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
     $stmt->bindValue(3, $workHistory->startYear, PDO::PARAM_INT);
     $stmt->bindValue(4, $workHistory->endYear, PDO::PARAM_INT);
+    $stmt->execute();
+
     $stmt->execute();
     $con = null;
 }
@@ -547,17 +539,10 @@ function getJobs($account_id) {
 
     $jobs = array();
     foreach ($result as $job_id) {
-        $stmt = $con->prepare("SELECT start, end FROM `Job History` where job_ID = '" . $job_id['job_ID'] . "'");
+        $stmt = $con->prepare("SELECT * FROM `Job History` where job_ID = '" . $job_id['job_ID'] . "'");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $start = $result['start'];
-        $end = $result['end'];
-
-        $stmt = $con->prepare("SELECT * FROM `Job` where job_ID = '" . $job_id['job_ID'] . "'");
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        array_push($jobs, array($result['employer'], $result['profession_field'], $start, $end));
+        array_push($jobs, array($result['employer'], $result['profession_field'], $result['start'], $result['end']));
     }
     $con = null;
     return $jobs;

@@ -90,12 +90,9 @@ if (isset($_POST['submit'])) {
             <p>
                 <label>Gender</label>
             </p>
-            <label>Male</label>
-            <input class="w3-radio w3-border" type="radio" name="gender" value="0" checked="checked"/>
-            <label>Female</label>
-            <input class="w3-radio w3-border" type="radio" name="gender" value="1"/>
-            <label>Nonbinary</label>
-            <input class="w3-radio w3-border" type="radio" name="gender" value="2"/>
+            <label>Male<input class="w3-radio w3-border" type="radio" name="gender" value="0" checked="checked"/></label>
+            <label>Female<input class="w3-radio w3-border" type="radio" name="gender" value="1"/></label>
+            <label>Nonbinary<input class="w3-radio w3-border" type="radio" name="gender" value="2"/></label>
             <p>
                 <label>Address Line 1</label>
             </p>
