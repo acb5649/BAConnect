@@ -562,3 +562,16 @@ function getJobs($account_id) {
     $con = null;
     return $jobs;
 }
+
+function getStates($countryID){
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT state_name, state_ID FROM Countries WHERE country_ID = '" . $countryID . "'");
+    $stmt->execute();
+    $list = $stmt->fetchAll();
+    $con = null;
+    $html = "";
+    foreach ($list as $option) {
+        $html = $html . '<option value="' . $option["state_ID"] . '"> ' . $option["state_name"] . ' </option> ';
+    }
+    return $html;
+}
