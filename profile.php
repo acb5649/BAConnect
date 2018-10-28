@@ -97,7 +97,7 @@ function formatJobs($jobs) {
                         <?php if ($allowEdit) { echo "<button class=\"w3-button w3-black\" onclick=\"document.getElementById('uploadPicModal').style.display='block'\">Change Picture...</button>";} ?>
                     </div>
                     <div class="w3-display-bottomleft w3-container w3-text-black">
-                        <h2><?php echo getName($account_id) ?></h2>
+                        <h2 class="w3-text-white" style="text-shadow:1px 1px 0 #444"><?php echo getName($account_id) ?></h2>
                     </div>
                 </div>
                 <div class="w3-container">
