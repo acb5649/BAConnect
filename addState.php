@@ -1,19 +1,17 @@
 <?php
     session_start();
     require_once "database.php";
-
-
 ?>
 <html>
 <head>
     <script>
-    function showStates(countryID){
-
+    function showStates(){
+        countryID = 1;
         if($countryID != ""){
             xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){
-                    document.getElementById("state").innerHTML = "hello";
+                    document.getElementById("addState").innerHTML = this.responseText;
                 }
             };
             xmlhttp.open("GET", "AJAX.php?action=refreshState&country=" + countryID, true);
@@ -32,13 +30,17 @@
             <p>
                 <label>Select Country</label>
             </p>
-
+            <!-- I swear this onchange thing isn't activating -->
             <select class="w3-select w3-border" name="country" onchange="showStates(this.value)">
                 <?php print listCountries(); ?>
             </select>
 
-        </form>
-        <form method = 'post' action="addState.php" class="w3-container">
+            <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="edit">select
+                <i class="fa fa-check"></i>
+            </button>
+
+        </form> <!-- I forget why I had multiple forms, but they were in addCountry when I copied over -->
+        <form method = 'post' action = "addState.php" class = "w3-container">
 
             <h1>Add new State</h1>
             <p>
@@ -51,20 +53,16 @@
             </button>
         </form>
 
-        <div id = "state">
-
-        </div>
-
         <form method = 'post' action = "addState.php" class = "w3-container">
             <h1>Edit a State</h1>
             <p>
                 <label>Select State to Edit</label>
             </p>
 
-            <!--<select class="w3-select w3-border" name="state" id = "state">
-                <?php// print getStates($countryID); ?>
+            <select class="w3-select w3-border" name="state" id = "state">
+                <?php// print getStates($countryID);?>
             </select>
-            -->
+
             <p>
                 <label>Enter New State Name</label>
             </p>

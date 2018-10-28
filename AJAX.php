@@ -12,11 +12,7 @@ if($_GET["action"] == "refreshState"){
     $countryID = $_GET["country"];
     $options = getStates($countryID);
 
-    echo "<select class="w3-select w3-border" name="newState" id = "newState">";
-
     echo $options;
-    echo "</select>";
+
 }
-
-
 ?>
