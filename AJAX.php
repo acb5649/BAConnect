@@ -12,6 +12,8 @@ if($_GET["action"] == "refreshState"){
     $countryID = $_GET["country"];
     $options = getStates($countryID);
 
+
+
     echo $options;
 
 }

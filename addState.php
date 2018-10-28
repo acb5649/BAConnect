@@ -5,13 +5,12 @@
 <html>
 <head>
     <script>
-    function showStates(){
-        countryID = 1;
-        if($countryID != ""){
-            xmlhttp = new XMLHttpRequest();
+    function showStates(countryID){
+        if(countryID != ""){
+            let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){
-                    document.getElementById("addState").innerHTML = this.responseText;
+                    document.getElementById("state").innerHTML = this.responseText;
                 }
             };
             xmlhttp.open("GET", "AJAX.php?action=refreshState&country=" + countryID, true);
@@ -26,7 +25,7 @@
             <span onclick="document.getElementById('addStateModal').style.display='none'" class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
             <h2 class="w3-wide"><i class="w3-margin-right"></i>Add State </h2>
         </header>
-        <form method = 'post' action = "addState.php" class = "w3-container">
+        <div class = "w3-container">
             <p>
                 <label>Select Country</label>
             </p>
@@ -35,11 +34,7 @@
                 <?php print listCountries(); ?>
             </select>
 
-            <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="edit">select
-                <i class="fa fa-check"></i>
-            </button>
-
-        </form> <!-- I forget why I had multiple forms, but they were in addCountry when I copied over -->
+        </div> <!-- I forget why I had multiple forms, but they were in addCountry when I copied over -->
         <form method = 'post' action = "addState.php" class = "w3-container">
 
             <h1>Add new State</h1>
@@ -59,7 +54,7 @@
                 <label>Select State to Edit</label>
             </p>
 
-            <select class="w3-select w3-border" name="state" id = "state">
+            <select class="w3-select w3-border" name="state" id="state">
                 <?php// print getStates($countryID);?>
             </select>
 
@@ -70,7 +65,7 @@
             <p>
                 <label>Or Delete Selected State</label>
             </p>
-            <button type="button" class="w3-button w3-red w3-section" type = "submit" name = "delete">Delete
+            <button type="button" class="w3-button w3-red w3-section" type="submit" name = "delete">Delete
                 <i class="fa fa-remove"></i>
             </button>
 

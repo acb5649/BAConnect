@@ -550,7 +550,7 @@ function getJobs($account_id) {
 
 function getStates($countryID){
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT state_name, state_ID FROM Countries WHERE country_ID = '" . $countryID . "'");
+    $stmt = $con->prepare("SELECT state_name, state_ID FROM States WHERE country_ID = '" . $countryID . "'");
     $stmt->execute();
     $list = $stmt->fetchAll();
     $con = null;
