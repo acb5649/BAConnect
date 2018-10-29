@@ -95,10 +95,23 @@ function formatJobs($jobs) {
         function init() {
 
         }
+        
 
-        function cancel() {
-            window.location.reload(true);
-            return false;
+        function exitEditState(id) {
+            document.getElementById(id).classList.remove("w3-cell-row");
+            if (id == "gender") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getGender($account_id)) . makeEditable($allowEdit, "gender")?>`;
+            } else if (id == "status") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($account_id)) . makeEditable($allowEdit, "status")?>`;
+            } else if (id == "email") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($account_id)) . makeEditable($allowEdit, "email")?>`;
+            } else if (id == "phone") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($account_id)) . makeEditable($allowEdit, "phone")?>`;
+            } else if (id == "location") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($account_id)) . makeEditable($allowEdit, "location")?>`;
+            } else if (id == "country") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($account_id)) . makeEditable($allowEdit, "country")?>`;
+            }
         }
 
         function enterEditState(id) {
@@ -113,7 +126,7 @@ function formatJobs($jobs) {
                         <option value="2"> Nonbinary/Other </option>
                     </select>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Gender</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('gender');">Cancel</button>
                     </form>`;
             } else if (id == "status") {
                 document.getElementById(id).innerHTML = `
@@ -124,7 +137,7 @@ function formatJobs($jobs) {
                         <option value="1"> Working Professional </option>
                     </select>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Status</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('status');">Cancel</button>
                     </form>`;
             } else if (id == "email") {
                 document.getElementById(id).innerHTML = `
@@ -132,7 +145,7 @@ function formatJobs($jobs) {
                     <form method="post" action="updateProfile.php">
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getEmail($account_id); ?>" name="email" id="email"/>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Email</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('email');">Cancel</button>
                     </form>`;
             } else if (id == "phone") {
                 document.getElementById(id).innerHTML = `
@@ -140,7 +153,7 @@ function formatJobs($jobs) {
                     <form method="post" action="updateProfile.php">
                     <input class="w3-input w3-border w3-cell" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Phone</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('phone');">Cancel</button>
                     </form>`;
             } else if (id == "location") {
                 document.getElementById(id).innerHTML = `
@@ -163,7 +176,7 @@ function formatJobs($jobs) {
                     <input class="w3-input w3-border" type="text" value="<?php echo getPostCode($account_id); ?>" name="postcode"/>
 
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Location</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('location');">Cancel</button>
                     </form>`;
             } else if (id == "country") {
                 document.getElementById(id).innerHTML = `
@@ -173,7 +186,7 @@ function formatJobs($jobs) {
                         <?php echo listCountries($account_id) ?>
                     </select>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Country</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('country');">Cancel</button>
                     </form>`;
             }
         }
