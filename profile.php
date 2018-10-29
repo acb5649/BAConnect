@@ -21,6 +21,11 @@ if (isset($_POST['submit'])) {
 }
 
 if (isset($_GET['user'])) {
+    if (isset($_SESSION["account_ID"])) {
+        if ($_SESSION["account_ID"] == $_GET['user']) {
+            header("location: profile.php");
+        }
+    }
     $account_id = $_GET['user'];
     $allowEdit = FALSE;
 } elseif (isset($_SESSION["account_ID"])) {
@@ -181,6 +186,7 @@ function formatJobs($jobs) {
 
                     <p id="gender"><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getGender($account_id)) . makeEditable($allowEdit, "gender")?></p>
                     <p id="status"><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($account_id)) . makeEditable($allowEdit, "status")?></p>
+                    <p id="country"><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($account_id)) . makeEditable($allowEdit, "country")?></p>
                     <p id="location"><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($account_id)) . makeEditable($allowEdit, "location")?></p>
                     <p id="email"><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($account_id)) . makeEditable($allowEdit, "email")?></p>
                     <p id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($account_id)) . makeEditable($allowEdit, "phone")?></p>

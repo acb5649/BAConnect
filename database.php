@@ -690,3 +690,18 @@ function setPostCode($account_id, $postCode) {
     $stmt->execute();
     $con = null;
 }
+
+function getCountry($account_id) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT country_ID FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $country_ID = $result['country_ID'];
+
+    $stmt = $con->prepare("SELECT country FROM `Countries` where country_ID = '" . $country_ID . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['country'];
+}
