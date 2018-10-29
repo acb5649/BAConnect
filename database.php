@@ -554,15 +554,22 @@ function getJobs($account_id) {
     return $jobs;
 }
 
-function getStates($countryID){
+function getStatesList($countryID, $account_id){
     $con = Connection::connect();
     $stmt = $con->prepare("SELECT state_name, state_ID FROM States WHERE country_ID = '" . $countryID . "'");
     $stmt->execute();
     $list = $stmt->fetchAll();
     $con = null;
+
+    $selected = getStateID($account_id);
+
     $html = "";
     foreach ($list as $option) {
-        $html = $html . '<option value="' . $option["state_ID"] . '"> ' . $option["state_name"] . ' </option> ';
+        if ($option["state_ID"] == $selected) {
+            $html = $html . '<option selected value="' . $option["state_ID"] . '"> ' . $option["state_name"] . ' </option> ';
+        } else {
+            $html = $html . '<option value="' . $option["state_ID"] . '"> ' . $option["state_name"] . ' </option> ';
+        }
     }
     return $html;
 }

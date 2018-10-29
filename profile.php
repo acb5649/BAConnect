@@ -140,8 +140,8 @@ function formatJobs($jobs) {
                     <input class="w3-input w3-border" type="text" value="<?php echo getCity($account_id); ?>" name="city"/>
 
                     <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>State:</p>
-                    <select class="w3-select w3-border" value="<?php echo getStateID($account_id); ?>" name="state" id="state">
-                        <?php echo getStates(getCountryID($account_id)); ?>
+                    <select class="w3-select w3-border" name="state" id="state">
+                        <?php echo getStatesList(getCountryID($account_id), $account_id); ?>
                     </select>
 
                     <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Post code:</p>
