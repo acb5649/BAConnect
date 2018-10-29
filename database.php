@@ -271,16 +271,29 @@ function getAccountTypeFromAccountID($account_id) {
     return $row['type'];
 }
 
-function listCountries() {
+function listCountries($account_id = 0) {
     $con = Connection::connect();
     $stmt = $con->prepare("SELECT country, country_ID FROM Countries");
     $stmt->execute();
     $list = $stmt->fetchAll();
     $con = null;
     $html = "";
-    foreach ($list as $option) {
-        $html = $html . '<option value="' . $option["country_ID"] . '"> ' . $option["country"] . ' </option> ';
+
+    if ($account_id != 0) {
+        $selected = getCountryID($account_id);
+        foreach ($list as $option) {
+            if ($option["country_ID"] == $selected) {
+                $html = $html . '<option selected value="' . $option["country_ID"] . '"> ' . $option["country"] . ' </option> ';
+            } else {
+                $html = $html . '<option value="' . $option["country_ID"] . '"> ' . $option["country"] . ' </option> ';
+            }
+        }
+    } else {
+        foreach ($list as $option) {
+            $html = $html . '<option value="' . $option["country_ID"] . '"> ' . $option["country"] . ' </option> ';
+        }
     }
+
     return $html;
 }
 
@@ -747,4 +760,13 @@ function getCountry($account_id) {
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['country'];
+}
+
+function setCountry($account_id, $new_country_id) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("UPDATE `Addresses` set country_ID = '" . $new_country_id . "' where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $con = null;
 }

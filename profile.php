@@ -154,6 +154,15 @@ function formatJobs($jobs) {
 
                     <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Location</button>
                     </form>`;
+            } else if (id == "country") {
+                document.getElementById(id).innerHTML = `
+                    <p><i class="fa fa-briefcase fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Status:</p>
+                    <form style="display: inline-block;" method="post" action="updateProfile.php">
+                    <select class="w3-select w3-border" name="country" id="country">
+                        <?php listCountries($account_id) ?>
+                    </select>
+                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Status</button>
+                    </form>`;
             }
         }
     </script>

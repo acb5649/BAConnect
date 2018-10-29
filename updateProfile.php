@@ -56,6 +56,10 @@ if (isset($_POST['submit'])) {
         setPostCode($account_id, $_POST['postcode']);
     }
 
+    if (isset($_POST['country'])) {
+        setCountry($account_id, $_POST['country']);
+    }
+
     $con = null;
     header("location: profile.php");
 }
