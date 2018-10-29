@@ -573,7 +573,7 @@ function getStatesList($countryID, $account_id){
     }
     return $html;
 }
-<<<<<<< HEAD
+
 //this function will add a new state to the database, and associate it with the given country
 function addState($countryID, $stateName){
     $con = Connection::connect();
@@ -616,7 +616,6 @@ function deleteState($ID){
     $stmt = null;
     return true;
 }
-=======
 
 function getAddressIDFromAccount($account_id) {
     $con = Connection::connect();
@@ -734,4 +733,18 @@ function setPostCode($account_id, $postCode) {
     $stmt->execute();
     $con = null;
 }
->>>>>>> 3cc23cf5d727a49b96f1d4022543fe34ca13c8a5
+
+function getCountry($account_id) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT country_ID FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $country_ID = $result['country_ID'];
+
+    $stmt = $con->prepare("SELECT country FROM `Countries` where country_ID = '" . $country_ID . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['country'];
+}
