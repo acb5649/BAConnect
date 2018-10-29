@@ -43,6 +43,14 @@ function makeEditable($allowEdit, $id) {
     }
 }
 
+function makeHistoryElementEditable($allowEdit, $id) {
+    if ($allowEdit) {
+        return ' <a class="w3-button w3-display-topright w3-margin" onclick="enterHistoryElementEditState(\'' . $id . '\');"><i class="fa fa-pencil fa-fw w3-large w3-text-lime w3-opacity"></i></a>';
+    } else {
+        return "";
+    }
+}
+
 function putItInASpan($thing) {
     return "<span>" . $thing . "</span>";
 }
@@ -55,6 +63,32 @@ function formatDegrees($degrees) {
         $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
         $result .= $degree[3] . " - " . $degree[2];
         $result .= '</h6><hr></div>';
+    }
+    return $result;
+}
+
+function formatDegreesEditable($degrees) {
+    $result = "";
+    /*
+     * <select name="degreeType_0" id="degreeType_0" class="w3-select w3-border">
+     * <!--?php print listDegreeTypes(); ?-->
+     * </select>
+     *
+     * <input type="text" placeholder="School Name" name="schoolName_0" id="schoolName_0" class="w3-input w3-border">
+     * <input type="text" placeholder="Major" name="major_0" id="major_0" class="w3-input w3-border">
+     *
+     * Year Enrolled:<input type="number" placeholder="" name="enrollmentYear_0" id="enrollmentYear_0" class="w3-input w3-border">
+     * Year Graduated:<input type="number" placeholder="" name="gradYear_0" id="gradYear_0" class="w3-input w3-border w3-margin-bottom">
+     *
+     */
+    foreach($degrees as $degree) {
+        $result .= '<form class="w3-container" action="updateProfile.php"><h5 class="w3-opacity"><b>';
+        $result .= '<select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . "</select>";
+
+        $result .= $degree[1] . " / " . $degree[0];
+        $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
+        $result .= $degree[3] . " - " . $degree[2];
+        $result .= '</h6><hr></form>';
     }
     return $result;
 }
@@ -107,6 +141,14 @@ function formatJobs($jobs) {
                 xmlhttp.open("GET", "AJAX.php?action=refreshState&country=" + countryID, true);
                 xmlhttp.send();
             }
+        }
+
+        function enterHistoryElementEditState(id) {
+
+        }
+
+        function exitHistoryElementEditState(id) {
+
         }
 
         function exitEditState(id) {
@@ -246,14 +288,14 @@ function formatJobs($jobs) {
         <!-- Right Column -->
         <div class="w3-twothird">
 
-            <div class="w3-container w3-card w3-white w3-margin-bottom">
+            <div id="jobs" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>
-                <?php echo formatJobs(getJobs($account_id)); ?>
+                <?php echo formatJobs(getJobs($account_id)) . makeHistoryElementEditable($allowEdit, "jobs"); ?>
             </div>
 
-            <div class="w3-container w3-card w3-white">
+            <div id="degrees" class="w3-container w3-display-container w3-card w3-white">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>
-                <?php echo formatDegrees(getDegrees($account_id)); ?>
+                <?php echo formatDegrees(getDegrees($account_id)) . makeHistoryElementEditable($allowEdit, "degrees"); ?>
             </div>
 
             <!-- End Right Column -->
