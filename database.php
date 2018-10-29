@@ -463,8 +463,14 @@ function getApproximateLocation($account_id) {
     if($row == null){
         return "Somewhere over the rainbow";
     }
+    $city = $row['city'];
 
-    return $row['city'] . ", " . $row['state'];
+    $stmt = $con->prepare("select state_name from `States` where state_id = ?");
+    $stmt->bindValue(1, $row['state'], PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return  $city . ", " . $row['state_name'];
 }
 
 function getStatus($account_id) {
@@ -559,4 +565,121 @@ function getStates($countryID){
         $html = $html . '<option value="' . $option["state_ID"] . '"> ' . $option["state_name"] . ' </option> ';
     }
     return $html;
+}
+
+function getAddressIDFromAccount($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT address_ID FROM `Address History` where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['address_ID'];
+}
+
+function getCountryID($account_id) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT country_ID FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['country_ID'];
+}
+
+function getStateID($account_id) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT state FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['state'];
+}
+
+function setStateID($account_id, $newState) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("UPDATE `Addresses` set state = ? where address_ID = '" . $address_id . "'");
+    $stmt->bindValue(1, $newState, PDO::PARAM_INT);
+    $stmt->execute();
+    $con = null;
+}
+
+
+function getAddressLine1($account_id) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT street_address FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['street_address'];
+}
+
+function setAddressLine1($account_id, $newStreet1) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("UPDATE `Addresses` set street_address = '" . $newStreet1 . "' where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $con = null;
+}
+
+
+function getAddressLine2($account_id) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT street_address2 FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['street_address2'];
+}
+
+function setAddressLine2($account_id, $newStreet2) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("UPDATE `Addresses` set street_address2 = '" . $newStreet2 . "' where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $con = null;
+}
+
+
+function getCity($account_id) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT city FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['city'];
+}
+
+function setCity($account_id, $city) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("UPDATE `Addresses` set city = '" . $city . "' where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $con = null;
+}
+
+function getPostCode($account_id) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT post_code FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['post_code'];
+}
+
+function setPostCode($account_id, $postCode) {
+    $address_id = getAddressIDFromAccount($account_id);
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("UPDATE `Addresses` set post_code = '" . $postCode . "' where address_ID = '" . $address_id . "'");
+    $stmt->execute();
+    $con = null;
 }
