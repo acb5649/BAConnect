@@ -588,7 +588,7 @@ function addState($countryID, $stateName){
     $result = null;
 
     $stmt = $con->prepare("INSERT INTO States (country_ID, state_name, state_ID) values (?, ?, DEFAULT)");
-    $stmt->bindValue(1, $country_ID, PDO::PARAM_STR);
+    $stmt->bindValue(1, $country_ID, PDO::PARAM_INT);
     $stmt->bindValue(2, $state_name, PDO::PARAM_STR);
     $stmt->execute();
 
