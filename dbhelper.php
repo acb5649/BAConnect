@@ -36,19 +36,20 @@ class User extends Account {
 
 class Address {
     public $street;
+    public $street2;
     public $city;
     public $postcode;
     public $state;
     public $country;
 
-    function __construct($street, $city, $postcode, $state, $country) {
+    function __construct($street, $street2, $city, $postcode, $state, $country) {
         $this->street = $street;
+        $this->street2 = $street2;
         $this->city = $city;
         $this->postcode = $postcode;
         $this->state = $state;
         $this->country = $country;
     }
-
 }
 
 class EducationHistoryEntry {

@@ -17,6 +17,7 @@ if (isset($_POST['submit'])) {
     $status = $_POST['status'];
     // Collect Address data from Post
     $street = $_POST['street'];
+    $street2 = $_POST['street2'];
     $city = $_POST['city'];
     $postcode = $_POST['postcode'];
     $state = $_POST['state'];
@@ -42,7 +43,7 @@ if (isset($_POST['submit'])) {
 
     if ($error == false) {
         $user = new User($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phone, $status);
-        $address = new Address($street, $city, $postcode, $state, $country);
+        $address = new Address($street, $street2, $city, $postcode, $state, $country);
         registerUser($user, $address, $degree, $work, $picturePath, $resumePath);
         header("Location: created.php");
     }
@@ -97,6 +98,10 @@ if (isset($_POST['submit'])) {
                 <label>Address Line 1</label>
             </p>
             <input class="w3-input w3-border" type="text" maxlength="50" value="" name="street" id="street"/>
+            <p>
+                <label>Address Line 2</label>
+            </p>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="street2" id="street2"/>
             <p>
                 <label>City</label>
             </p>

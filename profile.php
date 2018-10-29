@@ -95,7 +95,19 @@ function formatJobs($jobs) {
         function init() {
 
         }
-        
+
+        function showStates(countryID){
+            if(countryID != ""){
+                let xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        document.getElementById("state").innerHTML = this.responseText;
+                    }
+                };
+                xmlhttp.open("GET", "AJAX.php?action=refreshState&country=" + countryID, true);
+                xmlhttp.send();
+            }
+        }
 
         function exitEditState(id) {
             document.getElementById(id).classList.remove("w3-cell-row");
@@ -109,8 +121,7 @@ function formatJobs($jobs) {
                 document.getElementById(id).innerHTML = `<i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($account_id)) . makeEditable($allowEdit, "phone")?>`;
             } else if (id == "location") {
                 document.getElementById(id).innerHTML = `<i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($account_id)) . makeEditable($allowEdit, "location")?>`;
-            } else if (id == "country") {
-                document.getElementById(id).innerHTML = `<i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($account_id)) . makeEditable($allowEdit, "country")?>`;
+                document.getElementById("countrySpan").innerHTML = `<i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($account_id))?>`;
             }
         }
 
@@ -158,6 +169,12 @@ function formatJobs($jobs) {
             } else if (id == "location") {
                 document.getElementById(id).innerHTML = `
                     <form method="post" action="updateProfile.php">
+
+                    <p><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i>Country:</p>
+                    <select class="w3-select w3-border w3-cell" name="country" id="country" onchange="showStates(this.value);">
+                        <?php echo listCountries($account_id) ?>
+                    </select>
+
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>Address Line 1:</p>
                     <input class="w3-input w3-border" type="text" value="<?php echo getAddressLine1($account_id); ?>" name="addr1"/>
 
@@ -178,16 +195,7 @@ function formatJobs($jobs) {
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Location</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('location');">Cancel</button>
                     </form>`;
-            } else if (id == "country") {
-                document.getElementById(id).innerHTML = `
-                    <p><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i>Country:</p>
-                    <form method="post" action="updateProfile.php">
-                    <select class="w3-select w3-border w3-cell" name="country" id="country">
-                        <?php echo listCountries($account_id) ?>
-                    </select>
-                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Country</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('country');">Cancel</button>
-                    </form>`;
+                document.getElementById("countrySpan").innerHTML = " ";
             }
         }
     </script>
@@ -220,8 +228,9 @@ function formatJobs($jobs) {
 
                     <p class="w3-display-container" id="gender"><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getGender($account_id)) . makeEditable($allowEdit, "gender")?></p>
                     <p class="w3-display-container" id="status"><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($account_id)) . makeEditable($allowEdit, "status")?></p>
-                    <p class="w3-display-container" id="country"><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($account_id)) . makeEditable($allowEdit, "country")?></p>
                     <p class="w3-display-container" id="location"><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($account_id)) . makeEditable($allowEdit, "location")?></p>
+                    <p class="w3-display-container" id="countrySpan"><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($account_id))?></p>
+                    <hr>
                     <p class="w3-display-container" id="email"><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($account_id)) . makeEditable($allowEdit, "email")?></p>
                     <p class="w3-display-container" id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($account_id)) . makeEditable($allowEdit, "phone")?></p>
                     <hr>

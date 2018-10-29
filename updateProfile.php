@@ -1,6 +1,6 @@
 <?php
 
-include_once "database.php";
+require_once "dbhelper.php";
 include_once "session.php";
 
 if (isset($_SESSION["account_ID"])) {
@@ -36,28 +36,15 @@ if (isset($_POST['submit'])) {
         $stmt->execute();
     }
 
-    if (isset($_POST['addr1'])) {
-        setAddressLine1($account_id, $_POST['addr1']);
-    }
+    if (isset($_POST['addr1']) && isset($_POST['addr2']) && isset($_POST['city']) && isset($_POST['state']) && isset($_POST['postcode']) && isset($_POST['country'])) {
+        $address = new Address($_POST['addr1'], $_POST['addr2'], $_POST['city'], $_POST['postcode'], $_POST['state'], $_POST['country']);
 
-    if (isset($_POST['addr2'])) {
-        setAddressLine2($account_id, $_POST['addr2']);
-    }
+        $old_address_id = getAddressIDFromAccount($account_id);
+        $stmt = $con->prepare("UPDATE `Address History` set end = CURRENT_TIMESTAMP where address_id = ?");
+        $stmt->bindValue(1, $old_address_id, PDO::PARAM_INT);
+        $stmt->execute();
 
-    if (isset($_POST['city'])) {
-        setCity($account_id, $_POST['city']);
-    }
-
-    if (isset($_POST['state'])) {
-        setStateID($account_id, $_POST['state']);
-    }
-
-    if (isset($_POST['postcode'])) {
-        setPostCode($account_id, $_POST['postcode']);
-    }
-
-    if (isset($_POST['country'])) {
-        setCountry($account_id, $_POST['country']);
+        updateUserAddress($account_id, $address);
     }
 
     $con = null;

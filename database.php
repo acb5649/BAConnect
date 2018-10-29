@@ -88,7 +88,7 @@ function registerNewAddress($address) {
     $stmt->bindValue(3, $address->city, PDO::PARAM_STR);
     $stmt->bindValue(4, $address->postcode, PDO::PARAM_STR);
     $stmt->bindValue(5, $address->street, PDO::PARAM_STR);
-    $stmt->bindValue(6, $address->street, PDO::PARAM_STR);
+    $stmt->bindValue(6, $address->street2, PDO::PARAM_STR);
     $stmt->execute();
     $con = null;
 }
@@ -632,7 +632,7 @@ function deleteState($ID){
 
 function getAddressIDFromAccount($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT address_ID FROM `Address History` where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("SELECT address_ID FROM `Address History` where account_ID = '" . $account_id . "' and isnull(end) ");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['address_ID'];
@@ -658,17 +658,6 @@ function getStateID($account_id) {
     return $result['state'];
 }
 
-function setStateID($account_id, $newState) {
-    $address_id = getAddressIDFromAccount($account_id);
-
-    $con = Connection::connect();
-    $stmt = $con->prepare("UPDATE `Addresses` set state = ? where address_ID = '" . $address_id . "'");
-    $stmt->bindValue(1, $newState, PDO::PARAM_INT);
-    $stmt->execute();
-    $con = null;
-}
-
-
 function getAddressLine1($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
 
@@ -678,16 +667,6 @@ function getAddressLine1($account_id) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['street_address'];
 }
-
-function setAddressLine1($account_id, $newStreet1) {
-    $address_id = getAddressIDFromAccount($account_id);
-
-    $con = Connection::connect();
-    $stmt = $con->prepare("UPDATE `Addresses` set street_address = '" . $newStreet1 . "' where address_ID = '" . $address_id . "'");
-    $stmt->execute();
-    $con = null;
-}
-
 
 function getAddressLine2($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
@@ -699,16 +678,6 @@ function getAddressLine2($account_id) {
     return $result['street_address2'];
 }
 
-function setAddressLine2($account_id, $newStreet2) {
-    $address_id = getAddressIDFromAccount($account_id);
-
-    $con = Connection::connect();
-    $stmt = $con->prepare("UPDATE `Addresses` set street_address2 = '" . $newStreet2 . "' where address_ID = '" . $address_id . "'");
-    $stmt->execute();
-    $con = null;
-}
-
-
 function getCity($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
 
@@ -719,15 +688,6 @@ function getCity($account_id) {
     return $result['city'];
 }
 
-function setCity($account_id, $city) {
-    $address_id = getAddressIDFromAccount($account_id);
-
-    $con = Connection::connect();
-    $stmt = $con->prepare("UPDATE `Addresses` set city = '" . $city . "' where address_ID = '" . $address_id . "'");
-    $stmt->execute();
-    $con = null;
-}
-
 function getPostCode($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
 
@@ -736,15 +696,6 @@ function getPostCode($account_id) {
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['post_code'];
-}
-
-function setPostCode($account_id, $postCode) {
-    $address_id = getAddressIDFromAccount($account_id);
-
-    $con = Connection::connect();
-    $stmt = $con->prepare("UPDATE `Addresses` set post_code = '" . $postCode . "' where address_ID = '" . $address_id . "'");
-    $stmt->execute();
-    $con = null;
 }
 
 function getCountry($account_id) {
@@ -762,11 +713,3 @@ function getCountry($account_id) {
     return $result['country'];
 }
 
-function setCountry($account_id, $new_country_id) {
-    $address_id = getAddressIDFromAccount($account_id);
-
-    $con = Connection::connect();
-    $stmt = $con->prepare("UPDATE `Addresses` set country_ID = '" . $new_country_id . "' where address_ID = '" . $address_id . "'");
-    $stmt->execute();
-    $con = null;
-}
