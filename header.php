@@ -9,10 +9,6 @@ require_once "session.php";
         <a class="w3-bar-item w3-button w3-padding-large" href="/courseproject">BAConnect</a>
         <!-- If user is logged in, don't show this link -->
         <?php
-        if($type == 1){
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="profile.php">PROFILE</a>';
-        }
-
         if($type == 0){
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'loginModal'".').style.display='."'block'".'">LOG IN</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'registerModal'".').style.display='."'block'".'">REGISTER</a>';
@@ -20,6 +16,7 @@ require_once "session.php";
         }
 
         if($type > 0){
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="profile.php">PROFILE</a>';
             print '<a class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right" href="logout.php">LOG OUT</a>';
         }
 
@@ -38,10 +35,6 @@ require_once "session.php";
 
 <div id="navMobile" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
     <?php
-    if($type == 1){
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="profile.php">PROFILE</a>';
-    }
-
     if($type == 0){
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'loginModal'".').style.display='."'block'".'">LOG IN</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'registerModal'".').style.display='."'block'".'">REGISTER</a>';
@@ -49,6 +42,7 @@ require_once "session.php";
     }
 
     if($type > 0){
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="profile.php">PROFILE</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" href="logout.php">LOG OUT</a>';
     }
 
