@@ -95,7 +95,7 @@ function registerNewAddress($address) {
 
 function getAddressID($address) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select address_ID from Addresses where street_address = '" . $address->street . "' and post_code = '" . $address->postcode . "' and city = '" . $address->city . "'");
+    $stmt = $con->prepare("select address_ID from Addresses where street_address = '" . $address->street . "' and street_address2 = '" . $address->street2 . "' and post_code = '" . $address->postcode . "' and city = '" . $address->city . "' and country_id = '" . $address->country . "' and state = '" . $address->state . "'");
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     return $row['address_ID'];
@@ -462,7 +462,7 @@ function getEmail($account_id) {
 
 function getApproximateLocation($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select address_ID from `Address History` where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select address_ID from `Address History` where account_ID = '" . $account_id . "'  and isnull(end)");
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row == null){
