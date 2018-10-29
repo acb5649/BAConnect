@@ -96,72 +96,84 @@ function formatJobs($jobs) {
 
         }
 
+        function cancel() {
+            window.location.reload(true);
+            return false;
+        }
+
         function enterEditState(id) {
+            document.getElementById(id).className += "w3-cell-row";
             if (id == "gender") {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i>Gender:</p>
-                    <form style="display: inline-block;" method="post" action="updateProfile.php">
-                    <select class="w3-select w3-border" name="gender" id="gender">
+                    <form method="post" action="updateProfile.php">
+                    <select class="w3-select w3-border w3-cell" name="gender" id="gender">
                         <option value="0"> Male </option>
                         <option value="1"> Female </option>
                         <option value="2"> Nonbinary/Other </option>
                     </select>
-                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Gender</button>
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Gender</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
                     </form>`;
             } else if (id == "status") {
                 document.getElementById(id).innerHTML = `
-                    <p><i class="fa fa-briefcase fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Status:</p>
-                    <form style="display: inline-block;" method="post" action="updateProfile.php">
-                    <select class="w3-select w3-border" name="status" id="status">
+                    <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i>Status:</p>
+                    <form method="post" action="updateProfile.php">
+                    <select class="w3-select w3-border w3-cell" name="status" id="status">
                         <option value="0"> Student </option>
                         <option value="1"> Working Professional </option>
                     </select>
-                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Status</button>
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Status</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
                     </form>`;
             } else if (id == "email") {
                 document.getElementById(id).innerHTML = `
-                    <p><i class="fa fa-envelope fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Email:</p>
-                    <form style="display: inline-block;" method="post" action="updateProfile.php">
-                    <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo getEmail($account_id); ?>" name="email" id="email"/>
-                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Email</button>
+                    <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i>Email:</p>
+                    <form method="post" action="updateProfile.php">
+                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getEmail($account_id); ?>" name="email" id="email"/>
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Email</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
                     </form>`;
             } else if (id == "phone") {
                 document.getElementById(id).innerHTML = `
-                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Phone Number:</p>
-                    <form style="display: inline-block;" method="post" action="updateProfile.php">
-                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
-                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Phone</button>
+                    <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i>Phone Number:</p>
+                    <form method="post" action="updateProfile.php">
+                    <input class="w3-input w3-border w3-cell" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Phone</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
                     </form>`;
             } else if (id == "location") {
                 document.getElementById(id).innerHTML = `
-                    <form style="display: inline-block;" method="post" action="updateProfile.php">
-                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Address Line 1:</p>
+                    <form method="post" action="updateProfile.php">
+                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>Address Line 1:</p>
                     <input class="w3-input w3-border" type="text" value="<?php echo getAddressLine1($account_id); ?>" name="addr1"/>
 
-                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Address Line 2:</p>
+                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>Address Line 2:</p>
                     <input class="w3-input w3-border" type="text" value="<?php echo getAddressLine2($account_id); ?>" name="addr2"/>
 
-                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>City:</p>
+                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>City:</p>
                     <input class="w3-input w3-border" type="text" value="<?php echo getCity($account_id); ?>" name="city"/>
 
-                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>State:</p>
+                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>State:</p>
                     <select class="w3-select w3-border" name="state" id="state">
                         <?php echo getStatesList(getCountryID($account_id), $account_id); ?>
                     </select>
 
-                    <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Post code:</p>
+                    <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>Post code:</p>
                     <input class="w3-input w3-border" type="text" value="<?php echo getPostCode($account_id); ?>" name="postcode"/>
 
-                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Location</button>
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Location</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
                     </form>`;
             } else if (id == "country") {
                 document.getElementById(id).innerHTML = `
-                    <p><i class="fa fa-globe fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Country:</p>
-                    <form style="display: inline-block;" method="post" action="updateProfile.php">
-                    <select class="w3-select w3-border" name="country" id="country">
+                    <p><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i>Country:</p>
+                    <form method="post" action="updateProfile.php">
+                    <select class="w3-select w3-border w3-cell" name="country" id="country">
                         <?php echo listCountries($account_id) ?>
                     </select>
-                    <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Country</button>
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Country</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="cancel();">Cancel</button>
                     </form>`;
             }
         }
