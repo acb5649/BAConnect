@@ -574,6 +574,49 @@ function getStatesList($countryID, $account_id){
     return $html;
 }
 
+//this function will add a new state to the database, and associate it with the given country
+function addState($countryID, $stateName){
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT * FROM States WHERE state_name = '" . $stateName . "' AND country_ID = '" . $countryID . "'");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if($result != null){	//if there is already a country with the same name in the database
+        return true;
+    }
+    $stmt = null;
+    $result = null;
+
+    $stmt = $con->prepare("INSERT INTO States (country_ID, state_name, state_ID) values (?, ?, DEFAULT)");
+    $stmt->bindValue(1, $country_ID, PDO::PARAM_STR);
+    $stmt->bindValue(2, $state_name, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $stmt = null;
+    $con = null;
+    return true;
+}
+// This function will edit a pre-existing state name in the database
+function editState($newName, $ID){
+    $con = Connection::connect();
+    $stmt = $con->prepare("UPDATE States SET state_name = '" . $newName . "' WHERE state_ID = '" . $ID . "'");
+    $stmt->execute();
+
+    $con = null;
+    $stmt = null;
+    return true;
+}
+// This function will delete a state from the database
+function deleteState($ID){
+    $con = Connection::connect();
+    $stmt = $con->prepare("DELETE FROM States WHERE state_ID = '" . $ID . "'");
+    $stmt->execute();
+
+    $con = null;
+    $stmt = null;
+    return true;
+}
+
 function getAddressIDFromAccount($account_id) {
     $con = Connection::connect();
     $stmt = $con->prepare("SELECT address_ID FROM `Address History` where account_ID = '" . $account_id . "'");
