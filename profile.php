@@ -131,25 +131,26 @@ function formatJobs($jobs) {
                 document.getElementById(id).innerHTML = `
                     <form style="display: inline-block;" method="post" action="updateProfile.php">
                     <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Address Line 1:</p>
-                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+                    <input class="w3-input w3-border" type="text" value="<?php echo getAddressLine1($account_id); ?>" name="addr1"/>
 
                     <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Address Line 2:</p>
-                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+                    <input class="w3-input w3-border" type="text" value="<?php echo getAddressLine2($account_id); ?>" name="addr2"/>
 
                     <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>City:</p>
-                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+                    <input class="w3-input w3-border" type="text" value="<?php echo getCity($account_id); ?>" name="city"/>
 
                     <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>State:</p>
-                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+                    <select class="w3-select w3-border" name="state" id="state">
+                        <?php echo getStatesList(getCountryID($account_id), $account_id); ?>
+                    </select>
 
                     <p><i class="fa fa-phone fa-fw w3-margin-rgiht w3-large w3-text-lime"></i>Post code:</p>
-                    <input class="w3-input w3-border" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+                    <input class="w3-input w3-border" type="text" value="<?php echo getPostCode($account_id); ?>" name="postcode"/>
 
                     <button class="w3-button w3-block w3-lime" type="submit" name="submit">Edit Location</button>
                     </form>`;
             }
         }
-
     </script>
 </head>
 

@@ -10,7 +10,7 @@ if($_GET["action"] == "refreshState"){
         header("Location:index.php");
     }
     $countryID = $_GET["country"];
-    $options = getStates($countryID);
+    $options = getStatesList($countryID);
 
 
 

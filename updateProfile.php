@@ -36,7 +36,25 @@ if (isset($_POST['submit'])) {
         $stmt->execute();
     }
 
+    if (isset($_POST['addr1'])) {
+        setAddressLine1($account_id, $_POST['addr1']);
+    }
 
+    if (isset($_POST['addr2'])) {
+        setAddressLine2($account_id, $_POST['addr2']);
+    }
+
+    if (isset($_POST['city'])) {
+        setCity($account_id, $_POST['city']);
+    }
+
+    if (isset($_POST['state'])) {
+        setStateID($account_id, $_POST['state']);
+    }
+
+    if (isset($_POST['postcode'])) {
+        setPostCode($account_id, $_POST['postcode']);
+    }
 
     $con = null;
     header("location: profile.php");
