@@ -3,6 +3,18 @@ ini_set("allow_url_fopen", 1);
 
 include_once "dbhelper.php";
 
+function better_array_rand($array, $num_results) {
+    if ($num_results > 1) {
+        $result = array();
+        for ($i = 0; i < $num_results; i++) {
+            array_push($result, $array[mt_rand(0, count($array) - 1)]);
+        }
+        return $result;
+    } else {
+        return $array[mt_rand(0, count($array) - 1)];
+    }
+}
+
 function generateFakes($number) {
     $collegeCsv = array_map('str_getcsv', file('extras/colleges-list.csv'));
     array_walk($collegeCsv, function(&$a) use ($collegeCsv) {
