@@ -1,5 +1,7 @@
 <?php
 
+require_once "dbhelper.php";
+
 class Connection {
     public static function connect() {
         try {

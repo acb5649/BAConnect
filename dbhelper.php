@@ -20,7 +20,9 @@ class User extends Account {
     public $phoneNumber;
     public $status;
 
-    function __construct($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phoneNumber, $status) {
+    public $address;
+
+    function __construct($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phoneNumber, $status, $address = null) {
         parent::__construct($username, $password);
 
         $this->firstName = $firstName;
@@ -30,6 +32,54 @@ class User extends Account {
         $this->gender = $gender;
         $this->phoneNumber = $phoneNumber;
         $this->status = $status;
+
+        $this->address = $address;
+    }
+
+    public static function fromID($account_id) {
+        $con = Connection::connect();
+        $stmt = $con->prepare("SELECT * FROM UserAddressView where account_ID = ?");
+        $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $addr = new Address($row['street_address'], $row['street_address2'], $row['city'], $row['post_code'], $row['state_name'], $row['country']);
+        return new self($row['username'], $row['password'], $row['first_name'], $row['middle_name'], $row['last_name'], $row['email_address'], $row['gender'], $row['phone_number'], $row['status'], $addr);
+    }
+
+    public function formatName() {
+        if ($this->middleName == "") {
+            return $this->firstName . " " . $this->lastName;
+        } else {
+            return $this->firstName . " " . $this->middleName . $this->lastName;
+        }
+    }
+
+    public function formatStatus() {
+        if ($this->status == 0) {
+            return "Student";
+        } elseif ($this->status == 1) {
+            return "Working Professional";
+        } else {
+            return "Unknown Status";
+        }
+    }
+
+    public function formatGender() {
+        if ($this->gender == 0) {
+            return "Male";
+        } elseif ($this->gender == 1) {
+            return "Female";
+        } else {
+            return "Nonbinary/Other";
+        }
+    }
+
+    public function formatCityAndState() {
+        if (!is_null($this->address)) {
+            return $this->address->city . ", " . $this->address->state;
+        } else {
+            return "";
+        }
     }
 
 }

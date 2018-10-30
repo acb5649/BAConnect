@@ -25,25 +25,46 @@ include "extras/fakegen.php";
                 x.className = x.className.replace(" w3-show", "");
             }
         }
+
+        function cardAjax(ids) {
+            ids.forEach(function(id) {
+                if (id["account_ID"] > 4) {
+                    let xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            document.getElementById("mentorDisplay").innerHTML += this.responseText;
+                            console.log(this.responseText + " response");
+                        } else {
+                            console.log("state: " + this.readyState + " status: " + this.status)
+                        }
+                    };
+                    console.log("getting card: " + id["account_ID"]);
+                    xmlhttp.open("GET", "card.php?id=" + id["account_ID"], true);
+                    xmlhttp.send();
+                }
+            });
+        }
+
+        function makeCards() {
+            let array = <?php $con = Connection::connect();
+                $stmt = $con->prepare("SELECT `account_ID` FROM Information LIMIT 30");
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $con = null;
+                echo json_encode($result);
+                ?>;
+            cardAjax(array);
+        }
+
     </script>
 </head>
 
-<body class="w3-light-grey" onload="init();">
+<body class="w3-light-grey" onload="init();makeCards();">
 <!-- Navbar -->
 <?php include "header.php"; ?>
 <!-- Page content -->
 <div id="mentorDisplay">
-    <?php
-    $con = Connection::connect();
-    $stmt = $con->prepare("SELECT `account_ID` FROM Information limit 90");
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($result as $user) {
-        $card = createCard($user["account_ID"]);
-        echo '<span class="w3-container" style="display: inline-block; text-align: center; vertical-align: middle;">' . $card . '</span>';
-    }
-    $con = null;
-    ?>
+
 </div>
 <!-- modals -->
 <?php

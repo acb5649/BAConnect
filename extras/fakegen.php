@@ -6,7 +6,7 @@ include_once "dbhelper.php";
 function better_array_rand($array, $num_results) {
     if ($num_results > 1) {
         $result = array();
-        for ($i = 0; i < $num_results; i++) {
+        for ($i = 0; $i < $num_results; $i++) {
             array_push($result, $array[mt_rand(0, count($array) - 1)]);
         }
         return $result;
