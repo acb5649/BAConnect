@@ -50,7 +50,7 @@ class User extends Account {
         if ($this->middleName == "") {
             return $this->firstName . " " . $this->lastName;
         } else {
-            return $this->firstName . " " . $this->middleName . $this->lastName;
+            return $this->firstName . " " . $this->middleName . " " . $this->lastName;
         }
     }
 

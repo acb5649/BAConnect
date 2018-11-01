@@ -25,7 +25,8 @@ function createCard($account_id) {
     // final product looks like this: https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_cards_buttons2
 
     $user = User::fromID($account_id);
-    $imageSrc = file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id);
+    //$imageSrc = file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id);
+    //$imageSrc = "http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id;
 
     return '<span class="w3-container" style="display: inline-block; text-align: center; vertical-align: middle;">
   <div class="w3-card-4 w3-margin-bottom">
@@ -36,7 +37,7 @@ function createCard($account_id) {
   <div class="w3-row-padding">
     <div class="w3-third">
         <div style="position: relative; top: 50%; /*transform: translateY(-50%); -webkit-transform: translateY(-50%); -moz-transform: translateY(-50%);*/">
-                <img class="w3-circle w3-border" src="data:image/jpeg;base64,' . $imageSrc . '" style="width: 100%;" alt="Avatar">
+                <img id="' . $account_id . '" class="w3-circle w3-border" src="" style="width: 100%;" alt="Avatar">
         </div>
     </div>
     <div class="w3-twothird w3-small">' . formatDegreesAndJobs(getDegrees($account_id), getJobs($account_id)) . '</div>

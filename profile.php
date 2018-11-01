@@ -258,7 +258,7 @@ function formatJobs($jobs) {
 
             <div class="w3-white w3-text-grey w3-card-4">
                 <div class="w3-display-container">
-                    <img src="data:image/jpeg;base64,<?php echo file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id); ?>" style="width:100%;" alt="Avatar">
+                    <img src="<?php echo file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id); ?>" style="width:100%;" alt="Avatar">
                     <div class="w3-display-middle w3-display-hover w3-xlarge">
                         <?php if ($allowEdit) { echo "<button class=\"w3-button w3-black\" onclick=\"document.getElementById('uploadPicModal').style.display='block'\">Change Picture...</button>";} ?>
                     </div>

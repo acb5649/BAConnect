@@ -33,21 +33,32 @@ include "extras/fakegen.php";
                     xmlhttp.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
                             document.getElementById("mentorDisplay").innerHTML += this.responseText;
-                            console.log(this.responseText + " response");
-                        } else {
-                            console.log("state: " + this.readyState + " status: " + this.status)
+                            imageAjax(id);
                         }
                     };
-                    console.log("getting card: " + id["account_ID"]);
+                    //console.log("getting card: " + id["account_ID"]);
                     xmlhttp.open("GET", "card.php?id=" + id["account_ID"], true);
                     xmlhttp.send();
                 }
             });
         }
 
+        function imageAjax(id) {
+            if (id["account_ID"] > 4) {
+                let xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById(id["account_ID"]).src = this.responseText;
+                    }
+                };
+                xmlhttp.open("GET", "image.php?account_id=" + id["account_ID"], true);
+                xmlhttp.send();
+            }
+        }
+
         function makeCards() {
             let array = <?php $con = Connection::connect();
-                $stmt = $con->prepare("SELECT `account_ID` FROM Information LIMIT 30");
+                $stmt = $con->prepare("SELECT `account_ID` FROM Information LIMIT 90");
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 $con = null;
