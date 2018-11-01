@@ -68,27 +68,43 @@ function formatDegrees($degrees) {
 }
 
 function formatDegreesEditable($degrees) {
-    $result = "";
-    /*
-     * <select name="degreeType_0" id="degreeType_0" class="w3-select w3-border">
-     * <!--?php print listDegreeTypes(); ?-->
-     * </select>
-     *
-     * <input type="text" placeholder="School Name" name="schoolName_0" id="schoolName_0" class="w3-input w3-border">
-     * <input type="text" placeholder="Major" name="major_0" id="major_0" class="w3-input w3-border">
-     *
-     * Year Enrolled:<input type="number" placeholder="" name="enrollmentYear_0" id="enrollmentYear_0" class="w3-input w3-border">
-     * Year Graduated:<input type="number" placeholder="" name="gradYear_0" id="gradYear_0" class="w3-input w3-border w3-margin-bottom">
-     *
-     */
+    $result = '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>';
     foreach($degrees as $degree) {
-        $result .= '<form class="w3-container" action="updateProfile.php"><h5 class="w3-opacity"><b>';
+        $result .= '<form class="w3-container w3-text-grey" action="updateProfile.php">';
+        $result .= '<p><span>Degree Type:</span></p>';
         $result .= '<select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . "</select>";
+        $result .= '<p><span>Major:</span></p>';
+        $result .= '<input class="w3-input w3-border" type="text" value="' . $degree[1] . '" name="major"/>';
+        $result .= '<p><span>University/College:</span></p>';
+        $result .= '<input class="w3-input w3-border" type="text" value="' . $degree[0] . '" name="school"/>';
+        $result .= '<p><span>Enrollment Year:</span></p>';
+        $result .= '<input class="w3-input w3-border" type="text" value="' . $degree[3] . '" name="start"/>';
+        $result .= '<p><span>Graduation Year:</span></p>';
+        $result .= '<input class="w3-input w3-border" type="text" value="' . $degree[2] . '" name="end"/>';
+        $result .= '<input type="hidden" id="degree_ID" name="degree_ID" value="' . ' $degree[4] ' . '">';
+        $result .= '<button type="button" class="w3-button w3-lime w3-section" onclick="">Edit</button>';
+        $result .= '<button type="button" class="w3-button w3-red w3-section" onclick="">Delete</button>';
+        $result .= '<hr></form>';
+    }
+    return $result;
+}
 
-        $result .= $degree[1] . " / " . $degree[0];
-        $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
-        $result .= $degree[3] . " - " . $degree[2];
-        $result .= '</h6><hr></form>';
+function formatJobsEditable($jobs) {
+    $result = '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>';
+    foreach($jobs as $job) {
+        $result .= '<form class="w3-container w3-text-grey" action="updateProfile.php">';
+        $result .= '<p><span>Company:</span></p>';
+        $result .= '<input class="w3-input w3-border" type="text" value="' . $job[1] . '" name="employer"/>';
+        $result .= '<p><span>Job Title/Field:</span></p>';
+        $result .= '<input class="w3-input w3-border" type="text" value="' . $job[0] . '" name="title"/>';
+        $result .= '<p><span>Start Year:</span></p>';
+        $result .= '<input class="w3-input w3-border" type="text" value="' . $job[2] . '" name="start"/>';
+        $result .= '<p><span>End Year:</span></p>';
+        $result .= '<input class="w3-input w3-border" type="text" value="' . $job[3] . '" name="end"/>';
+        $result .= '<input type="hidden" id="degree_ID" name="degree_ID" value="' . ' $job[4] ' . '">';
+        $result .= '<button type="button" class="w3-button w3-lime w3-section" onclick="">Edit</button>';
+        $result .= '<button type="button" class="w3-button w3-red w3-section" onclick="">Delete</button>';
+        $result .= '<hr></form>';
     }
     return $result;
 }
@@ -145,9 +161,9 @@ function formatJobs($jobs) {
 
         function enterHistoryElementEditState(id) {
             if (id == "jobs") {
-                document.getElementById(id).innerHTML = <?php echo formatDegreesEditable($degrees); ?>
+                document.getElementById(id).innerHTML = `<?php echo formatJobsEditable(getJobs($account_id)); ?>`;
             } else if (id == "degrees") {
-
+                document.getElementById(id).innerHTML = `<?php echo formatDegreesEditable(getDegrees($account_id)); ?>`;
             }
 
         }
