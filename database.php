@@ -65,6 +65,7 @@ function getAccountIDFromEmail($email) {
     $stmt = $con->prepare("select account_ID from Information where email_address = '" . $email . "'");
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $con = null;
     return $row['account_ID'];
 }
 
@@ -100,6 +101,7 @@ function getAddressID($address) {
     $stmt = $con->prepare("select address_ID from Addresses where street_address = '" . $address->street . "' and street_address2 = '" . $address->street2 . "' and post_code = '" . $address->postcode . "' and city = '" . $address->city . "' and country_id = '" . $address->country . "' and state = '" . $address->state . "'");
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $con = null;
     return $row['address_ID'];
 }
 
@@ -243,12 +245,14 @@ function changePassword($email, $code, $newPassword) {
         $account_id = $row['account_ID'];
 
         if (!$account_id) {
+            $con = null;
             return False;
         }
 
         $stmt = $con->prepare("UPDATE Account set password = '" . $newPassword . "' where account_ID = '" . $account_id . "'");
         $stmt->execute();
 
+        $con = null;
         return True;
     }
 }
@@ -485,6 +489,8 @@ function getApproximateLocation($account_id) {
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $con = null;
+
     return  $city . ", " . $row['state_name'];
 }
 
@@ -637,6 +643,10 @@ function getAddressIDFromAccount($account_id) {
     $stmt = $con->prepare("SELECT address_ID FROM `Address History` where account_ID = '" . $account_id . "' and isnull(end) ");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $con = null;
+    $stmt = null;
+
     return $result['address_ID'];
 }
 
@@ -647,6 +657,10 @@ function getCountryID($account_id) {
     $stmt = $con->prepare("SELECT country_ID FROM `Addresses` where address_ID = '" . $address_id . "'");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $con = null;
+    $stmt = null;
+
     return $result['country_ID'];
 }
 
@@ -657,6 +671,10 @@ function getStateID($account_id) {
     $stmt = $con->prepare("SELECT state FROM `Addresses` where address_ID = '" . $address_id . "'");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $con = null;
+    $stmt = null;
+
     return $result['state'];
 }
 
@@ -667,6 +685,10 @@ function getAddressLine1($account_id) {
     $stmt = $con->prepare("SELECT street_address FROM `Addresses` where address_ID = '" . $address_id . "'");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $con = null;
+    $stmt = null;
+
     return $result['street_address'];
 }
 
@@ -677,6 +699,10 @@ function getAddressLine2($account_id) {
     $stmt = $con->prepare("SELECT street_address2 FROM `Addresses` where address_ID = '" . $address_id . "'");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $con = null;
+    $stmt = null;
+
     return $result['street_address2'];
 }
 
@@ -687,6 +713,10 @@ function getCity($account_id) {
     $stmt = $con->prepare("SELECT city FROM `Addresses` where address_ID = '" . $address_id . "'");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $con = null;
+    $stmt = null;
+
     return $result['city'];
 }
 
@@ -697,6 +727,10 @@ function getPostCode($account_id) {
     $stmt = $con->prepare("SELECT post_code FROM `Addresses` where address_ID = '" . $address_id . "'");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $con = null;
+    $stmt = null;
+
     return $result['post_code'];
 }
 
@@ -712,6 +746,10 @@ function getCountry($account_id) {
     $stmt = $con->prepare("SELECT country FROM `Countries` where country_ID = '" . $country_ID . "'");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $con = null;
+    $stmt = null;
+
     return $result['country'];
 }
 
@@ -720,4 +758,36 @@ function editAccountType($account_id, $newType){
   $stmt = $con->prepare("UPDATE `Account` SET type = '" . $newType . "' WHERE account_ID = '" . $account_id . "'");
   $stmt->execute();
 
+  $con = null;
+  $stmt = null;
+
+}
+
+function getUserMentorshipPreference($account_id){
+  $con = Connection::connect();
+  $stmt = $con->prepare("SELECT mentorship_preference FROM `Information` WHERE account_ID = '" . $account_id . "'");
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  $preference = $result['mentorship_preference'];
+
+  $con = null;
+  $stmt = null;
+  $result = null;
+
+  return $preference;
+}
+
+function getPendingMentorships($account_id = null){
+  $con = Connection::connect();
+
+  if($account_id != null){
+    $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "'");
+    $list = $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+  else{
+    $stmt = $con->prepare("SELECT * FROM `Pending Mentorship`");
+    $list = $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
+  return $list;
 }
