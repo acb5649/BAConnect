@@ -71,11 +71,11 @@ include "extras/fakegen.php";
             xmlhttp.open("GET", "AJAX.php?action=loadCards&offset=" + offset, true);
             xmlhttp.send();
 
-            offset += 30;
+            offset += 10;
         }
 
         continuallyLoadCards();
-        
+
         window.onscroll = function(ev) {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
                 continuallyLoadCards()
