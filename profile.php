@@ -111,7 +111,7 @@ function formatDegreesEditable($degrees) {
         $result .= '<input class="w3-input w3-border" type="text" value="' . $degree[3] . '" name="start"/>';
         $result .= '<p><span>Graduation Year:</span></p>';
         $result .= '<input class="w3-input w3-border" type="text" value="' . $degree[2] . '" name="end"/>';
-        $result .= '<input type="hidden" id="degree_ID" name="degree_ID" value="' . ' $degree[4] ' . '">';
+        $result .= '<input type="hidden" id="degree_ID" name="degree_ID" value="' . $degree[4] . '">';
         $result .= '<button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Edit</button>';
         $result .= '<button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button>';
         $result .= '<hr></form>';

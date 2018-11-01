@@ -94,6 +94,37 @@ if (isset($_POST['submit'])) {
         }
     }
 
+    if (isset($_POST['degree_ID'])) {
+        if (isset($_POST['delete'])) {
+            $stmt = $con->prepare("DELETE FROM `Degrees` where degree_ID = ?");
+            $stmt->bindValue(1, $_POST['degree_ID'], PDO::PARAM_INT);
+            $stmt->execute();
+        } else {
+            if ($_POST['degree_ID'] == -1) {
+                // adding new degree
+                $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year, enrollment_year) values (?, ?, ?, ?, ?, ?)");
+                $stmt->bindValue(1, $_POST['account_ID'], PDO::PARAM_INT);
+                $stmt->bindValue(2, $_POST['degreeType'], PDO::PARAM_INT);
+                $stmt->bindValue(3, $_POST['school'], PDO::PARAM_STR);
+                $stmt->bindValue(4, $_POST['major'], PDO::PARAM_STR);
+                $stmt->bindValue(5, $_POST['end'], PDO::PARAM_INT);
+                $stmt->bindValue(6, $_POST['start'], PDO::PARAM_INT);
+
+                $stmt->execute();
+            } else {
+                $stmt = $con->prepare("UPDATE `Degrees` set degree_type_ID = ?, school = ?, major = ?, graduation_year = ?, enrollment_year = ? where degree_ID = ?");
+                $stmt->bindValue(1, $_POST['degreeType'], PDO::PARAM_INT);
+                $stmt->bindValue(2, $_POST['school'], PDO::PARAM_STR);
+                $stmt->bindValue(3, $_POST['major'], PDO::PARAM_STR);
+                $stmt->bindValue(4, $_POST['end'], PDO::PARAM_INT);
+                $stmt->bindValue(5, $_POST['start'], PDO::PARAM_INT);
+                $stmt->bindValue(6, $_POST['degree_ID'], PDO::PARAM_INT);
+
+                $stmt->execute();
+            }
+        }
+    }
+
     $con = null;
     header("location: profile.php");
 }

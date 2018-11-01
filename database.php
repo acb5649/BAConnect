@@ -552,7 +552,7 @@ function getDegrees($account_id) {
 
     $degrees = array();
     foreach ($result as $degree) {
-        array_push($degrees, array($degree['school'], $degree['major'], $degree['graduation_year'], $degree['enrollment_year']));
+        array_push($degrees, array($degree['school'], $degree['major'], $degree['graduation_year'], $degree['enrollment_year'], $degree['degree_ID']));
     }
     $con = null;
     return $degrees;
