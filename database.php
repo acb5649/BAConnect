@@ -799,7 +799,13 @@ function getUserMentorshipPreference($account_id){
   $stmt = null;
   $result = null;
 
-  return $preference;
+  if ($preference == 0) {
+      return "Mentor";
+  } elseif ($preference == 1) {
+      return "Mentee";
+  } else {
+      return "Not Interested";
+  }
 }
 
 function getPendingMentorships($account_id = null){

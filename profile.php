@@ -209,6 +209,8 @@ function formatJobs($jobs) {
                 document.getElementById(id).innerHTML = `<i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($account_id)) . makeEditable($allowEdit, "facebook")?>`;
             } else if (id == "linkedin") {
                 document.getElementById(id).innerHTML = `<i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($account_id)) . makeEditable($allowEdit, "linkedin")?>`;
+            } else if (id == "preference") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getUserMentorshipPreference($account_id)) . makeEditable($allowEdit, "preference")?>`;
             }
         }
 
@@ -299,6 +301,18 @@ function formatJobs($jobs) {
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Linkedin</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('linkedin');">Cancel</button>
                     </form>`;
+            } else if (id == "preference") {
+                document.getElementById(id).innerHTML = `
+                    <p><i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i>Mentorship Preference:</p>
+                    <form method="post" action="updateProfile.php">
+                    <select class="w3-select w3-border w3-cell" name="preference" id="preference">
+                        <option <?php if(getUserMentorshipPreference($account_id) == "Mentor"){echo("selected");}?> value="0"> Mentor </option>
+                        <option <?php if(getUserMentorshipPreference($account_id) == "Mentee"){echo("selected");}?> value="1"> Mentee </option>
+                        <option <?php if(getUserMentorshipPreference($account_id) == "Not Interested"){echo("selected");}?> value="2"> Not Interested </option>
+                    </select>
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Preference</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('preference');">Cancel</button>
+                    </form>`;
             }
         }
     </script>
@@ -328,7 +342,8 @@ function formatJobs($jobs) {
                     </div>
                 </div>
                 <div class="w3-container">
-
+                    <p class="w3-display-container" id="preference"><i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getUserMentorshipPreference($account_id)) . makeEditable($allowEdit, "preference")?></p>
+                    <hr>
                     <p class="w3-display-container" id="gender"><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getGender($account_id)) . makeEditable($allowEdit, "gender")?></p>
                     <p class="w3-display-container" id="status"><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($account_id)) . makeEditable($allowEdit, "status")?></p>
                     <p class="w3-display-container" id="location"><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($account_id)) . makeEditable($allowEdit, "location")?></p>

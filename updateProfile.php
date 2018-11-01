@@ -59,6 +59,12 @@ if (isset($_POST['submit'])) {
         $stmt->execute();
     }
 
+    if (isset($_POST['preference'])) {
+        $stmt = $con->prepare("UPDATE Information set mentorship_preference = ? where account_ID = '" . $account_id . "'");
+        $stmt->bindValue(1, $_POST['preference'], PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
     if (isset($_POST['job_ID'])) {
         if (isset($_POST['delete'])) {
             $stmt = $con->prepare("DELETE FROM `Job History` where job_ID = ?");
