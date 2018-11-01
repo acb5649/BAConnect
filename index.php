@@ -3,6 +3,7 @@ require_once "session.php";
 require_once "database.php";
 require_once "card.php";
 include "extras/fakegen.php";
+
 ?>
 <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
 <!DOCTYPE html>
@@ -56,21 +57,35 @@ include "extras/fakegen.php";
             }
         }
 
-        function makeCards() {
-            let array = <?php $con = Connection::connect();
-                $stmt = $con->prepare("SELECT `account_ID` FROM Information LIMIT 90");
-                $stmt->execute();
-                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                $con = null;
-                echo json_encode($result);
-                ?>;
-            cardAjax(array);
+        var offset = 0;
+
+        function continuallyLoadCards() {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var array = JSON.parse(this.responseText);
+                    console.log(array);
+                    cardAjax(array);
+                }
+            };
+            xmlhttp.open("GET", "AJAX.php?action=loadCards&offset=" + offset, true);
+            xmlhttp.send();
+
+            offset += 30;
         }
+
+        continuallyLoadCards();
+        
+        window.onscroll = function(ev) {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                continuallyLoadCards()
+            }
+        };
 
     </script>
 </head>
 
-<body class="w3-light-grey" onload="init();makeCards();">
+<body class="w3-light-grey" onload="init();">
 <!-- Navbar -->
 <?php include "header.php"; ?>
 <!-- Page content -->

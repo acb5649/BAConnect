@@ -144,6 +144,11 @@ function formatJobs($jobs) {
         }
 
         function enterHistoryElementEditState(id) {
+            if (id == "jobs") {
+                document.getElementById(id).innerHTML = <?php echo formatDegreesEditable($degrees); ?>
+            } else if (id == "degrees") {
+
+            }
 
         }
 
