@@ -53,6 +53,16 @@ if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
     die();
 }
 
+if (isset($_GET['action']) && $_GET['action'] == "getEditableFormattedDegrees") {
+    echo formatDegreesEditable(getDegrees($account_id));
+    die();
+}
+
+if (isset($_GET['action']) && $_GET['action'] == "getEditableFormattedJobs") {
+    echo formatJobsEditable(getJobs($account_id));
+    die();
+}
+
 function makeEditable($allowEdit, $id) {
     if ($allowEdit) {
         return ' <a class="w3-button w3-display-right" onclick="enterEditState(\'' . $id . '\');"><i class="fa fa-pencil fa-fw w3-large w3-text-lime w3-opacity"></i></a>';
@@ -182,12 +192,20 @@ function formatJobs($jobs) {
         }
 
         function enterHistoryElementEditState(id) {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    document.getElementById(id).innerHTML = this.responseText;
+                }
+            };
+
             if (id == "jobs") {
-                document.getElementById(id).innerHTML = `<?php echo formatJobsEditable(getJobs($account_id)); ?>`;
+                xmlhttp.open("GET", "profile.php?action=getEditableFormattedJobs", true);
             } else if (id == "degrees") {
-                document.getElementById(id).innerHTML = `<?php echo formatDegreesEditable(getDegrees($account_id)); ?>`;
+                xmlhttp.open("GET", "profile.php?action=getEditableFormattedDegrees", true);
             }
 
+            xmlhttp.send();
         }
 
         function exitHistoryElementEditState(id) {
