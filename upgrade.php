@@ -1,7 +1,36 @@
 <?php
     require_once "session.php";
+    require_once "database.php";
     if(!isset($type)){
         print "type is undefined. dang it.<br>";
+    }
+    if($type <= 2){
+      header("Location: index.php");
+      die;
+    }
+
+    if(isset($_POST['upgrade'])){
+      $username = $_POST["username"];
+      $newType = $_POST["type"];
+      $id = getAccountIDFromUsername($username);
+
+      $oldType = getAccountTypeFromAccountID($id);
+
+      if($newType != $oldType && $_SESSION['account_ID'] != $id){
+
+        if($oldType > $newType){
+          if($type > $oldType){
+            editAccountType($id, $newType);
+          }
+        }
+        else{
+          if($type > $newType){
+            editAccountType($id, $newType);
+          }
+        }
+      }
+    //  header("Location: index.php");
+    //  die;
     }
 ?>
 
@@ -36,7 +65,7 @@
          <p>
             <label><i class="fa fa-user"></i> Username</label>
          </p>
-         <input type="text" id="upAcc" placeholder="" name="upAcc" class="w3-input w3-border" required autofocus>
+         <input type="text" id="username" placeholder="" name="username" class="w3-input w3-border" required autofocus>
          <br>
          <select id="type" class="w3-select w3-border" name="type">
          <?php
@@ -47,7 +76,7 @@
             //foreach ($type as $pos => $value) {
             $rank = $type;
 
-            
+
             for($x = 1; $x < 4 && $x < $rank; $x++){
                 $list = $list . '<option value = "'.$x.'">'.$types[$x].'</option>';
             }

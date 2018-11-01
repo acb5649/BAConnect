@@ -1,10 +1,13 @@
 <?php
-    session_start();
+    require_once "session.php";
     require_once "database.php";
 
-    if($_POST["country"] == "-1"){
-        header('Location: index.php');
-        die;
+    if(isset($_POST["country"])){
+
+      if($_POST["country"] == "-1"){
+          header('Location: index.php');
+          die;
+        }
     }
 
     if(isset($_POST["add"])){

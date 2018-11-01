@@ -715,3 +715,9 @@ function getCountry($account_id) {
     return $result['country'];
 }
 
+function editAccountType($account_id, $newType){
+  $con = Connection::connect();
+  $stmt = $con->prepare("UPDATE `Account` SET type = '" . $newType . "' WHERE account_ID = '" . $account_id . "'");
+  $stmt->execute();
+
+}
