@@ -47,6 +47,18 @@ if (isset($_POST['submit'])) {
         updateUserAddress($account_id, $address);
     }
 
+    if (isset($_POST['fb'])) {
+        $stmt = $con->prepare("UPDATE Information set facebook = ? where account_ID = '" . $account_id . "'");
+        $stmt->bindValue(1, $_POST['fb'], PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    if (isset($_POST['li'])) {
+        $stmt = $con->prepare("UPDATE Information set linkedin = ? where account_ID = '" . $account_id . "'");
+        $stmt->bindValue(1, $_POST['li'], PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
     if (isset($_POST['job_ID'])) {
         if (isset($_POST['delete'])) {
             $stmt = $con->prepare("DELETE FROM `Job History` where job_ID = ?");

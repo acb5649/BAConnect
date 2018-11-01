@@ -753,6 +753,31 @@ function getCountry($account_id) {
     return $result['country'];
 }
 
+function getFacebookLink($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select facebook from `Information` where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row['facebook'] == ""){
+        return "Add Facebook";
+    }
+    $con = null;
+    return $row['facebook'];
+}
+
+function getLinkedinLink($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select linkedin from `Information` where account_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row['linkedin'] == ""){
+        return "Add LinkedIn";
+    }
+    $con = null;
+    return $row['linkedin'];
+}
+
+
 function editAccountType($account_id, $newType){
   $con = Connection::connect();
   $stmt = $con->prepare("UPDATE `Account` SET type = '" . $newType . "' WHERE account_ID = '" . $account_id . "'");

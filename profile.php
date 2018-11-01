@@ -205,6 +205,10 @@ function formatJobs($jobs) {
             } else if (id == "location") {
                 document.getElementById(id).innerHTML = `<i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($account_id)) . makeEditable($allowEdit, "location")?>`;
                 document.getElementById("countrySpan").innerHTML = `<i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($account_id))?>`;
+            } else if (id == "facebook") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($account_id)) . makeEditable($allowEdit, "facebook")?>`;
+            } else if (id == "linkedin") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($account_id)) . makeEditable($allowEdit, "linkedin")?>`;
             }
         }
 
@@ -279,6 +283,22 @@ function formatJobs($jobs) {
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('location');">Cancel</button>
                     </form>`;
                 document.getElementById("countrySpan").innerHTML = " ";
+            } else if (id == "facebook") {
+                document.getElementById(id).innerHTML = `
+                    <p><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Facebook:</p>
+                    <form method="post" action="updateProfile.php">
+                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getFacebookLink($account_id); ?>" name="fb" id="fb"/>
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Facebook</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('facebook');">Cancel</button>
+                    </form>`;
+            } else if (id == "linkedin") {
+                document.getElementById(id).innerHTML = `
+                    <p><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Linkedin:</p>
+                    <form method="post" action="updateProfile.php">
+                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getLinkedinLink($account_id); ?>" name="li" id="li"/>
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Linkedin</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('linkedin');">Cancel</button>
+                    </form>`;
             }
         }
     </script>
@@ -316,6 +336,9 @@ function formatJobs($jobs) {
                     <hr>
                     <p class="w3-display-container" id="email"><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($account_id)) . makeEditable($allowEdit, "email")?></p>
                     <p class="w3-display-container" id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($account_id)) . makeEditable($allowEdit, "phone")?></p>
+                    <hr>
+                    <p class="w3-display-container" id="facebook"><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($account_id)) . makeEditable($allowEdit, "facebook")?></p>
+                    <p class="w3-display-container" id="linkedin"><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($account_id)) . makeEditable($allowEdit, "linkedin")?></p>
                     <hr>
 
                     <button class="w3-button w3-block w3-dark-grey">+ Connect</button>
