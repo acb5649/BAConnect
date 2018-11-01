@@ -12,9 +12,21 @@ if($_GET["action"] == "refreshState"){
     $countryID = $_GET["country"];
     $options = getStatesList($countryID);
 
-
-
     echo $options;
-
 }
+
+if($_GET["action"] == "loadCards"){
+    if(!isset($_GET["offset"])){
+        $offset = 0;
+    } else {
+        $offset = $_GET["offset"];
+    }
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT `account_ID` FROM Information LIMIT 10 OFFSET " . $offset);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $con = null;
+    echo json_encode($result);
+}
+
 ?>
