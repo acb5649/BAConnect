@@ -53,6 +53,11 @@ if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
     die();
 }
 
+if (isset($_GET['action']) && $_GET['action'] == "addEmptyDegree") {
+    echo '<form method="post" class="w3-container w3-text-grey" action="updateProfile.php"><p><span>Degree Type:</span></p><select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . '</select><p><span>Major:</span></p><input class="w3-input w3-border" type="text" value="" name="major"/><p><span>University/College:</span></p><input class="w3-input w3-border" type="text" value="" name="school"/><p><span>Enrollment Year:</span></p><input class="w3-input w3-border" type="text" value="" name="start"/><p><span>Graduation Year:</span></p><input class="w3-input w3-border" type="text" value="" name="end"/><input type="hidden" id="degree_ID" name="degree_ID" value="-1"><button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button><button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button><hr></form>';
+    die();
+}
+
 if (isset($_GET['action']) && $_GET['action'] == "getEditableFormattedDegrees") {
     echo formatDegreesEditable(getDegrees($account_id));
     die();
@@ -97,7 +102,7 @@ function formatDegrees($degrees) {
 
 function formatDegreesEditable($degrees) {
     $result = '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>';
-    $result .= '<button name="addDegree" class="w3-button w3-third w3-lime w3-section">Add Degree</button>';
+    $result .= '<button name="addDegree" class="w3-button w3-third w3-lime w3-section" onclick="addEmptyDegree();">Add Degree</button>';
     $result .= '<button name="cancel" class="w3-button w3-third w3-red w3-section" onclick="exitHistoryElementEditState(\'degrees\');">Cancel</button>';
     foreach($degrees as $degree) {
         $result .= '<form method="post" class="w3-container w3-text-grey" action="updateProfile.php">';
@@ -224,6 +229,17 @@ function formatJobs($jobs) {
                 }
             };
             xmlhttp.open("GET", "profile.php?action=addEmptyJob", true);
+            xmlhttp.send();
+        }
+
+        function addEmptyDegree() {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    document.getElementById("degrees").innerHTML += this.responseText;
+                }
+            };
+            xmlhttp.open("GET", "profile.php?action=addEmptyDegree", true);
             xmlhttp.send();
         }
 
