@@ -35,6 +35,24 @@ if (isset($_GET['user'])) {
     header("location: index.php");
 }
 
+if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
+    echo '  <form method="post" class="w3-container w3-text-grey" action="updateProfile.php">
+            <p><span>Company:</span></p>
+            <input class="w3-input w3-border" type="text" value="" name="employer"/>
+            <p><span>Job Title/Field:</span></p>
+            <input class="w3-input w3-border" type="text" value="" name="title"/>
+            <p><span>Start Year:</span></p>
+            <input class="w3-input w3-border" type="text" value="" name="start"/>
+            <p><span>End Year:</span></p>
+            <input class="w3-input w3-border" type="text" value="" name="end"/>
+            <input type="hidden" id="degree_ID" name="job_ID" value="-1">
+            <input type="hidden" id="account_ID" name="account_ID" value="' . $account_id . '">
+            <button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button>
+            <button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button>
+            <hr></form>';
+    die();
+}
+
 function makeEditable($allowEdit, $id) {
     if ($allowEdit) {
         return ' <a class="w3-button w3-display-right" onclick="enterEditState(\'' . $id . '\');"><i class="fa fa-pencil fa-fw w3-large w3-text-lime w3-opacity"></i></a>';
@@ -181,21 +199,14 @@ function formatJobs($jobs) {
         }
 
         function addEmptyJob() {
-            document.getElementById("jobs").innerHTML += `
-            <form method="post" class="w3-container w3-text-grey" action="updateProfile.php">
-            <p><span>Company:</span></p>
-            <input class="w3-input w3-border" type="text" value="" name="employer"/>
-            <p><span>Job Title/Field:</span></p>
-            <input class="w3-input w3-border" type="text" value="" name="title"/>
-            <p><span>Start Year:</span></p>
-            <input class="w3-input w3-border" type="text" value="" name="start"/>
-            <p><span>End Year:</span></p>
-            <input class="w3-input w3-border" type="text" value="" name="end"/>
-            <input type="hidden" id="degree_ID" name="job_ID" value="-1">
-            <input type="hidden" id="account_ID" name="account_ID" value="<?php echo $account_id ?>">
-            <button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Edit</button>
-            <button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button>
-            <hr></form>`;
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    document.getElementById("jobs").innerHTML += this.responseText;
+                }
+            };
+            xmlhttp.open("GET", "profile.php?action=addEmptyJob", true);
+            xmlhttp.send();
         }
 
         function exitEditState(id) {
