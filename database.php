@@ -569,7 +569,7 @@ function getJobs($account_id) {
         $stmt = $con->prepare("SELECT * FROM `Job History` where job_ID = '" . $job_id['job_ID'] . "'");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        array_push($jobs, array($result['employer'], $result['profession_field'], $result['start'], $result['end']));
+        array_push($jobs, array($result['employer'], $result['profession_field'], $result['start'], $result['end'], $result['job_ID']));
     }
     $con = null;
     return $jobs;

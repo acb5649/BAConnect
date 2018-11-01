@@ -70,7 +70,7 @@ function formatDegrees($degrees) {
 function formatDegreesEditable($degrees) {
     $result = '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>';
     foreach($degrees as $degree) {
-        $result .= '<form class="w3-container w3-text-grey" action="updateProfile.php">';
+        $result .= '<form method="post" class="w3-container w3-text-grey" action="updateProfile.php">';
         $result .= '<p><span>Degree Type:</span></p>';
         $result .= '<select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . "</select>";
         $result .= '<p><span>Major:</span></p>';
@@ -82,17 +82,19 @@ function formatDegreesEditable($degrees) {
         $result .= '<p><span>Graduation Year:</span></p>';
         $result .= '<input class="w3-input w3-border" type="text" value="' . $degree[2] . '" name="end"/>';
         $result .= '<input type="hidden" id="degree_ID" name="degree_ID" value="' . ' $degree[4] ' . '">';
-        $result .= '<button type="button" class="w3-button w3-lime w3-section" onclick="">Edit</button>';
+        $result .= '<button type="submit" name="submit" class="w3-button w3-lime w3-section">Edit</button>';
         $result .= '<button type="button" class="w3-button w3-red w3-section" onclick="">Delete</button>';
         $result .= '<hr></form>';
     }
+    $result .= '<button name="addDegree" class="w3-button w3-lime w3-section">Add Degree</button>';
     return $result;
 }
 
 function formatJobsEditable($jobs) {
     $result = '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>';
+    $result .= '<button name="addJob" class="w3-button w3-lime w3-section" onclick="addEmptyJob();">Add Job</button>';
     foreach($jobs as $job) {
-        $result .= '<form class="w3-container w3-text-grey" action="updateProfile.php">';
+        $result .= '<form method="post" class="w3-container w3-text-grey" action="updateProfile.php">';
         $result .= '<p><span>Company:</span></p>';
         $result .= '<input class="w3-input w3-border" type="text" value="' . $job[1] . '" name="employer"/>';
         $result .= '<p><span>Job Title/Field:</span></p>';
@@ -101,8 +103,8 @@ function formatJobsEditable($jobs) {
         $result .= '<input class="w3-input w3-border" type="text" value="' . $job[2] . '" name="start"/>';
         $result .= '<p><span>End Year:</span></p>';
         $result .= '<input class="w3-input w3-border" type="text" value="' . $job[3] . '" name="end"/>';
-        $result .= '<input type="hidden" id="degree_ID" name="degree_ID" value="' . ' $job[4] ' . '">';
-        $result .= '<button type="button" class="w3-button w3-lime w3-section" onclick="">Edit</button>';
+        $result .= '<input type="hidden" id="degree_ID" name="job_ID" value="' . $job[4] . '">';
+        $result .= '<button type="submit" name="submit" class="w3-button w3-lime w3-section">Edit</button>';
         $result .= '<button type="button" class="w3-button w3-red w3-section" onclick="">Delete</button>';
         $result .= '<hr></form>';
     }
@@ -170,6 +172,24 @@ function formatJobs($jobs) {
 
         function exitHistoryElementEditState(id) {
 
+        }
+
+        function addEmptyJob() {
+            document.getElementById("jobs").innerHTML += `
+            <form method="post" class="w3-container w3-text-grey" action="updateProfile.php">
+            <p><span>Company:</span></p>
+            <input class="w3-input w3-border" type="text" value="" name="employer"/>
+            <p><span>Job Title/Field:</span></p>
+            <input class="w3-input w3-border" type="text" value="" name="title"/>
+            <p><span>Start Year:</span></p>
+            <input class="w3-input w3-border" type="text" value="" name="start"/>
+            <p><span>End Year:</span></p>
+            <input class="w3-input w3-border" type="text" value="" name="end"/>
+            <input type="hidden" id="degree_ID" name="job_ID" value="-1">
+            <input type="hidden" id="account_ID" name="account_ID" value="<?php echo $account_id ?>">
+            <button type="submit" name="submit" class="w3-button w3-lime w3-section">Edit</button>
+            <button type="button" class="w3-button w3-red w3-section" onclick="">Delete</button>
+            <hr></form>`;
         }
 
         function exitEditState(id) {

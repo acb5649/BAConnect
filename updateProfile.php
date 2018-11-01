@@ -47,6 +47,35 @@ if (isset($_POST['submit'])) {
         updateUserAddress($account_id, $address);
     }
 
+    if (isset($_POST['job_ID'])) {
+        if (isset($_POST['delete'])) {
+            $stmt = $con->prepare("DELETE FROM `Job History` where job_ID = ?");
+            $stmt->bindValue(1, $_POST['job_ID'], PDO::PARAM_INT);
+            $stmt->execute();
+        } else {
+            if ($_POST['job_ID'] == -1) {
+                // adding new degree
+                $stmt = $con->prepare("insert into `Job History` (`account_ID`, employer, profession_field, `start`, `end`) values (?, ?, ?, ?, ?)");
+                $stmt->bindValue(1, $_POST['account_ID'], PDO::PARAM_INT);
+                $stmt->bindValue(2, $_POST['employer'], PDO::PARAM_STR);
+                $stmt->bindValue(3, $_POST['title'], PDO::PARAM_STR);
+                $stmt->bindValue(4, $_POST['start'], PDO::PARAM_INT);
+                $stmt->bindValue(5, $_POST['end'], PDO::PARAM_INT);
+
+                $stmt->execute();
+            } else {
+                $stmt = $con->prepare("UPDATE `Job History` set employer = ?, profession_field = ?, start = ?, `end` = ? where job_ID = ?");
+                $stmt->bindValue(1, $_POST['employer'], PDO::PARAM_STR);
+                $stmt->bindValue(2, $_POST['title'], PDO::PARAM_STR);
+                $stmt->bindValue(3, $_POST['start'], PDO::PARAM_INT);
+                $stmt->bindValue(4, $_POST['end'], PDO::PARAM_INT);
+                $stmt->bindValue(5, $_POST['job_ID'], PDO::PARAM_INT);
+
+                $stmt->execute();
+            }
+        }
+    }
+
     $con = null;
     header("location: profile.php");
 }
