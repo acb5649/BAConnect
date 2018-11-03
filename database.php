@@ -819,6 +819,55 @@ function getPendingMentorships($account_id = null){
     $stmt = $con->prepare("SELECT * FROM `Pending Mentorship`");
     $list = $stmt->fetch(PDO::FETCH_ASSOC);
   }
-
+  $con = null;
   return $list;
+}
+//a current mentorship has a set 'start' date, but it's 'end' date is null
+function getCurrentMentorships($account_id = null){
+    $con = Connection::connect();
+
+    if($account_id != null){
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "') AND end = NULL AND NOT start = NULL");
+      $list = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    else{
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE end = NULL AND NOT start = NULL");
+      $list = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    $con = null;
+    return $list;
+}
+//a mentorship that was rejected while it was still pending will have it's 'end' date set to the date it was rejected,
+//but it's 'start' date will be left null
+function getRejectedMentorships($account_id = null){
+    $con = Connection::connect();
+
+    if($account_id != null){
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "') AND start = NULL AND NOT end = NULL");
+      $list = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    else{
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE start = NULL AND NOT end = NULL");
+      $list = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    $con = null;
+    return $list;
+}
+//a mentorship that was started but later ended will have NEITHER it's 'start' nor 'end' dates set to null
+function getEndedMentorships($account_id){
+    $con = Connection::connect();
+
+    if($account_id != null){
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "') AND NOT start = NULL AND NOT end = NULL");
+      $list = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    else{
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE NOT start = NULL AND NOT end = NULL");
+      $list = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    $con = null;
+    return $list;
 }
