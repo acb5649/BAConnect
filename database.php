@@ -813,10 +813,12 @@ function getPendingMentorships($account_id = null){
 
   if($account_id != null){
     $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "'");
+    $stmt->execute();
     $list = $stmt->fetch(PDO::FETCH_ASSOC);
   }
   else{
     $stmt = $con->prepare("SELECT * FROM `Pending Mentorship`");
+    $stmt->execute();
     $list = $stmt->fetch(PDO::FETCH_ASSOC);
   }
   $con = null;
@@ -828,10 +830,12 @@ function getCurrentMentorships($account_id = null){
 
     if($account_id != null){
       $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "') AND end = NULL AND NOT start = NULL");
+      $stmt->execute();
       $list = $stmt->fetch(PDO::FETCH_ASSOC);
     }
     else{
       $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE end = NULL AND NOT start = NULL");
+      $stmt->execute();
       $list = $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -839,16 +843,18 @@ function getCurrentMentorships($account_id = null){
     return $list;
 }
 //a mentorship that was rejected while it was still pending will have it's 'end' date set to the date it was rejected,
-//but it's 'start' date will be left null
+//but it's 'start' date will be left null. A user won't see a mentorship where they were rejected.
 function getRejectedMentorships($account_id = null){
     $con = Connection::connect();
 
     if($account_id != null){
       $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "') AND start = NULL AND NOT end = NULL");
+      $stmt->execute();
       $list = $stmt->fetch(PDO::FETCH_ASSOC);
     }
     else{
       $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE start = NULL AND NOT end = NULL");
+      $stmt->execute();
       $list = $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -861,13 +867,119 @@ function getEndedMentorships($account_id){
 
     if($account_id != null){
       $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "') AND NOT start = NULL AND NOT end = NULL");
+      $stmt->execute();
       $list = $stmt->fetch(PDO::FETCH_ASSOC);
     }
     else{
       $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE NOT start = NULL AND NOT end = NULL");
+      $stmt->execute();
       $list = $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     $con = null;
     return $list;
+}
+
+function pendingMentorshipResponse($account_id, $code){
+    $mentee;
+    $con = Connection::connect();
+
+    $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE accept_code = '" . $code . "' OR decline_code = '" . $code . "'");
+    $stmt->execute();
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $response;
+    $responder;
+    if($code == $result['accept_code']){
+        $response = TRUE;
+    }
+    else{
+        $response = FALSE;
+    }
+
+    if($account_id == $result['mentor_ID']){
+        $mentee = FALSE;
+    }
+    else if($account_id == $result['mentee_ID']){
+        $mentee = TRUE;
+    }
+    else{
+
+        if(getAccountTypeFromAccountID($account_id) == "1"){
+            return FALSE;
+        }
+        else{
+            //NOT FINISHED
+        }
+    }
+
+    if($response == TRUE){
+        if($responder )
+    }
+}
+
+//this function will create an entry in the Mentorship table based on the info in the related entry
+//in the Pending Mentorship table. It will then delete the entry in the Pending Mentorship table.
+
+//NOTE:this function should only be called after either both mentor and mentee have approved the pending
+//mentorship, or if either of them or an admin rejected it.
+
+//NOTE: duplicate pending mentorships (ones with the same mentor and mentee) cannot be allowed.
+function resolvePendingMentorship($mentorID, $menteeID, $userID){
+    $con = Connection::connect();
+
+    //first get the information from the entry in Pending Mentorship
+    $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE mentor_ID = '" . $mentorID . "' AND mentee_ID = '" . $menteeID . "'");
+    $stmt->execute();
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if($result == NULL){
+        return false;
+    }
+
+    $stmt = $con->prepare("INSERT INTO `Mentorship` (mentorship_ID, mentor_ID, mentee_ID, start, end, terminator_ID) VALUES (?, ?, ?, ?, ?, ?)")
+    $stmt->bindValue(1, null , PDO::PARAM_NULL);
+    $stmt->bindValue(2, $mentorID, PDO::PARAM_INT);
+    $stmt->bindValue(3, $menteeID, PDO::PARAM_INT);
+
+    //now start building the rest of the INSERT command piece-meal depending on the Information
+    //from the Pending Mentorship entry
+
+    /*
+    if($result['mentee_status'] == "-1"){   //the mentee rejected the proposal
+        $stmt->bindValue(4, NULL, PDO::PARAM_NULL);
+        $stmt->bindValue(5, NULL, PDO::CURRENT_TIMESTAMP);
+    }
+    else if($result['mentor_status'] == "-1"){ //the mentor rejected the proposal
+        $stmt->bindValue(4, NULL, PDO::PARAM_NULL);
+        $stmt->bindValue(5, NULL, PDO::CURRENT_TIMESTAMP);
+    }
+    else*/ if($result['mentee_status'] == "1" && $result['mentor_status'] == "1"){ //the proposal was accepted by both the mentor and mentee
+        $stmt->bindValue(4, null, PDO::CURRENT_TIMESTAMP);
+        $stmt->bindValue(5, NULL, PDO::PARAM_NULL);
+        $stmt->bindValue(6, NULL, PDO::PARAM_NULL);
+
+    }
+    /*else{   //the proposal was rejected by an admin
+        $stmt->bindValue(4, NULL, PDO::PARAM_NULL);
+        $stmt->bindValue(5, NULL, PDO::CURRENT_TIMESTAMP);
+    }
+    */
+    else{ //the proposal was denied
+        $stmt->bindValue(4, NULL, PDO::PARAM_NULL);
+        $stmt->bindValue(5, NULL, PDO::CURRENT_TIMESTAMP);
+        $stmt->bindValue(6, $userID, PDO::PARAM_INT);
+    }
+
+    $stmt->execute();
+
+    //now delete the entry from the Pending Mentorship table
+    $stmt = $con->prepare("DELETE FROM `Pending Mentorship` WHERE mentor_ID = '" . $mentorID . "' AND mentee_ID = '" . $menteeID . "'");
+    $stmt->execute();
+
+}
+
+function proposeMentorship($mentorID, $menteeID, $userID){
+
 }
