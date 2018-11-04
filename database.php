@@ -812,14 +812,15 @@ function getPendingMentorships($account_id = null){
   $con = Connection::connect();
 
   if($account_id != null){
-    $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "'");
-    $stmt->execute();
-    $list = $stmt->fetch(PDO::FETCH_ASSOC);
-  }
-  else{
-    $stmt = $con->prepare("SELECT * FROM `Pending Mentorship`");
-    $stmt->execute();
-    $list = $stmt->fetch(PDO::FETCH_ASSOC);
+      $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE mentor_ID = ? OR mentee_id = ?");
+      $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+      $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
+      $stmt->execute();
+      $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  } else {
+      $stmt = $con->prepare("SELECT * FROM `Pending Mentorship`");
+      $stmt->execute();
+      $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
   $con = null;
   return $list;
@@ -829,14 +830,15 @@ function getCurrentMentorships($account_id = null){
     $con = Connection::connect();
 
     if($account_id != null){
-      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "') AND end = NULL AND NOT start = NULL");
+        $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = ? OR mentee_id = ?) AND isnull(end) AND !isnull(start)");
+        $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+        $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE isnull(end) AND !isnull(start)");
       $stmt->execute();
-      $list = $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-    else{
-      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE end = NULL AND NOT start = NULL");
-      $stmt->execute();
-      $list = $stmt->fetch(PDO::FETCH_ASSOC);
+      $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     $con = null;
@@ -848,14 +850,15 @@ function getRejectedMentorships($account_id = null){
     $con = Connection::connect();
 
     if($account_id != null){
-      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "') AND start = NULL AND NOT end = NULL");
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = ? OR mentee_id = ?) AND isnull(start) AND !isnull(end)");
+        $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+        $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
       $stmt->execute();
-      $list = $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-    else{
-      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE start = NULL AND NOT end = NULL");
+      $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE isnull(start) AND !isnull(end)");
       $stmt->execute();
-      $list = $stmt->fetch(PDO::FETCH_ASSOC);
+      $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     $con = null;
@@ -866,30 +869,32 @@ function getEndedMentorships($account_id){
     $con = Connection::connect();
 
     if($account_id != null){
-      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = '" . $account_id . "' OR mentee_id = '" . $account_id . "') AND NOT start = NULL AND NOT end = NULL");
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE (mentor_ID = ? OR mentee_id = ?) AND !isnull(start) AND !isnull(end)");
+        $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+        $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
       $stmt->execute();
-      $list = $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-    else{
-      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE NOT start = NULL AND NOT end = NULL");
+      $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+      $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE !isnull(start) AND !isnull(end)");
       $stmt->execute();
-      $list = $stmt->fetch(PDO::FETCH_ASSOC);
+      $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     $con = null;
     return $list;
 }
 
+
 function pendingMentorshipResponse($account_id, $code){
-    $mentee;
+    //$mentee;
     $con = Connection::connect();
 
     $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE accept_code = '" . $code . "' OR decline_code = '" . $code . "'");
     $stmt->execute();
 
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $response;
-    $responder;
+    //$response;
+    //$responder;
     if($code == $result['accept_code']){
         $response = TRUE;
     }
@@ -914,9 +919,10 @@ function pendingMentorshipResponse($account_id, $code){
     }
 
     if($response == TRUE){
-        if($responder )
+        //if($responder )
     }
 }
+
 
 //this function will create an entry in the Mentorship table based on the info in the related entry
 //in the Pending Mentorship table. It will then delete the entry in the Pending Mentorship table.
@@ -938,7 +944,7 @@ function resolvePendingMentorship($mentorID, $menteeID, $userID){
         return false;
     }
 
-    $stmt = $con->prepare("INSERT INTO `Mentorship` (mentorship_ID, mentor_ID, mentee_ID, start, end, terminator_ID) VALUES (?, ?, ?, ?, ?, ?)")
+    $stmt = $con->prepare("INSERT INTO `Mentorship` (mentorship_ID, mentor_ID, mentee_ID, start, end, terminator_ID) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->bindValue(1, null , PDO::PARAM_NULL);
     $stmt->bindValue(2, $mentorID, PDO::PARAM_INT);
     $stmt->bindValue(3, $menteeID, PDO::PARAM_INT);

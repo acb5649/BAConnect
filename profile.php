@@ -58,6 +58,16 @@ if (isset($_GET['action']) && $_GET['action'] == "addEmptyDegree") {
     die();
 }
 
+if (isset($_GET['action']) && $_GET['action'] == "getFormattedDegrees") {
+    echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>' . formatDegrees(getDegrees($account_id)) . makeHistoryElementEditable($allowEdit, "degrees");
+    die();
+}
+
+if (isset($_GET['action']) && $_GET['action'] == "getFormattedJobs") {
+    echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>' . formatJobs(getJobs($account_id)) . makeHistoryElementEditable($allowEdit, "jobs");
+    die();
+}
+
 if (isset($_GET['action']) && $_GET['action'] == "getEditableFormattedDegrees") {
     echo formatDegreesEditable(getDegrees($account_id));
     die();
@@ -124,6 +134,18 @@ function formatDegreesEditable($degrees) {
     return $result;
 }
 
+function formatJobs($jobs) {
+    $result = "";
+    foreach ($jobs as $job) {
+        $result .= '<div class="w3-container"><h5 class="w3-opacity"><b>';
+        $result .= $job[1] . " / " . $job[0];
+        $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
+        $result .= $job[2] . " - " . $job[3];
+        $result .= '</h6><hr></div>';
+    }
+    return $result;
+}
+
 function formatJobsEditable($jobs) {
     $result = '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>';
     $result .= '<button name="addJob" class="w3-button w3-third w3-lime w3-section" onclick="addEmptyJob();">Add Job</button>';
@@ -146,17 +168,34 @@ function formatJobsEditable($jobs) {
     return $result;
 }
 
-function formatJobs($jobs) {
-    $result = "";
-    foreach ($jobs as $job) {
-        $result .= '<div class="w3-container"><h5 class="w3-opacity"><b>';
-        $result .= $job[1] . " / " . $job[0];
-        $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
-        $result .= $job[2] . " - " . $job[3];
-        $result .= '</h6><hr></div>';
+function formatMentorships($account_id) {
+    $current = getCurrentMentorships($account_id);
+    $ended = getEndedMentorships($account_id);
+
+    $result = '<table id="mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Began</th><th>Ended</th></tr></thead><tbody>';
+
+    foreach($current as $cur) {
+        $result .= "<tr>";
+        $result .= "<th>" . $cur['mentor_ID'] . "</th>";
+        $result .= "<th>" . $cur['mentee_ID'] . "</th>";
+        $result .= "<th>" . $cur['start'] . "</th>";
+        $result .= "<th>" . $cur['end'] . "</th>";
+        $result .= "</tr>";
     }
+
+    foreach($ended as $cur) {
+        $result .= "<tr>";
+        $result .= "<th>" . $cur['mentor_ID'] . "</th>";
+        $result .= "<th>" . $cur['mentee_ID'] . "</th>";
+        $result .= "<th>" . $cur['start'] . "</th>";
+        $result .= "<th>" . $cur['end'] . "</th>";
+        $result .= "</tr>";
+    }
+
+    $result .= '</tbody></table>';
     return $result;
 }
+
 ?>
 <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
 <!DOCTYPE html>
@@ -168,6 +207,9 @@ function formatJobs($jobs) {
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="js/closeModals.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script>
         // Used to toggle the menu on small screens when clicking on the menu button
         function toggleNav() {
@@ -182,6 +224,15 @@ function formatJobs($jobs) {
         function init() {
 
         }
+
+        $(document).ready( function () {
+            $('#mentorship_history_table').DataTable({
+                "paging":   false,
+                "ordering": false,
+                "info":     false,
+                "searching":   false
+            });
+        });
 
         function showStates(countryID){
             if(countryID != ""){
@@ -214,11 +265,20 @@ function formatJobs($jobs) {
         }
 
         function exitHistoryElementEditState(id) {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    document.getElementById(id).innerHTML = this.responseText;
+                }
+            };
+
             if (id == "jobs") {
-                document.getElementById(id).innerHTML = `<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2><?php echo formatJobs(getJobs($account_id)) . makeHistoryElementEditable($allowEdit, "jobs"); ?>`;
+                xmlhttp.open("GET", "profile.php?action=getFormattedJobs", true);
             } else if (id == "degrees") {
-                document.getElementById(id).innerHTML = `<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2><?php echo formatDegrees(getDegrees($account_id)) . makeHistoryElementEditable($allowEdit, "degrees"); ?>`;
+                xmlhttp.open("GET", "profile.php?action=getFormattedDegrees", true);
             }
+
+            xmlhttp.send();
         }
 
         function addEmptyJob() {
@@ -418,19 +478,24 @@ function formatJobs($jobs) {
         <!-- Right Column -->
         <div class="w3-twothird">
 
+            <div id="degrees" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
+                <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>
+                <?php echo formatDegrees(getDegrees($account_id)) . makeHistoryElementEditable($allowEdit, "degrees"); ?>
+            </div>
+
             <div id="jobs" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>
                 <?php echo formatJobs(getJobs($account_id)) . makeHistoryElementEditable($allowEdit, "jobs"); ?>
             </div>
 
-            <div id="degrees" class="w3-container w3-display-container w3-card w3-white">
-                <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>
-                <?php echo formatDegrees(getDegrees($account_id)) . makeHistoryElementEditable($allowEdit, "degrees"); ?>
+            <div id="mentorships" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
+                <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Mentorships</h2>
+                <div class="w3-container w3-padding-32 w3-text-grey">
+                    <?php echo formatMentorships($account_id); ?>
+                </div>
             </div>
-
             <!-- End Right Column -->
         </div>
-
         <!-- End Grid -->
     </div>
 
