@@ -1,5 +1,4 @@
 <?php
-    require_once "session.php";
     require_once "database.php";
 
     if(isset($_POST["country"])){

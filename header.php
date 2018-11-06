@@ -57,3 +57,22 @@ require_once "session.php";
     }
     ?>
 </div>
+
+<?php
+
+if ($type == 0) {
+    include "login.php";
+    include "register.php";
+    include "forgot.php";
+}
+
+if ($type > 1) {
+    include "match.php";
+    include "edit.php";
+    include "upgrade.php";
+    include "search.php";
+    include "addCountry.php";
+    include "addDegreeType.php";
+    include "addState.php";
+}
+?>

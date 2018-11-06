@@ -34,27 +34,6 @@ if (isset($_POST['submit'])) {
 <body class="w3-light-grey" onload="document.getElementById('changePassModal').style.display='block';">
 <!-- Navbar -->
 <?php include "header.php"; ?>
-<!-- modals -->
-<?php
-if ($type == 1) {
-    include "profile.php";
-}
-
-if ($type == 0) {
-    include "login.php";
-    include "register.php";
-    include "forgot.php";
-}
-
-if ($type > 1) {
-    include "match.php";
-    include "edit.php";
-    include "upgrade.php";
-    include "search.php";
-    include "addCountry.php";
-    include "addDegreeType.php";
-}
-?>
 <!-- Page content -->
 <div id="changePassModal" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
