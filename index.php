@@ -2,7 +2,24 @@
 require_once "session.php";
 require_once "database.php";
 require_once "card.php";
-include "extras/fakegen.php";
+
+if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
+    if(!isset($_POST["offset"])){
+        $offset = 0;
+    } else {
+        $offset = $_POST["offset"];
+    }
+
+    $num = $_POST["num"];
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT `account_ID` FROM Information LIMIT " . $num . " OFFSET " . $offset);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $con = null;
+    echo json_encode($result);
+    die();
+}
 
 ?>
 <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
@@ -59,7 +76,7 @@ include "extras/fakegen.php";
 
         var offset = 0;
 
-        function continuallyLoadCards() {
+        function continuallyLoadCards(num = 10) {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
@@ -68,13 +85,14 @@ include "extras/fakegen.php";
                     cardAjax(array);
                 }
             };
-            xmlhttp.open("GET", "AJAX.php?action=loadCards&offset=" + offset, true);
-            xmlhttp.send();
-
+            let params = "action=loadCards&num=" + num +"&offset=" + offset;
+            xmlhttp.open("POST", "index.php", true);
+            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xmlhttp.send(params);
             offset += 10;
         }
 
-        continuallyLoadCards();
+        continuallyLoadCards(30);
 
         window.onscroll = function(ev) {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
