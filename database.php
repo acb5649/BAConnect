@@ -885,45 +885,68 @@ function getEndedMentorships($account_id){
 }
 
 
-function pendingMentorshipResponse($account_id, $code){
+function pendingMentorshipResponse($account_id, $pending_id, $response){
     //$mentee;
     $con = Connection::connect();
 
-    $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE accept_code = '" . $code . "' OR decline_code = '" . $code . "'");
+    $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE pending_ID = '" . $pending_id . "'");
     $stmt->execute();
 
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    //$response;
-    //$responder;
-    if($code == $result['accept_code']){
-        $response = TRUE;
-    }
-    else{
-        $response = FALSE;
+
+    if($result == null){
+        return false;
     }
 
     if($account_id == $result['mentor_ID']){
-        $mentee = FALSE;
+        if($response == TRUE){
+            if($result['mentor_status'] == "1"){
+                return TRUE; //this user has already approved of this relationghip, so nothing happens.
+            }
+            else{
+                $stmt = $con->prepare("UPDATE `Pending Mentorship` SET mentor_status = 1 WHERE pending_ID = '" . $pending_id . "'");
+                $stmt->execute();
+                if($result['mentee_status'] == "1"){
+                    resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+                }
+                return TRUE;
+            }
+        }
+        else{
+            resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+            return TRUE;
+        }
     }
     else if($account_id == $result['mentee_ID']){
-        $mentee = TRUE;
+        if($response == TRUE){
+            if($result['mentee_status'] == "1"){
+                return TRUE; //this user has already approved of this relationghip, so nothing happens.
+            }
+            else{
+                $stmt = $con->prepare("UPDATE `Pending Mentorship` SET mentee_status = 1 WHERE pending_ID = '" . $pending_id . "'");
+                $stmt->execute();
+                if($result['mentor_status'] == "1"){
+                    resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+                }
+                return TRUE;
+            }
+        }
+        else{
+            resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+            return TRUE;
+        }
     }
     else{
 
         if(getAccountTypeFromAccountID($account_id) == "1"){
+            //the current user isn't the mentee, mentor, or an admin, so they shouldn't be here.
             return FALSE;
         }
         else{
-            //NOT FINISHED
+            resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
         }
     }
-
-    if($response == TRUE){
-        //if($responder )
-    }
 }
-
-
 //this function will create an entry in the Mentorship table based on the info in the related entry
 //in the Pending Mentorship table. It will then delete the entry in the Pending Mentorship table.
 
@@ -966,6 +989,8 @@ function resolvePendingMentorship($mentorID, $menteeID, $userID){
         $stmt->bindValue(5, NULL, PDO::PARAM_NULL);
         $stmt->bindValue(6, NULL, PDO::PARAM_NULL);
 
+        //Do we send an email here?
+
     }
     /*else{   //the proposal was rejected by an admin
         $stmt->bindValue(4, NULL, PDO::PARAM_NULL);
@@ -986,6 +1011,77 @@ function resolvePendingMentorship($mentorID, $menteeID, $userID){
 
 }
 
-function proposeMentorship($mentorID, $menteeID, $userID){
+function proposeMentorship($mentorID, $menteeID, $proposerID){
+    if($mentorID == $menteeID){
+        return false;
+    }
+    $mentorPreference = getUserMentorshipPreference($mentorID);
+    $menteePreference = getUserMentorshipPreference($menteeID);
+    if($mentorPreference != "Mentor" || $menteePreference != "Mentee"){
+        if($mentorPreference == "Mentee" || $menteePreference == "Mentor"){
+            $temp = $mentorID;
+            $mentorID = $menteeID;
+            $menteeID = $temp;
+        }
+        else{
+            return false;
+        }
+    }
 
+    $con = Connection::connect();
+
+    $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE mentor_ID = '" . $mentorID . "' AND mentee_ID = '" . $menteeID . "'");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if($result != null){
+        return true;
+    }
+
+    $stmt = $con->prepare("INSERT INTO `Pending Mentorship` (pending_ID, mentor_ID, mentee_ID, mentor_status, mentee_status, request_date) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bindValue(1, null , PDO::PARAM_NULL);
+    $stmt->bindValue(2, $mentorID, PDO::PARAM_INT);
+    $stmt->bindValue(3, $menteeID, PDO::PARAM_INT);
+
+    $mentor = FALSE;
+    $mentee = FALSE;
+
+    if($menteeID == $proposerID){
+        $stmt->bindValue(4, 1, PDO::PARAM_INT);
+        $mentee = TRUE;
+    }
+    else{
+        $stmt->bindValue(4, 0, PDO::PARAM_INT);
+    }
+
+    if($mentorID == $proposerID){
+        $stmt->bindValue(5, 1, PDO::PARAM_INT);
+        $mentor = FALSE;
+    }
+    else{
+        $stmt->bindValue(5, 0, PDO::PARAM_INT);
+    }
+
+    $date = new Datetime('NOW');
+    $dateStr = $date->format('Y-m-d');
+
+    $stmt->bindValue(6, $dateStr, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+    if(!$mentee && !$mentor){
+        $menteeEmail = getEmail($menteeID);
+        $mentorEmail = getEmail($mentorID);
+        mail($menteeEmail, "BAConnect: Mentorship Proposal", "An admin has proposed a mentorship relationship for you. Click this link to log-in and view your profile: http://corsair.cs.iupui.edu:22891/courseproject/profile.php");
+        mail($mentorEmail, "BAConnect: Mentorship Proposal", "An admin has proposed a mentorship relationship for you. Click this link to log-in and view your profile: http://corsair.cs.iupui.edu:22891/courseproject/profile.php");
+    }
+    else if($mentee){
+        $menteeEmail = getEmail($menteeID);
+        mail($menteeEmail, "BAConnect: Mentorship Proposal", "A user has proposed a mentorship relationship with you. Click this link to log-in and view your profile: http://corsair.cs.iupui.edu:22891/courseproject/profile.php");
+    }
+    else if($mentor){
+        $mentorEmail = getEmail($mentorID);
+        mail($mentorEmail, "BAConnect: Mentorship Proposal", "A user has proposed a mentorship relationship with you. Click this link to log-in and view your profile: http://corsair.cs.iupui.edu:22891/courseproject/profile.php");
+    }
+    return true;
 }
