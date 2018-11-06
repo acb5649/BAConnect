@@ -10,12 +10,18 @@ function formatDegreesAndJobs($degrees, $jobs) {
     $result = "";
 
     foreach($degrees as $degree) {
-        $result = $result . "<p>" . $degree[2] . " - " . $degree[1] ."</p>";
-        $result = $result . "<p>" . $degree[0] . "</p>";
+        $result = $result . "<p style='margin:0.5em;'><span class='w3-text-lime'><b>" . $degree[2] . "-" .$degree[3] . "</b></span> " . $degree[1] ."</p>";
+        $result = $result . "<p style='margin:0.5em;'>" . $degree[0] . "</p>";
     }
+
+    if (count($jobs) == 0) {
+        return $result;
+    }
+
     $result = $result . "<hr>";
     foreach($jobs as $job) {
-        $result = $result . "<p>" . $job[1] . " at " . $job[0]. "</p>";
+        $result = $result . "<p style='margin:0.5em;'><span class='w3-text-lime'><b>" . $job[3] . "-" .$job[2] . "</b></span> " . $job[1] ."</p>";
+        $result = $result . "<p style='margin:0.5em;'>" . $job[0]. "</p>";
     }
     return $result;
 }
@@ -36,14 +42,14 @@ function createCard($account_id) {
   <div class="w3-container w3-text-grey w3-white">
   <div class="w3-row-padding">
     <div class="w3-third">
-        <div style="position: relative; top: 50%; /*transform: translateY(-50%); -webkit-transform: translateY(-50%); -moz-transform: translateY(-50%);*/">
+        <div class = "w3-padding-32" style="position: relative; top: 50%;">
                 <img id="' . $account_id . '" class="w3-circle w3-border" src="" style="width: 100%;" alt="Avatar">
         </div>
     </div>
-    <div class="w3-twothird w3-small">' . formatDegreesAndJobs(getDegrees($account_id), getJobs($account_id)) . '</div>
+    <div class="w3-twothird w3-small" style="text-align: left;">' . formatDegreesAndJobs(getDegrees($account_id), getJobs($account_id)) . '</div>
   </div>
   <hr>
-  <p>'.$user->formatGender().' '.$user->formatCityAndState().'</p>
+  <p>' . getUserMentorshipPreference($account_id) . ' / ' . $user->formatGender() . ' / ' . $user->formatCityAndState() . '</p>
   </div>
   <a class="w3-button w3-block w3-dark-grey" href="profile.php?user=' . $account_id . '">+ Connect</a>
   </div></span>';
