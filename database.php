@@ -5,7 +5,7 @@ require_once "dbhelper.php";
 class Connection {
     public static function connect() {
         try {
-            return new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer");
+            return new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer", array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
