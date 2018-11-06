@@ -107,7 +107,7 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
 <!-- Navbar -->
 <?php include "header.php"; ?>
 <!-- Page content -->
-<div id="mentorDisplay">
+<div id="mentorDisplay" class="flex-container" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; align-content: flex-start;">
 
 </div>
 </body>
