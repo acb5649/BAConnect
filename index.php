@@ -33,6 +33,7 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="js/registration.js"></script>
     <script src="js/closeModals.js"></script>
+    <script src="js/cardHandler.js"></script>
     <script>
         // Used to toggle the menu on small screens when clicking on the menu button
         function toggleNav() {
@@ -41,36 +42,6 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
                 x.className += " w3-show";
             } else {
                 x.className = x.className.replace(" w3-show", "");
-            }
-        }
-
-        function cardAjax(ids) {
-            ids.forEach(function(id) {
-                if (id["account_ID"] > 4) {
-                    let xmlhttp = new XMLHttpRequest();
-                    xmlhttp.onreadystatechange = function () {
-                        if (this.readyState == 4 && this.status == 200) {
-                            document.getElementById("mentorDisplay").innerHTML += this.responseText;
-                            imageAjax(id);
-                        }
-                    };
-                    //console.log("getting card: " + id["account_ID"]);
-                    xmlhttp.open("GET", "card.php?id=" + id["account_ID"], true);
-                    xmlhttp.send();
-                }
-            });
-        }
-
-        function imageAjax(id) {
-            if (id["account_ID"] > 4) {
-                let xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        document.getElementById(id["account_ID"]).src = this.responseText;
-                    }
-                };
-                xmlhttp.open("GET", "image.php?account_id=" + id["account_ID"], true);
-                xmlhttp.send();
             }
         }
 
@@ -89,7 +60,7 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
             xmlhttp.open("POST", "index.php", true);
             xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xmlhttp.send(params);
-            offset += 10;
+            offset += num;
         }
 
         continuallyLoadCards(30);
