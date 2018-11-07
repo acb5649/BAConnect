@@ -25,7 +25,7 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
         $search = $_POST["search"];
 
         $con = Connection::connect();
-        $stmt = $con->prepare("SELECT `account_ID` FROM UserAddressView where '%" . $search . "%' IN (`account_ID`, `address_ID`, `country_ID`, `state`, `country`, `state_name`, `city`, `post_code`, `street_address`, `street_address2`, `username`, `password`, `type`, `active`, `frozen`, `first_name`, `middle_name`, `last_name`, `gender`, `email_address`, `status`, `facebook`, `linkedin`, `mentorship_preference`, `dob`, `phone_number`) LIMIT " . $num . " OFFSET " . $offset);
+        $stmt = $con->prepare("SELECT `account_ID` FROM UserAddressView where '%" . $search . "%' IN (`state`, `country`, `state_name`, `city`, `post_code`, `street_address`, `street_address2`, `first_name`, `middle_name`, `last_name`, `gender`, `facebook`, `linkedin`, `mentorship_preference`, `dob`, `phone_number`) LIMIT " . $num . " OFFSET " . $offset);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $con = null;
