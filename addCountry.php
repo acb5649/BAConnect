@@ -1,6 +1,13 @@
 <?php
     require_once "database.php";
 
+    require_once "session.php";
+
+    if($type < 3){
+        header("Location:index.php");
+        die;
+    }
+
     if(isset($_POST['add'])){
         $countryName = trim($_POST['addCountry']);
 

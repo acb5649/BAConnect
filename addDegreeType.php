@@ -1,21 +1,37 @@
 <?php
     require_once "database.php";
 
+    require_once "session.php";
+
+    if($type < 3){
+        header("Location:index.php");
+        die;
+    }
+
     if(isset($_POST['add'])){
         $degreeTypeName = trim($_POST['addDegreeType']);
 
         addDegreeType($degreeTypeName);
+
+        header("Location:Index.php");
+        die;
     }
     elseif (isset($_POST['edit'])) {
         $oldName = trim($_POST['degreeType']);
         $newName = trim($_POST['editDegreeType']);
 
         editDegreeType($oldName, $newName);
+
+        header("Location:Index.php");
+        die;
     }
     elseif (isset($_POST['delete'])) {
         $degreeTypeName = trim($_POST['degreeType']);
 
         deleteDegreeType($degreeTypeName);
+
+        header("Location:Index.php");
+        die;
     }
 
 ?>
