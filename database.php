@@ -1085,3 +1085,67 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
     }
     return true;
 }
+function forcePairMentorships($account_id,$mentorAccID, $menteeAccID){
+	$accountType=getAccountTypeFromAccountID($account_id);
+	if($accountType >= 2){
+		$con = Connection::connect();
+		$date = new Datetime('NOW');
+		$dateStr = $date->format('Y-m-d H:i:s');
+		$menteeEmail = getEmail($menteeAccID);
+        $mentorEmail = getEmail($mentorAccID);
+		$menteeName=getName($menteeAccID);
+		$mentorName=getName($mentorAccID);
+		mail($menteeEmail, "BAConnect: Mentorship", "You've successfully started a mentorship relationship with".$mentorName." Click this link to view thier profile: http://corsair.cs.iupui.edu:22891/courseproject/profile.php?user=".$mentorAccID);
+		mail($mentorEmail, "BAConnect: Mentorship", "You've successfully started a mentorship relationship with".$menteeName." Click this link to view thier profile: http://corsair.cs.iupui.edu:22891/courseproject/profile.php?user=".$menteeAccID);
+		//add to mentorship relationship
+		$stmt = $con->prepare("insert into Mentorship(mentor_ID,mentee_ID,start) values (?, ?, ?)");
+		$stmt->bindValue(1, $mentorAccID, PDO::PARAM_INT);
+		$stmt->bindValue(2, $menteeAccID, PDO::PARAM_INT);
+		$stmt->bindValue(3, $dateStr, PDO::PARAM_STR);
+		$stmt->execute();
+		$con = null;
+	}
+}//jonathan
+function fetchMenteeID($mentorship_ID){
+	$con = Connection::connect();
+	$stmt = $con->prepare("select * from Mentorship where mentorship_ID = '" .$mentorship_ID. "'");
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	if($row == null){
+		return "MISSING INFORMATION!";
+	}
+	$con = null;
+	return $row['mentee_ID'];
+}//jonathan
+function fetchMentorID($mentorship_ID){
+	$con = Connection::connect();
+	$stmt = $con->prepare("select * from Mentorship where mentorship_ID = '" .$mentorship_ID. "'");
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	if($row == null){
+		return "MISSING INFORMATION!";
+	}
+	$con = null;
+	return $row['mentor_ID'];
+}//jonathan
+
+function forceEndMentorship($account_id,$targetMentorshipID){
+	$accountType=getAccountTypeFromAccountID($account_id);
+	if($accountType >= 2){
+		$con = Connection::connect();
+		$date = new Datetime('NOW');
+		$dateStr = $date->format('Y-m-d H:i:s');//end date
+		$menteeID=fetchMenteeID($targetMentorshipID);
+		$mentorID=fetchMentorID($targetMentorshipID);
+		$menteeEmail = getEmail($menteeID);
+        $mentorEmail = getEmail($mentorID);
+		$menteeName=getName($menteeID);
+		$mentorName=getName($mentorID);
+		mail($menteeEmail, "BAConnect: Mentorship", "Congradulations! You have completed your mentorship with ".$mentorName.".");
+		mail($mentorEmail, "BAConnect: Mentorship", "Congradulations! You have completed your mentorship with ".$menteeEmail.".");
+		$stmt = $con->prepare("UPDATE `Mentorship` SET end = '".$dateStr."' WHERE mentorship_ID = '" . $targetMentorshipID. "'");
+		$stmt->execute();
+		$con = null;
+	}
+}//jonathan
+
