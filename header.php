@@ -2,8 +2,19 @@
 require_once "session.php";
 ?>
 
+<script>
+    function openSearch(id) {
+        var x = document.getElementById(id);
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+        }
+    }
+</script>
+
 <div style="position: sticky; position: -webkit-sticky; padding-bottom: 16px;" class="w3-top">
-    <div class="w3-bar w3-lime w3-card">
+    <div class="w3-bar w3-lime w3-card" style="z-index: 0;">
         <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="toggleNav()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
         <!-- The homepage will have a feed of the newest users and updated users -->
         <a class="w3-bar-item w3-button w3-padding-large" href="/courseproject">BAConnect</a>
@@ -17,6 +28,7 @@ require_once "session.php";
 
         if($type > 0){
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="profile.php">PROFILE</a>';
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="openSearch(\'search\')">SEARCH</a>';
             print '<a class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right" href="logout.php">LOG OUT</a>';
         }
 
@@ -30,6 +42,9 @@ require_once "session.php";
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addStateModal'".').style.display='."'block'".'">ADD STATE</a>';
         }
         ?>
+    </div>
+    <div id="search" class="w3-center w3-round-xxlarge w3-hide w3-container w3-card w3-white w3-animate-top" style="width: 50%; margin: auto; z-index: -1;">
+        <input id="searchBox" class="w3-input w3-border w3-round-large w3-margin" type="text" placeholder="Search..." style="width: 97%" onkeyup="searchCards()">
     </div>
 </div>
 
