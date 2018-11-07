@@ -2,19 +2,20 @@
 require_once "session.php";
 require_once "database.php";
 
-if (isset($_GET['user']) && isset($_SESSION["account_ID"])) {
-    if ($_SESSION["account_ID"] == $_GET['user']) {
-        header("location: profile.php");
+if (isset($_REQUEST['user']) && isset($_SESSION["account_ID"])) {
+    if ($_SESSION["account_ID"] == $_REQUEST['user']) {
+        echo "session matches get user: " . $_REQUEST['user'] . " == " . $_SESSION["account_ID"];
+        //header("location: profile.php");
         die();
     } elseif (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
-        $account_id = $_GET['user'];
+        $profile_account_id = $_REQUEST['user'];
         $allowEdit = TRUE;
     } else {
-        $account_id = $_GET['user'];
+        $profile_account_id = $_REQUEST['user'];
         $allowEdit = FALSE;
     }
 } elseif (isset($_SESSION["account_ID"])) {
-    $account_id = $_SESSION["account_ID"];
+    $profile_account_id = $_SESSION["account_ID"];
     $allowEdit = TRUE;
 } else {
     header("location: index.php");
@@ -33,31 +34,31 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     $target = $image_dir_path . DIRECTORY_SEPARATOR . $file_name;
     move_uploaded_file($file_tmp, $target);
 
-    registerNewPicture($_SESSION["account_ID"], $target);
-    header("location: profile.php");
+    registerNewPicture($profile_account_id, $target);
+    header("location: profile.php?user=" . $profile_account_id);
 } elseif (isset($_POST['submit'])) {
     $con = Connection::connect();
 
     if (isset($_POST['gender'])) {
-        $stmt = $con->prepare("UPDATE Information set gender = ? where account_ID = '" . $account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set gender = ? where account_ID = '" . $profile_account_id . "'");
         $stmt->bindValue(1, $_POST['gender'], PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['status'])) {
-        $stmt = $con->prepare("UPDATE Information set status = ? where account_ID = '" . $account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set status = ? where account_ID = '" . $profile_account_id . "'");
         $stmt->bindValue(1, $_POST['status'], PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['email'])) {
-        $stmt = $con->prepare("UPDATE Information set email_address = ? where account_ID = '" . $account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set email_address = ? where account_ID = '" . $profile_account_id . "'");
         $stmt->bindValue(1, $_POST['email'], PDO::PARAM_STR);
         $stmt->execute();
     }
 
     if (isset($_POST['phone'])) {
-        $stmt = $con->prepare("UPDATE `Phone Numbers` set phone_number = ? where account_ID = '" . $account_id . "'");
+        $stmt = $con->prepare("UPDATE `Phone Numbers` set phone_number = ? where account_ID = '" . $profile_account_id . "'");
         $stmt->bindValue(1, $_POST['phone'], PDO::PARAM_INT);
         $stmt->execute();
     }
@@ -65,28 +66,28 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     if (isset($_POST['addr1']) && isset($_POST['addr2']) && isset($_POST['city']) && isset($_POST['state']) && isset($_POST['postcode']) && isset($_POST['country'])) {
         $address = new Address($_POST['addr1'], $_POST['addr2'], $_POST['city'], $_POST['postcode'], $_POST['state'], $_POST['country']);
 
-        $old_address_id = getAddressIDFromAccount($account_id);
+        $old_address_id = getAddressIDFromAccount($profile_account_id);
         $stmt = $con->prepare("UPDATE `Address History` set end = CURRENT_TIMESTAMP where address_id = ?");
         $stmt->bindValue(1, $old_address_id, PDO::PARAM_INT);
         $stmt->execute();
 
-        updateUserAddress($account_id, $address);
+        updateUserAddress($profile_account_id, $address);
     }
 
     if (isset($_POST['fb'])) {
-        $stmt = $con->prepare("UPDATE Information set facebook = ? where account_ID = '" . $account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set facebook = ? where account_ID = '" . $profile_account_id . "'");
         $stmt->bindValue(1, $_POST['fb'], PDO::PARAM_STR);
         $stmt->execute();
     }
 
     if (isset($_POST['li'])) {
-        $stmt = $con->prepare("UPDATE Information set linkedin = ? where account_ID = '" . $account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set linkedin = ? where account_ID = '" . $profile_account_id . "'");
         $stmt->bindValue(1, $_POST['li'], PDO::PARAM_STR);
         $stmt->execute();
     }
 
     if (isset($_POST['preference'])) {
-        $stmt = $con->prepare("UPDATE Information set mentorship_preference = ? where account_ID = '" . $account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set mentorship_preference = ? where account_ID = '" . $profile_account_id . "'");
         $stmt->bindValue(1, $_POST['preference'], PDO::PARAM_STR);
         $stmt->execute();
     }
@@ -100,7 +101,7 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
             if ($_POST['job_ID'] == -1) {
                 // adding new degree
                 $stmt = $con->prepare("insert into `Job History` (`account_ID`, employer, profession_field, `start`, `end`) values (?, ?, ?, ?, ?)");
-                $stmt->bindValue(1, $_POST['account_ID'], PDO::PARAM_INT);
+                $stmt->bindValue(1, $profile_account_id, PDO::PARAM_INT);
                 $stmt->bindValue(2, $_POST['employer'], PDO::PARAM_STR);
                 $stmt->bindValue(3, $_POST['title'], PDO::PARAM_STR);
                 $stmt->bindValue(4, $_POST['start'], PDO::PARAM_INT);
@@ -129,7 +130,7 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
             if ($_POST['degree_ID'] == -1) {
                 // adding new degree
                 $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year, enrollment_year) values (?, ?, ?, ?, ?, ?)");
-                $stmt->bindValue(1, $_POST['account_ID'], PDO::PARAM_INT);
+                $stmt->bindValue(1, $profile_account_id, PDO::PARAM_INT);
                 $stmt->bindValue(2, $_POST['degreeType'], PDO::PARAM_INT);
                 $stmt->bindValue(3, $_POST['school'], PDO::PARAM_STR);
                 $stmt->bindValue(4, $_POST['major'], PDO::PARAM_STR);
@@ -152,7 +153,8 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     }
 
     $con = null;
-    header("location: profile.php");
+    header("location: profile.php?user=" . $profile_account_id);
+    die();
 }
 
 if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
@@ -166,7 +168,7 @@ if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
             <p><span>End Year:</span></p>
             <input class="w3-input w3-border" type="text" value="" name="end"/>
             <input type="hidden" id="degree_ID" name="job_ID" value="-1">
-            <input type="hidden" id="account_ID" name="account_ID" value="' . $account_id . '">
+            <input type="hidden" id="account_ID" name="account_ID" value="' . $profile_account_id . '">
             <button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button>
             <button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button>
             <hr></form>';
@@ -179,22 +181,22 @@ if (isset($_GET['action']) && $_GET['action'] == "addEmptyDegree") {
 }
 
 if (isset($_GET['action']) && $_GET['action'] == "getFormattedDegrees") {
-    echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>' . formatDegrees(getDegrees($account_id)) . makeHistoryElementEditable($allowEdit, "degrees");
+    echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>' . formatDegrees(getDegrees($profile_account_id)) . makeHistoryElementEditable($allowEdit, "degrees");
     die();
 }
 
 if (isset($_GET['action']) && $_GET['action'] == "getFormattedJobs") {
-    echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>' . formatJobs(getJobs($account_id)) . makeHistoryElementEditable($allowEdit, "jobs");
+    echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>' . formatJobs(getJobs($profile_account_id)) . makeHistoryElementEditable($allowEdit, "jobs");
     die();
 }
 
 if (isset($_GET['action']) && $_GET['action'] == "getEditableFormattedDegrees") {
-    echo formatDegreesEditable(getDegrees($account_id));
+    echo formatDegreesEditable(getDegrees($profile_account_id), $profile_account_id);
     die();
 }
 
 if (isset($_GET['action']) && $_GET['action'] == "getEditableFormattedJobs") {
-    echo formatJobsEditable(getJobs($account_id));
+    echo formatJobsEditable(getJobs($profile_account_id), $profile_account_id);
     die();
 }
 
@@ -230,7 +232,7 @@ function formatDegrees($degrees) {
     return $result;
 }
 
-function formatDegreesEditable($degrees) {
+function formatDegreesEditable($degrees, $profile_account_ID) {
     $result = '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>';
     $result .= '<button name="addDegree" class="w3-button w3-third w3-lime w3-section" onclick="addEmptyDegree();">Add Degree</button>';
     $result .= '<button name="cancel" class="w3-button w3-third w3-red w3-section" onclick="exitHistoryElementEditState(\'degrees\');">Cancel</button>';
@@ -247,6 +249,7 @@ function formatDegreesEditable($degrees) {
         $result .= '<p><span>Graduation Year:</span></p>';
         $result .= '<input class="w3-input w3-border" type="text" value="' . $degree[2] . '" name="end"/>';
         $result .= '<input type="hidden" id="degree_ID" name="degree_ID" value="' . $degree[4] . '">';
+        $result .= '<input type="hidden" id="user" name="user" value="' . $profile_account_ID . '">';
         $result .= '<button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Edit</button>';
         $result .= '<button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button>';
         $result .= '<hr></form>';
@@ -266,21 +269,22 @@ function formatJobs($jobs) {
     return $result;
 }
 
-function formatJobsEditable($jobs) {
+function formatJobsEditable($jobs, $profile_account_ID) {
     $result = '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>';
     $result .= '<button name="addJob" class="w3-button w3-third w3-lime w3-section" onclick="addEmptyJob();">Add Job</button>';
     $result .= '<button name="cancel" class="w3-button w3-third w3-red w3-section" onclick="exitHistoryElementEditState(\'jobs\');">Cancel</button>';
     foreach($jobs as $job) {
         $result .= '<form method="post" class="w3-container w3-text-grey" action="profile.php">';
         $result .= '<p><span>Company:</span></p>';
-        $result .= '<input class="w3-input w3-border" type="text" value="' . $job[1] . '" name="employer"/>';
+        $result .= '<input class="w3-input w3-border" type="text" value="' . $job[0] . '" name="employer"/>';
         $result .= '<p><span>Job Title/Field:</span></p>';
-        $result .= '<input class="w3-input w3-border" type="text" value="' . $job[0] . '" name="title"/>';
+        $result .= '<input class="w3-input w3-border" type="text" value="' . $job[1] . '" name="title"/>';
         $result .= '<p><span>Start Year:</span></p>';
         $result .= '<input class="w3-input w3-border" type="text" value="' . $job[2] . '" name="start"/>';
         $result .= '<p><span>End Year:</span></p>';
         $result .= '<input class="w3-input w3-border" type="text" value="' . $job[3] . '" name="end"/>';
-        $result .= '<input type="hidden" id="degree_ID" name="job_ID" value="' . $job[4] . '">';
+        $result .= '<input type="hidden" id="job_ID" name="job_ID" value="' . $job[4] . '">';
+        $result .= '<input type="hidden" id="user" name="user" value="' . $profile_account_ID . '">';
         $result .= '<button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Edit</button>';
         $result .= '<button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button>';
         $result .= '<hr></form>';
@@ -288,9 +292,9 @@ function formatJobsEditable($jobs) {
     return $result;
 }
 
-function formatMentorships($account_id) {
-    $current = getCurrentMentorships($account_id);
-    $ended = getEndedMentorships($account_id);
+function formatMentorships($profile_account_id) {
+    $current = getCurrentMentorships($profile_account_id);
+    $ended = getEndedMentorships($profile_account_id);
 
     $result = '<table id="mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Began</th><th>Ended</th></tr></thead><tbody>';
 
@@ -376,9 +380,9 @@ function formatMentorships($account_id) {
             };
 
             if (id == "jobs") {
-                xmlhttp.open("GET", "profile.php?action=getEditableFormattedJobs", true);
+                xmlhttp.open("GET", "profile.php?action=getEditableFormattedJobs&user=<?php echo $profile_account_id?>" , true);
             } else if (id == "degrees") {
-                xmlhttp.open("GET", "profile.php?action=getEditableFormattedDegrees", true);
+                xmlhttp.open("GET", "profile.php?action=getEditableFormattedDegrees&user=<?php echo $profile_account_id?>", true);
             }
 
             xmlhttp.send();
@@ -393,9 +397,9 @@ function formatMentorships($account_id) {
             };
 
             if (id == "jobs") {
-                xmlhttp.open("GET", "profile.php?action=getFormattedJobs", true);
+                xmlhttp.open("GET", "profile.php?action=getFormattedJobs&user=<?php echo $profile_account_id?>", true);
             } else if (id == "degrees") {
-                xmlhttp.open("GET", "profile.php?action=getFormattedDegrees", true);
+                xmlhttp.open("GET", "profile.php?action=getFormattedDegrees&user=<?php echo $profile_account_id?>", true);
             }
 
             xmlhttp.send();
@@ -408,7 +412,7 @@ function formatMentorships($account_id) {
                     document.getElementById("jobs").innerHTML += this.responseText;
                 }
             };
-            xmlhttp.open("GET", "profile.php?action=addEmptyJob", true);
+            xmlhttp.open("GET", "profile.php?action=addEmptyJob&user=<?php echo $profile_account_id?>", true);
             xmlhttp.send();
         }
 
@@ -419,29 +423,29 @@ function formatMentorships($account_id) {
                     document.getElementById("degrees").innerHTML += this.responseText;
                 }
             };
-            xmlhttp.open("GET", "profile.php?action=addEmptyDegree", true);
+            xmlhttp.open("GET", "profile.php?action=addEmptyDegree&user=<?php echo $profile_account_id?>", true);
             xmlhttp.send();
         }
 
         function exitEditState(id) {
             document.getElementById(id).classList.remove("w3-cell-row");
             if (id == "gender") {
-                document.getElementById(id).innerHTML = `<i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getGender($account_id)) . makeEditable($allowEdit, "gender")?>`;
+                document.getElementById(id).innerHTML = `<i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getGender($profile_account_id)) . makeEditable($allowEdit, "gender")?>`;
             } else if (id == "status") {
-                document.getElementById(id).innerHTML = `<i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($account_id)) . makeEditable($allowEdit, "status")?>`;
+                document.getElementById(id).innerHTML = `<i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($profile_account_id)) . makeEditable($allowEdit, "status")?>`;
             } else if (id == "email") {
-                document.getElementById(id).innerHTML = `<i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($account_id)) . makeEditable($allowEdit, "email")?>`;
+                document.getElementById(id).innerHTML = `<i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($profile_account_id)) . makeEditable($allowEdit, "email")?>`;
             } else if (id == "phone") {
-                document.getElementById(id).innerHTML = `<i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($account_id)) . makeEditable($allowEdit, "phone")?>`;
+                document.getElementById(id).innerHTML = `<i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($profile_account_id)) . makeEditable($allowEdit, "phone")?>`;
             } else if (id == "location") {
-                document.getElementById(id).innerHTML = `<i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($account_id)) . makeEditable($allowEdit, "location")?>`;
-                document.getElementById("countrySpan").innerHTML = `<i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($account_id))?>`;
+                document.getElementById(id).innerHTML = `<i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($profile_account_id)) . makeEditable($allowEdit, "location")?>`;
+                document.getElementById("countrySpan").innerHTML = `<i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($profile_account_id))?>`;
             } else if (id == "facebook") {
-                document.getElementById(id).innerHTML = `<i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($account_id)) . makeEditable($allowEdit, "facebook")?>`;
+                document.getElementById(id).innerHTML = `<i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($profile_account_id)) . makeEditable($allowEdit, "facebook")?>`;
             } else if (id == "linkedin") {
-                document.getElementById(id).innerHTML = `<i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($account_id)) . makeEditable($allowEdit, "linkedin")?>`;
+                document.getElementById(id).innerHTML = `<i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($profile_account_id)) . makeEditable($allowEdit, "linkedin")?>`;
             } else if (id == "preference") {
-                document.getElementById(id).innerHTML = `<i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getUserMentorshipPreference($account_id)) . makeEditable($allowEdit, "preference")?>`;
+                document.getElementById(id).innerHTML = `<i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getUserMentorshipPreference($profile_account_id)) . makeEditable($allowEdit, "preference")?>`;
             }
         }
 
@@ -474,7 +478,7 @@ function formatMentorships($account_id) {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i>Email:</p>
                     <form method="post" action="profile.php">
-                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getEmail($account_id); ?>" name="email" id="email"/>
+                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getEmail($profile_account_id); ?>" name="email" id="email"/>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Email</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('email');">Cancel</button>
                     </form>`;
@@ -482,7 +486,7 @@ function formatMentorships($account_id) {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i>Phone Number:</p>
                     <form method="post" action="profile.php">
-                    <input class="w3-input w3-border w3-cell" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
+                    <input class="w3-input w3-border w3-cell" type="tel" value="<?php echo getPhoneNumber($profile_account_id); ?>" name="phone"/>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Phone</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('phone');">Cancel</button>
                     </form>`;
@@ -492,25 +496,25 @@ function formatMentorships($account_id) {
 
                     <p><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i>Country:</p>
                     <select class="w3-select w3-border w3-cell" name="country" id="country" onchange="showStates(this.value);">
-                        <?php echo listCountries($account_id) ?>
+                        <?php echo listCountries($profile_account_id) ?>
                     </select>
 
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>Address Line 1:</p>
-                    <input class="w3-input w3-border" type="text" value="<?php echo getAddressLine1($account_id); ?>" name="addr1"/>
+                    <input class="w3-input w3-border" type="text" value="<?php echo getAddressLine1($profile_account_id); ?>" name="addr1"/>
 
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>Address Line 2:</p>
-                    <input class="w3-input w3-border" type="text" value="<?php echo getAddressLine2($account_id); ?>" name="addr2"/>
+                    <input class="w3-input w3-border" type="text" value="<?php echo getAddressLine2($profile_account_id); ?>" name="addr2"/>
 
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>City:</p>
-                    <input class="w3-input w3-border" type="text" value="<?php echo getCity($account_id); ?>" name="city"/>
+                    <input class="w3-input w3-border" type="text" value="<?php echo getCity($profile_account_id); ?>" name="city"/>
 
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>State:</p>
                     <select class="w3-select w3-border" name="state" id="state">
-                        <?php echo getStatesList(getCountryID($account_id), $account_id); ?>
+                        <?php echo getStatesList(getCountryID($profile_account_id), $profile_account_id); ?>
                     </select>
 
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>Post code:</p>
-                    <input class="w3-input w3-border" type="text" value="<?php echo getPostCode($account_id); ?>" name="postcode"/>
+                    <input class="w3-input w3-border" type="text" value="<?php echo getPostCode($profile_account_id); ?>" name="postcode"/>
 
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Location</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('location');">Cancel</button>
@@ -520,7 +524,7 @@ function formatMentorships($account_id) {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Facebook:</p>
                     <form method="post" action="profile.php">
-                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getFacebookLink($account_id); ?>" name="fb" id="fb"/>
+                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getFacebookLink($profile_account_id); ?>" name="fb" id="fb"/>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Facebook</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('facebook');">Cancel</button>
                     </form>`;
@@ -528,7 +532,7 @@ function formatMentorships($account_id) {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Linkedin:</p>
                     <form method="post" action="profile.php">
-                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getLinkedinLink($account_id); ?>" name="li" id="li"/>
+                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getLinkedinLink($profile_account_id); ?>" name="li" id="li"/>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Linkedin</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('linkedin');">Cancel</button>
                     </form>`;
@@ -537,9 +541,9 @@ function formatMentorships($account_id) {
                     <p><i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i>Mentorship Preference:</p>
                     <form method="post" action="profile.php">
                     <select class="w3-select w3-border w3-cell" name="preference" id="preference">
-                        <option <?php if(getUserMentorshipPreference($account_id) == "Mentor"){echo("selected");}?> value="0"> Mentor </option>
-                        <option <?php if(getUserMentorshipPreference($account_id) == "Mentee"){echo("selected");}?> value="1"> Mentee </option>
-                        <option <?php if(getUserMentorshipPreference($account_id) == "Not Interested"){echo("selected");}?> value="2"> Not Interested </option>
+                        <option <?php if(getUserMentorshipPreference($profile_account_id) == "Mentor"){echo("selected");}?> value="0"> Mentor </option>
+                        <option <?php if(getUserMentorshipPreference($profile_account_id) == "Mentee"){echo("selected");}?> value="1"> Mentee </option>
+                        <option <?php if(getUserMentorshipPreference($profile_account_id) == "Not Interested"){echo("selected");}?> value="2"> Not Interested </option>
                     </select>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Preference</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('preference');">Cancel</button>
@@ -564,27 +568,27 @@ function formatMentorships($account_id) {
 
             <div class="w3-white w3-text-grey w3-card-4">
                 <div class="w3-display-container">
-                    <img src="<?php echo file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id); ?>" style="width:100%;" alt="Avatar">
+                    <img src="<?php echo file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $profile_account_id); ?>" style="width:100%;" alt="Avatar">
                     <div class="w3-display-middle w3-display-hover w3-xlarge">
                         <?php if ($allowEdit) { echo "<button class=\"w3-button w3-black\" onclick=\"document.getElementById('uploadPicModal').style.display='block'\">Change Picture...</button>";} ?>
                     </div>
                     <div class="w3-display-bottomleft w3-container w3-text-black">
-                        <h2 class="w3-text-white" style="text-shadow:1px 1px 0 #444"><?php echo getName($account_id) ?></h2>
+                        <h2 class="w3-text-white" style="text-shadow:1px 1px 0 #444"><?php echo getName($profile_account_id) ?></h2>
                     </div>
                 </div>
                 <div class="w3-container">
-                    <p class="w3-display-container" id="preference"><i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getUserMentorshipPreference($account_id)) . makeEditable($allowEdit, "preference")?></p>
+                    <p class="w3-display-container" id="preference"><i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getUserMentorshipPreference($profile_account_id)) . makeEditable($allowEdit, "preference")?></p>
                     <hr>
-                    <p class="w3-display-container" id="gender"><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getGender($account_id)) . makeEditable($allowEdit, "gender")?></p>
-                    <p class="w3-display-container" id="status"><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($account_id)) . makeEditable($allowEdit, "status")?></p>
-                    <p class="w3-display-container" id="location"><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($account_id)) . makeEditable($allowEdit, "location")?></p>
-                    <p class="w3-display-container" id="countrySpan"><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($account_id))?></p>
+                    <p class="w3-display-container" id="gender"><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getGender($profile_account_id)) . makeEditable($allowEdit, "gender")?></p>
+                    <p class="w3-display-container" id="status"><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($profile_account_id)) . makeEditable($allowEdit, "status")?></p>
+                    <p class="w3-display-container" id="location"><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($profile_account_id)) . makeEditable($allowEdit, "location")?></p>
+                    <p class="w3-display-container" id="countrySpan"><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($profile_account_id))?></p>
                     <hr>
-                    <p class="w3-display-container" id="email"><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($account_id)) . makeEditable($allowEdit, "email")?></p>
-                    <p class="w3-display-container" id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($account_id)) . makeEditable($allowEdit, "phone")?></p>
+                    <p class="w3-display-container" id="email"><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($profile_account_id)) . makeEditable($allowEdit, "email")?></p>
+                    <p class="w3-display-container" id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($profile_account_id)) . makeEditable($allowEdit, "phone")?></p>
                     <hr>
-                    <p class="w3-display-container" id="facebook"><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($account_id)) . makeEditable($allowEdit, "facebook")?></p>
-                    <p class="w3-display-container" id="linkedin"><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($account_id)) . makeEditable($allowEdit, "linkedin")?></p>
+                    <p class="w3-display-container" id="facebook"><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($profile_account_id)) . makeEditable($allowEdit, "facebook")?></p>
+                    <p class="w3-display-container" id="linkedin"><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($profile_account_id)) . makeEditable($allowEdit, "linkedin")?></p>
                     <hr>
 
                     <button class="w3-button w3-block w3-dark-grey">+ Connect</button>
@@ -600,18 +604,18 @@ function formatMentorships($account_id) {
 
             <div id="degrees" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>
-                <?php echo formatDegrees(getDegrees($account_id)) . makeHistoryElementEditable($allowEdit, "degrees"); ?>
+                <?php echo formatDegrees(getDegrees($profile_account_id)) . makeHistoryElementEditable($allowEdit, "degrees"); ?>
             </div>
 
             <div id="jobs" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>
-                <?php echo formatJobs(getJobs($account_id)) . makeHistoryElementEditable($allowEdit, "jobs"); ?>
+                <?php echo formatJobs(getJobs($profile_account_id)) . makeHistoryElementEditable($allowEdit, "jobs"); ?>
             </div>
 
             <div id="mentorships" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Mentorships</h2>
                 <div class="w3-container w3-padding-32 w3-text-grey">
-                    <?php echo formatMentorships($account_id); ?>
+                    <?php echo formatMentorships($profile_account_id); ?>
                 </div>
             </div>
             <!-- End Right Column -->
