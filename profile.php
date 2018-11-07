@@ -2,32 +2,17 @@
 require_once "session.php";
 require_once "database.php";
 
-if (isset($_POST['submit'])) {
-
-    $image_dir = 'images';
-    $image_dir_path = getcwd() . DIRECTORY_SEPARATOR . $image_dir;
-
-    $file_name = $_FILES['profile']['name'];
-    $file_size = $_FILES['profile']['size'];
-    $file_tmp = $_FILES['profile']['tmp_name'];
-    $file_type = $_FILES['profile']['type'];
-    $file_ext=strtolower(end(explode('.',$_FILES['profile']['name'])));
-
-    $target = $image_dir_path . DIRECTORY_SEPARATOR . $file_name;
-    move_uploaded_file($file_tmp, $target);
-
-    registerNewPicture($_SESSION["account_ID"], $target);
-    header("location: profile.php");
-}
-
-if (isset($_GET['user'])) {
-    if (isset($_SESSION["account_ID"])) {
-        if ($_SESSION["account_ID"] == $_GET['user']) {
-            header("location: profile.php");
-        }
+if (isset($_GET['user']) && isset($_SESSION["account_ID"])) {
+    if ($_SESSION["account_ID"] == $_GET['user']) {
+        header("location: profile.php");
+        die();
+    } elseif (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
+        $account_id = $_GET['user'];
+        $allowEdit = TRUE;
+    } else {
+        $account_id = $_GET['user'];
+        $allowEdit = FALSE;
     }
-    $account_id = $_GET['user'];
-    $allowEdit = FALSE;
 } elseif (isset($_SESSION["account_ID"])) {
     $account_id = $_SESSION["account_ID"];
     $allowEdit = TRUE;
@@ -35,8 +20,143 @@ if (isset($_GET['user'])) {
     header("location: index.php");
 }
 
+if (isset($_POST['submit']) && isset($_FILES['profile'])) {
+    $image_dir = 'images';
+    $image_dir_path = getcwd() . DIRECTORY_SEPARATOR . $image_dir;
+
+    $file_name = $_FILES['profile']['name'];
+    $file_size = $_FILES['profile']['size'];
+    $file_tmp = $_FILES['profile']['tmp_name'];
+    $file_type = $_FILES['profile']['type'];
+    $file_ext = strtolower(end(explode('.',$_FILES['profile']['name'])));
+
+    $target = $image_dir_path . DIRECTORY_SEPARATOR . $file_name;
+    move_uploaded_file($file_tmp, $target);
+
+    registerNewPicture($_SESSION["account_ID"], $target);
+    header("location: profile.php");
+} elseif (isset($_POST['submit'])) {
+    $con = Connection::connect();
+
+    if (isset($_POST['gender'])) {
+        $stmt = $con->prepare("UPDATE Information set gender = ? where account_ID = '" . $account_id . "'");
+        $stmt->bindValue(1, $_POST['gender'], PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    if (isset($_POST['status'])) {
+        $stmt = $con->prepare("UPDATE Information set status = ? where account_ID = '" . $account_id . "'");
+        $stmt->bindValue(1, $_POST['status'], PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    if (isset($_POST['email'])) {
+        $stmt = $con->prepare("UPDATE Information set email_address = ? where account_ID = '" . $account_id . "'");
+        $stmt->bindValue(1, $_POST['email'], PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    if (isset($_POST['phone'])) {
+        $stmt = $con->prepare("UPDATE `Phone Numbers` set phone_number = ? where account_ID = '" . $account_id . "'");
+        $stmt->bindValue(1, $_POST['phone'], PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    if (isset($_POST['addr1']) && isset($_POST['addr2']) && isset($_POST['city']) && isset($_POST['state']) && isset($_POST['postcode']) && isset($_POST['country'])) {
+        $address = new Address($_POST['addr1'], $_POST['addr2'], $_POST['city'], $_POST['postcode'], $_POST['state'], $_POST['country']);
+
+        $old_address_id = getAddressIDFromAccount($account_id);
+        $stmt = $con->prepare("UPDATE `Address History` set end = CURRENT_TIMESTAMP where address_id = ?");
+        $stmt->bindValue(1, $old_address_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        updateUserAddress($account_id, $address);
+    }
+
+    if (isset($_POST['fb'])) {
+        $stmt = $con->prepare("UPDATE Information set facebook = ? where account_ID = '" . $account_id . "'");
+        $stmt->bindValue(1, $_POST['fb'], PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    if (isset($_POST['li'])) {
+        $stmt = $con->prepare("UPDATE Information set linkedin = ? where account_ID = '" . $account_id . "'");
+        $stmt->bindValue(1, $_POST['li'], PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    if (isset($_POST['preference'])) {
+        $stmt = $con->prepare("UPDATE Information set mentorship_preference = ? where account_ID = '" . $account_id . "'");
+        $stmt->bindValue(1, $_POST['preference'], PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    if (isset($_POST['job_ID'])) {
+        if (isset($_POST['delete'])) {
+            $stmt = $con->prepare("DELETE FROM `Job History` where job_ID = ?");
+            $stmt->bindValue(1, $_POST['job_ID'], PDO::PARAM_INT);
+            $stmt->execute();
+        } else {
+            if ($_POST['job_ID'] == -1) {
+                // adding new degree
+                $stmt = $con->prepare("insert into `Job History` (`account_ID`, employer, profession_field, `start`, `end`) values (?, ?, ?, ?, ?)");
+                $stmt->bindValue(1, $_POST['account_ID'], PDO::PARAM_INT);
+                $stmt->bindValue(2, $_POST['employer'], PDO::PARAM_STR);
+                $stmt->bindValue(3, $_POST['title'], PDO::PARAM_STR);
+                $stmt->bindValue(4, $_POST['start'], PDO::PARAM_INT);
+                $stmt->bindValue(5, $_POST['end'], PDO::PARAM_INT);
+
+                $stmt->execute();
+            } else {
+                $stmt = $con->prepare("UPDATE `Job History` set employer = ?, profession_field = ?, start = ?, `end` = ? where job_ID = ?");
+                $stmt->bindValue(1, $_POST['employer'], PDO::PARAM_STR);
+                $stmt->bindValue(2, $_POST['title'], PDO::PARAM_STR);
+                $stmt->bindValue(3, $_POST['start'], PDO::PARAM_INT);
+                $stmt->bindValue(4, $_POST['end'], PDO::PARAM_INT);
+                $stmt->bindValue(5, $_POST['job_ID'], PDO::PARAM_INT);
+
+                $stmt->execute();
+            }
+        }
+    }
+
+    if (isset($_POST['degree_ID'])) {
+        if (isset($_POST['delete'])) {
+            $stmt = $con->prepare("DELETE FROM `Degrees` where degree_ID = ?");
+            $stmt->bindValue(1, $_POST['degree_ID'], PDO::PARAM_INT);
+            $stmt->execute();
+        } else {
+            if ($_POST['degree_ID'] == -1) {
+                // adding new degree
+                $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year, enrollment_year) values (?, ?, ?, ?, ?, ?)");
+                $stmt->bindValue(1, $_POST['account_ID'], PDO::PARAM_INT);
+                $stmt->bindValue(2, $_POST['degreeType'], PDO::PARAM_INT);
+                $stmt->bindValue(3, $_POST['school'], PDO::PARAM_STR);
+                $stmt->bindValue(4, $_POST['major'], PDO::PARAM_STR);
+                $stmt->bindValue(5, $_POST['end'], PDO::PARAM_INT);
+                $stmt->bindValue(6, $_POST['start'], PDO::PARAM_INT);
+
+                $stmt->execute();
+            } else {
+                $stmt = $con->prepare("UPDATE `Degrees` set degree_type_ID = ?, school = ?, major = ?, graduation_year = ?, enrollment_year = ? where degree_ID = ?");
+                $stmt->bindValue(1, $_POST['degreeType'], PDO::PARAM_INT);
+                $stmt->bindValue(2, $_POST['school'], PDO::PARAM_STR);
+                $stmt->bindValue(3, $_POST['major'], PDO::PARAM_STR);
+                $stmt->bindValue(4, $_POST['end'], PDO::PARAM_INT);
+                $stmt->bindValue(5, $_POST['start'], PDO::PARAM_INT);
+                $stmt->bindValue(6, $_POST['degree_ID'], PDO::PARAM_INT);
+
+                $stmt->execute();
+            }
+        }
+    }
+
+    $con = null;
+    header("location: profile.php");
+}
+
 if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
-    echo '  <form method="post" class="w3-container w3-text-grey" action="updateProfile.php">
+    echo '  <form method="post" class="w3-container w3-text-grey" action="profile.php">
             <p><span>Company:</span></p>
             <input class="w3-input w3-border" type="text" value="" name="employer"/>
             <p><span>Job Title/Field:</span></p>
@@ -54,7 +174,7 @@ if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
 }
 
 if (isset($_GET['action']) && $_GET['action'] == "addEmptyDegree") {
-    echo '<form method="post" class="w3-container w3-text-grey" action="updateProfile.php"><p><span>Degree Type:</span></p><select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . '</select><p><span>Major:</span></p><input class="w3-input w3-border" type="text" value="" name="major"/><p><span>University/College:</span></p><input class="w3-input w3-border" type="text" value="" name="school"/><p><span>Enrollment Year:</span></p><input class="w3-input w3-border" type="text" value="" name="start"/><p><span>Graduation Year:</span></p><input class="w3-input w3-border" type="text" value="" name="end"/><input type="hidden" id="degree_ID" name="degree_ID" value="-1"><button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button><button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button><hr></form>';
+    echo '<form method="post" class="w3-container w3-text-grey" action="profile.php"><p><span>Degree Type:</span></p><select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . '</select><p><span>Major:</span></p><input class="w3-input w3-border" type="text" value="" name="major"/><p><span>University/College:</span></p><input class="w3-input w3-border" type="text" value="" name="school"/><p><span>Enrollment Year:</span></p><input class="w3-input w3-border" type="text" value="" name="start"/><p><span>Graduation Year:</span></p><input class="w3-input w3-border" type="text" value="" name="end"/><input type="hidden" id="degree_ID" name="degree_ID" value="-1"><button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button><button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button><hr></form>';
     die();
 }
 
@@ -115,7 +235,7 @@ function formatDegreesEditable($degrees) {
     $result .= '<button name="addDegree" class="w3-button w3-third w3-lime w3-section" onclick="addEmptyDegree();">Add Degree</button>';
     $result .= '<button name="cancel" class="w3-button w3-third w3-red w3-section" onclick="exitHistoryElementEditState(\'degrees\');">Cancel</button>';
     foreach($degrees as $degree) {
-        $result .= '<form method="post" class="w3-container w3-text-grey" action="updateProfile.php">';
+        $result .= '<form method="post" class="w3-container w3-text-grey" action="profile.php">';
         $result .= '<p><span>Degree Type:</span></p>';
         $result .= '<select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . "</select>";
         $result .= '<p><span>Major:</span></p>';
@@ -151,7 +271,7 @@ function formatJobsEditable($jobs) {
     $result .= '<button name="addJob" class="w3-button w3-third w3-lime w3-section" onclick="addEmptyJob();">Add Job</button>';
     $result .= '<button name="cancel" class="w3-button w3-third w3-red w3-section" onclick="exitHistoryElementEditState(\'jobs\');">Cancel</button>';
     foreach($jobs as $job) {
-        $result .= '<form method="post" class="w3-container w3-text-grey" action="updateProfile.php">';
+        $result .= '<form method="post" class="w3-container w3-text-grey" action="profile.php">';
         $result .= '<p><span>Company:</span></p>';
         $result .= '<input class="w3-input w3-border" type="text" value="' . $job[1] . '" name="employer"/>';
         $result .= '<p><span>Job Title/Field:</span></p>';
@@ -330,7 +450,7 @@ function formatMentorships($account_id) {
             if (id == "gender") {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i>Gender:</p>
-                    <form method="post" action="updateProfile.php">
+                    <form method="post" action="profile.php">
                     <select class="w3-select w3-border w3-cell" name="gender" id="gender">
                         <option value="0"> Male </option>
                         <option value="1"> Female </option>
@@ -342,7 +462,7 @@ function formatMentorships($account_id) {
             } else if (id == "status") {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i>Status:</p>
-                    <form method="post" action="updateProfile.php">
+                    <form method="post" action="profile.php">
                     <select class="w3-select w3-border w3-cell" name="status" id="status">
                         <option value="0"> Student </option>
                         <option value="1"> Working Professional </option>
@@ -353,7 +473,7 @@ function formatMentorships($account_id) {
             } else if (id == "email") {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i>Email:</p>
-                    <form method="post" action="updateProfile.php">
+                    <form method="post" action="profile.php">
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getEmail($account_id); ?>" name="email" id="email"/>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Email</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('email');">Cancel</button>
@@ -361,14 +481,14 @@ function formatMentorships($account_id) {
             } else if (id == "phone") {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i>Phone Number:</p>
-                    <form method="post" action="updateProfile.php">
+                    <form method="post" action="profile.php">
                     <input class="w3-input w3-border w3-cell" type="tel" value="<?php echo getPhoneNumber($account_id); ?>" name="phone"/>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Phone</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('phone');">Cancel</button>
                     </form>`;
             } else if (id == "location") {
                 document.getElementById(id).innerHTML = `
-                    <form method="post" action="updateProfile.php">
+                    <form method="post" action="profile.php">
 
                     <p><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i>Country:</p>
                     <select class="w3-select w3-border w3-cell" name="country" id="country" onchange="showStates(this.value);">
@@ -399,7 +519,7 @@ function formatMentorships($account_id) {
             } else if (id == "facebook") {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Facebook:</p>
-                    <form method="post" action="updateProfile.php">
+                    <form method="post" action="profile.php">
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getFacebookLink($account_id); ?>" name="fb" id="fb"/>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Facebook</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('facebook');">Cancel</button>
@@ -407,7 +527,7 @@ function formatMentorships($account_id) {
             } else if (id == "linkedin") {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Linkedin:</p>
-                    <form method="post" action="updateProfile.php">
+                    <form method="post" action="profile.php">
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getLinkedinLink($account_id); ?>" name="li" id="li"/>
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Linkedin</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('linkedin');">Cancel</button>
@@ -415,7 +535,7 @@ function formatMentorships($account_id) {
             } else if (id == "preference") {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i>Mentorship Preference:</p>
-                    <form method="post" action="updateProfile.php">
+                    <form method="post" action="profile.php">
                     <select class="w3-select w3-border w3-cell" name="preference" id="preference">
                         <option <?php if(getUserMentorshipPreference($account_id) == "Mentor"){echo("selected");}?> value="0"> Mentor </option>
                         <option <?php if(getUserMentorshipPreference($account_id) == "Mentee"){echo("selected");}?> value="1"> Mentee </option>
