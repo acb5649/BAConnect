@@ -169,6 +169,7 @@ if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
             <input class="w3-input w3-border" type="text" value="" name="end"/>
             <input type="hidden" id="degree_ID" name="job_ID" value="-1">
             <input type="hidden" id="account_ID" name="account_ID" value="' . $profile_account_id . '">
+            <input type="hidden" id="user" name="user" value="' . $_REQUEST['user'] . '">
             <button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button>
             <button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button>
             <hr></form>';
@@ -176,7 +177,7 @@ if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
 }
 
 if (isset($_GET['action']) && $_GET['action'] == "addEmptyDegree") {
-    echo '<form method="post" class="w3-container w3-text-grey" action="profile.php"><p><span>Degree Type:</span></p><select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . '</select><p><span>Major:</span></p><input class="w3-input w3-border" type="text" value="" name="major"/><p><span>University/College:</span></p><input class="w3-input w3-border" type="text" value="" name="school"/><p><span>Enrollment Year:</span></p><input class="w3-input w3-border" type="text" value="" name="start"/><p><span>Graduation Year:</span></p><input class="w3-input w3-border" type="text" value="" name="end"/><input type="hidden" id="degree_ID" name="degree_ID" value="-1"><button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button><button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button><hr></form>';
+    echo '<form method="post" class="w3-container w3-text-grey" action="profile.php"><p><span>Degree Type:</span></p><select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . '</select><p><span>Major:</span></p><input class="w3-input w3-border" type="text" value="" name="major"/><p><span>University/College:</span></p><input class="w3-input w3-border" type="text" value="" name="school"/><p><span>Enrollment Year:</span></p><input class="w3-input w3-border" type="text" value="" name="start"/><p><span>Graduation Year:</span></p><input class="w3-input w3-border" type="text" value="" name="end"/><input type="hidden" id="degree_ID" name="degree_ID" value="-1"><input type="hidden" id="user" name="user" value="' . $_REQUEST['user'] . '"><button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button><button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button><hr></form>';
     die();
 }
 
@@ -460,6 +461,7 @@ function formatMentorships($profile_account_id) {
                         <option value="1"> Female </option>
                         <option value="2"> Nonbinary/Other </option>
                     </select>
+                    <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Gender</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('gender');">Cancel</button>
                     </form>`;
@@ -471,6 +473,7 @@ function formatMentorships($profile_account_id) {
                         <option value="0"> Student </option>
                         <option value="1"> Working Professional </option>
                     </select>
+                    <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Status</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('status');">Cancel</button>
                     </form>`;
@@ -479,6 +482,7 @@ function formatMentorships($profile_account_id) {
                     <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i>Email:</p>
                     <form method="post" action="profile.php">
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getEmail($profile_account_id); ?>" name="email" id="email"/>
+                    <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Email</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('email');">Cancel</button>
                     </form>`;
@@ -487,6 +491,7 @@ function formatMentorships($profile_account_id) {
                     <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i>Phone Number:</p>
                     <form method="post" action="profile.php">
                     <input class="w3-input w3-border w3-cell" type="tel" value="<?php echo getPhoneNumber($profile_account_id); ?>" name="phone"/>
+                    <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Phone</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('phone');">Cancel</button>
                     </form>`;
@@ -516,6 +521,8 @@ function formatMentorships($profile_account_id) {
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>Post code:</p>
                     <input class="w3-input w3-border" type="text" value="<?php echo getPostCode($profile_account_id); ?>" name="postcode"/>
 
+                    <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
+
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Location</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('location');">Cancel</button>
                     </form>`;
@@ -525,6 +532,7 @@ function formatMentorships($profile_account_id) {
                     <p><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Facebook:</p>
                     <form method="post" action="profile.php">
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getFacebookLink($profile_account_id); ?>" name="fb" id="fb"/>
+                    <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Facebook</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('facebook');">Cancel</button>
                     </form>`;
@@ -533,6 +541,7 @@ function formatMentorships($profile_account_id) {
                     <p><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Linkedin:</p>
                     <form method="post" action="profile.php">
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getLinkedinLink($profile_account_id); ?>" name="li" id="li"/>
+                    <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Linkedin</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('linkedin');">Cancel</button>
                     </form>`;
@@ -545,6 +554,7 @@ function formatMentorships($profile_account_id) {
                         <option <?php if(getUserMentorshipPreference($profile_account_id) == "Mentee"){echo("selected");}?> value="1"> Mentee </option>
                         <option <?php if(getUserMentorshipPreference($profile_account_id) == "Not Interested"){echo("selected");}?> value="2"> Not Interested </option>
                     </select>
+                    <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Preference</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('preference');">Cancel</button>
                     </form>`;
