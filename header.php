@@ -17,7 +17,7 @@ require_once "session.php";
     <div class="w3-bar w3-lime w3-card" style="z-index: 0;">
         <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="toggleNav()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
         <!-- The homepage will have a feed of the newest users and updated users -->
-        <a class="w3-bar-item w3-button w3-padding-large" href="/courseproject">BAConnect</a>
+        <a class="w3-bar-item w3-button w3-padding-large" href="">BAConnect</a>
         <!-- If user is logged in, don't show this link -->
         <?php
         if($type == 0){
