@@ -396,9 +396,9 @@ function addCountry($countryName){
     return true;
 }
 // This function will edit a pre-existing country name in the database
-function editCountry($oldName, $newName){
+function editCountry($id, $newName){
     $con = Connection::connect();
-    $stmt = $con->prepare("UPDATE Countries SET country = '" . $newName . "' WHERE country = '" . $oldName . "'");
+    $stmt = $con->prepare("UPDATE Countries SET country = '" . $newName . "' WHERE country_ID = '" . $id . "'");
     $stmt->execute();
 
     $con = null;
@@ -406,9 +406,10 @@ function editCountry($oldName, $newName){
     return true;
 }
 // This function will delete a country from the database
-function deleteCountry($countryName){
+function deleteCountry($country_ID){
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT country_ID FROM Countries WHERE country = '" . $countryName . "'");
+    /*
+    $stmt = $con->prepare("SELECT country_ID FROM `Countries` WHERE country = '" . $countryName . "'");
     $stmt->execute();
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if($row == null){
@@ -417,14 +418,14 @@ function deleteCountry($countryName){
     $id = $row['country_ID'];
 
     $stmt = null;
-
-    $stmt = $con->prepare("UPDATE Addresses SET country_ID = -1 WHERE country_ID = '" . $id . "'" );
+    */
+    $stmt = $con->prepare("UPDATE `Addresses` SET country_ID = -1 WHERE country_ID = '" . $country_ID . "'" );
     $stmt->execute();
 
-    $row = null;
-    $id = null;
+    //$row = null;
+    //$id = null;
 
-    $stmt = $con->prepare("DELETE FROM Countries WHERE country = '" . $countryName . "'");
+    $stmt = $con->prepare("DELETE FROM `Countries` WHERE country_ID = '" . $country_ID . "'");
     $stmt->execute();
 
     $con = null;
@@ -1148,4 +1149,3 @@ function forceEndMentorship($account_id,$targetMentorshipID){
 		$con = null;
 	}
 }//jonathan
-

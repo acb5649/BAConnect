@@ -2,7 +2,8 @@
     require_once "session.php";
     require_once "database.php";
     if(!isset($type)){
-        print "type is undefined. dang it.<br>";
+        header("Location: index.php");
+        die;
     }
     if($type <= 2){
       header("Location: index.php");

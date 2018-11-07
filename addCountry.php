@@ -7,7 +7,6 @@
         header("Location:index.php");
         die;
     }
-
     if(isset($_POST['add'])){
         $countryName = trim($_POST['addCountry']);
 
@@ -15,20 +14,19 @@
         header('Location: index.php');
         die;
     } elseif (isset($_POST['edit'])) {
-        $oldName = trim($_POST['country']);
+        $id = trim($_POST['country']);
         $newName = trim($_POST['editCountry']);
 
-        editCountry($oldName, $newName);
+        editCountry($id, $newName);
         header('Location: index.php');
         die;
     } elseif (isset($_POST['delete'])) {
-        $countryName = trim($_POST['country']);
+        $countryID = trim($_POST['country']);
 
-        deleteCountry($countryName);
+        deleteCountry($countryID);
         header('Location: index.php');
         die;
     }
-
 ?>
 
 <div id="addCountryModal" class="w3-modal">
