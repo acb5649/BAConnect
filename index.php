@@ -32,8 +32,10 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
         echo json_encode($result);
         die();
     }
+}
 
-
+if(isset($_POST["action"]) && $_POST["action"] == "openModal"){
+    echo "<script>document.getElementById('" . $_POST["modal"] . "').style.display='block';</script>";
 }
 
 ?>

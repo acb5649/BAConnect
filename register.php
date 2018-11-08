@@ -3,49 +3,87 @@ require_once "dbhelper.php";
 
 if (isset($_POST['submit'])) {
     $error = false;
-    // Collect Account data from Post
-    $password = $_POST['password'];
-    $confirmedPassword = $_POST['confirmedPassword'];
-    $username = $_POST['username'];
-    // Collect User data from Post
-    $firstName = $_POST['firstName'];
-    $middleName = $_POST['middleName'];
-    $lastName = $_POST['lastName'];
-    $email = $_POST['email'];
-    $gender = $_POST['gender'];
-    $phone = $_POST['phoneNumber'];
-    $status = $_POST['status'];
-    // Collect Address data from Post
-    $street = $_POST['street'];
-    $street2 = $_POST['street2'];
-    $city = $_POST['city'];
-    $postcode = $_POST['postcode'];
-    $state = $_POST['state'];
-    $country = $_POST['country'];
-    // Collect Education and Work Histories
-    $numDegrees = $_POST['numDegs'];
-    for ($degreeNum = 0; $degreeNum < $numDegrees; $degreeNum++) {
-        $degree[$degreeNum] = new EducationHistoryEntry($_POST['schoolName_' . $degreeNum], $_POST['degreeType_' . $degreeNum], $_POST['major_' . $degreeNum], $_POST['enrollmentYear_' . $degreeNum], $_POST['gradYear_' . $degreeNum]);
+    $msg = "";
+
+    $requiredPOSTFieldNames = array('password', 'confirmedPassword', 'username', 'firstName', 'lastName', 'email', 'gender', 'phoneNumber', 'status', 'preference', 'state', 'country', 'numDegs', 'numJobs');
+    $optionalPOSTFieldNames = array('middleName', 'street', 'street2', 'city', 'postcode', 'facebook', 'twitter', 'linkedin');
+
+    foreach ($requiredPOSTFieldNames as $req) {
+        if (isset($_REQUEST[$req])) {
+            $_SESSION[$req] = Input::str($_POST[$req]);
+        } else {
+            $error = true;
+        }
     }
 
-    $numJobs = $_POST['numJobs'];
-    for ($jobNum = 0; $jobNum < $numJobs; $jobNum++) {
-        $work[$jobNum] = new WorkHistoryEntry($_POST['employerName_' . $degreeNum], $_POST['jobTitle' . $degreeNum], $_POST['startYear_' . $degreeNum], $_POST['endYear_' . $degreeNum]);
+    foreach ($optionalPOSTFieldNames as $req) {
+        if (isset($_REQUEST[$req])) {
+            $_SESSION[$req] = Input::str($_POST[$req]);
+        } else {
+            $_SESSION[$req] = "";
+        }
     }
+
+    // Collect Education and Work Histories
+    $degree = array();
+    for ($degreeNum = 0; $degreeNum < $_SESSION['numDegs']; $degreeNum++) {
+        foreach (array('schoolName_' . $degreeNum, 'degreeType_' . $degreeNum, 'major_' . $degreeNum, 'enrollmentYear_' . $degreeNum, 'gradYear_' . $degreeNum) as $req) {
+            if (isset($_REQUEST[$req])) {
+                $_SESSION[$req] = Input::str($_POST[$req]);
+            } else {
+                $_SESSION[$req] = "";
+            }
+        }
+        $degree[$degreeNum] = new EducationHistoryEntry($_SESSION['schoolName_' . $degreeNum], $_SESSION['degreeType_' . $degreeNum], $_SESSION['major_' . $degreeNum], $_SESSION['enrollmentYear_' . $degreeNum], $_SESSION['gradYear_' . $degreeNum]);
+    }
+
+    $work = array();
+    for ($jobNum = 0; $jobNum < $_SESSION['numJobs']; $jobNum++) {
+        foreach (array('employerName_' . $degreeNum, 'jobTitle' . $degreeNum, 'startYear_' . $degreeNum, 'endYear_' . $degreeNum) as $req) {
+            if (isset($_REQUEST[$req])) {
+                $_SESSION[$req] = Input::str($_POST[$req]);
+            } else {
+                $_SESSION[$req] = "";
+            }
+        }
+        $work[$jobNum] = new WorkHistoryEntry($_SESSION['employerName_' . $degreeNum], $_SESSION['jobTitle' . $degreeNum], $_SESSION['startYear_' . $degreeNum], $_SESSION['endYear_' . $degreeNum]);
+    }
+
     // handle files
     $picturePath = $_FILES['profile']['tmp_name'];
     $resumePath = $_FILES['resume']['tmp_name'];
 
     // verify Information
-    if ($password != $confirmedPassword) {
+    if ($_SESSION['password'] != $_SESSION['confirmedPassword']) {
         $error = true;
+        $msg += "\nPasswords do not match.";
+    } elseif (!(preg_match('/[A-Za-z]/', $_SESSION['password']) && preg_match('/[0-9]/', $_SESSION['password']))) {
+        $error = true;
+        $msg += "\nPassword must contain a capital letter and a number.";
+    } elseif (strlen($_SESSION['password']) < 12) {
+        $error = true;
+        $msg += "\nPassword must be 12 or more characters.";
     }
 
     if ($error == false) {
-        $user = new User($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phone, $status);
-        $address = new Address($street, $street2, $city, $postcode, $state, $country);
+        $user = new User($_SESSION['username'], $_SESSION['password'], $_SESSION['firstName'], $_SESSION['middleName'], $_SESSION['lastName'], $_SESSION['email'], $_SESSION['gender'], $_SESSION['phoneNumber'], $_SESSION['$status']);
+        $address = new Address($_SESSION['street'], $_SESSION['street2'], $_SESSION['city'], $_SESSION['postcode'], $_SESSION['state'], $_SESSION['country']);
         registerUser($user, $address, $degree, $work, $picturePath, $resumePath);
         header("Location: created.php");
+    } else {
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('action' => 'openModal', 'modal' => 'registerModal'))
+            )
+        );
+        $context  = stream_context_create($options);
+        $result = file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/index.php", false, $context);
+        if ($result === FALSE) { /* Handle error */ }
+        header("Location: index.php");
+        echo $result;
+        print_r($_SESSION);
     }
 }
 
@@ -77,19 +115,19 @@ if (isset($_POST['submit'])) {
             <p>
                 <label>First name<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="firstName" id="firstName" required/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['firstName']) ? $_SESSION['firstName'] : "") ?>" name="firstName" id="firstName" required/>
             <p>
                 <label>Middle name</label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="middleName" id="middleName"/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['middleName']) ? $_SESSION['middleName'] : "") ?>" name="middleName" id="middleName"/>
             <p>
                 <label>Last name<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="lastName" id="lastName" required/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['lastName']) ? $_SESSION['lastName'] : "") ?>" name="lastName" id="lastName" required/>
             <p>
                 <label>Email<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="email" id="email" required/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['email']) ? $_SESSION['email'] : "") ?>" name="email" id="email" required/>
             <p>
                 <label>User Name<span class="w3-text-red">*</span></label>
             </p>
