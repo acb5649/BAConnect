@@ -13,7 +13,7 @@
 
         addDegreeType($degreeTypeName);
 
-        header("Location:Index.php");
+        header("Location:index.php");
         die;
     }
     elseif (isset($_POST['edit'])) {
@@ -22,7 +22,7 @@
 
         editDegreeType($oldName, $newName);
 
-        header("Location:Index.php");
+        header("Location:index.php");
         die;
     }
     elseif (isset($_POST['delete'])) {
@@ -30,7 +30,7 @@
 
         deleteDegreeType($degreeTypeName);
 
-        header("Location:Index.php");
+        header("Location:index.php");
         die;
     }
 
