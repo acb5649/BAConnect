@@ -59,7 +59,7 @@
             </p>
 
 
-            <select class="w3-select w3-border" name="country" id="country" onchange="showStates(this.value)">
+            <select class="w3-select w3-border" name="country" id="country" onchange="showStates(this.value, 'stateAddList')">
                 <?php echo "<option value= '-1'>Please select a Country</option> " . listCountries(); ?>
             </select>
 
@@ -80,7 +80,7 @@
                 <label>Select State to Edit</label>
             </p>
 
-            <select class="w3-select w3-border" name="state" id="state">
+            <select class="w3-select w3-border" name="state" id="stateAddList">
                 <?php// print getStates($countryID);?>
             </select>
 

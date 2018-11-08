@@ -1,6 +1,8 @@
 <?php
 
 require_once "database.php";
+ini_set('max_execution_time', 300);
+
 
 function encodeToUtf8($string) {
     //return mb_convert_encoding($string, "UTF-8", mb_detect_encoding($string, mb_list_encodings(), true));
