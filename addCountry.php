@@ -11,8 +11,8 @@
         $countryName = trim($_POST['addCountry']);
 
         addCountry($countryName);
-        header('Location: index.php');
-        die;
+        //header('Location: index.php');
+        //die;
     } elseif (isset($_POST['edit'])) {
         $id = trim($_POST['country']);
         $newName = trim($_POST['editCountry']);

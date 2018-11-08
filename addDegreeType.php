@@ -17,18 +17,18 @@
         die;
     }
     elseif (isset($_POST['edit'])) {
-        $oldName = trim($_POST['degreeType']);
+        $degreeTypeID = trim($_POST['degreeType']);
         $newName = trim($_POST['editDegreeType']);
 
-        editDegreeType($oldName, $newName);
+        editDegreeType($degreeTypeID, $newName);
 
         header("Location:index.php");
         die;
     }
     elseif (isset($_POST['delete'])) {
-        $degreeTypeName = trim($_POST['degreeType']);
+        $degreeTypeID = trim($_POST['degreeType']);
 
-        deleteDegreeType($degreeTypeName);
+        deleteDegreeType($degreeTypeID);
 
         header("Location:index.php");
         die;
@@ -71,7 +71,7 @@
             <p>
                 <label>Or Delete Selected Degree Type</label>
             </p>
-            <button type="button" class="w3-button w3-red w3-section" type = "submit" name = "delete">Delete
+            <button class="w3-button w3-red w3-section" type = "submit" name = "delete">Delete
                 <i class="fa fa-remove"></i>
             </button>
 

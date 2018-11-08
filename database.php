@@ -329,7 +329,7 @@ function getAccountTypeFromAccountID($account_id) {
 
 function listCountries($account_id = 0) {
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT country, country_ID FROM Countries");
+    $stmt = $con->prepare("SELECT country, country_ID FROM `Countries` WHERE enabled = 1");
     $stmt->execute();
     $list = $stmt->fetchAll();
     $con = null;
@@ -356,7 +356,7 @@ function listCountries($account_id = 0) {
 // This function will generate a list of all the degree Types in the database
 function listDegreeTypes(){
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT degree, degree_type_ID FROM `Degree Types`");
+    $stmt = $con->prepare("SELECT degree, degree_type_ID FROM `Degree Types` WHERE enabled = 1");
     $stmt->execute();
     $list = $stmt->fetchAll();
     $html = "";
@@ -370,10 +370,14 @@ function listDegreeTypes(){
 // This function will add a new degree type to the database, but will check if it's already in the database first
 function addDegreeType($degreeType){
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT * FROM `Degree Types` WHERE degree = " . $degreeType);
-    $result = $stmt->execute();
-
-    if(!isset($result)){	//if there is already a degree type with the same name in the database
+    $stmt = $con->prepare("SELECT * FROM `Degree Types` WHERE degree = '" . $degreeType . "'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($result != null){	//if there is already a degree type with the same name in the database
+        if($result['enabled'] == "0"){
+            $stmt = $con->prepare("UPDATE `Degree Types` SET enabled = 1 WHERE degree = '" . $degreeType . "'");
+            $stmt->execute();
+        }
         $con = null;
         $stmt = null;
         return true;
@@ -390,17 +394,18 @@ function addDegreeType($degreeType){
 }
 
 // This function will edit a pre-existing degree type name in the database
-function editDegreeType($oldName, $newName){
+function editDegreeType($id, $newName){
     $con = Connection::connect();
-    $stmt = $con->prepare("UPDATE `Degree Types` SET degree = '" . $newName . "' WHERE degree = '" . $oldName . "'");
+    $stmt = $con->prepare("UPDATE `Degree Types` SET degree = '" . $newName . "' WHERE degree_type_ID = '" . $id . "'");
     $stmt->execute();
     $con = null;
     return true;
 }
 
 // This function will delete a degree type from the database
-function deleteDegreeType($degreeTypeName){
+function deleteDegreeType($degreeTypeID){
     $con = Connection::connect();
+    /*
     $stmt = $con->prepare("SELECT degree_type_ID FROM `Degree Types` WHERE degree = '" . $degreeTypeName . "'");
     $stmt->execute();
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -411,13 +416,13 @@ function deleteDegreeType($degreeTypeName){
 
     $stmt = null;
 
-    $stmt = $con->prepare("UPDATE Degrees SET degree_type_ID = -1 WHERE degree_type_ID = '" . $id . "'" );
-    $stmt->execute();
+    //$stmt = $con->prepare("UPDATE Degrees SET degree_type_ID = -1 WHERE degree_type_ID = '" . $id . "'" );
+    //$stmt->execute();
 
     $row = null;
     $id = null;
-
-    $stmt = $con->prepare("DELETE FROM `Degree Types` WHERE degree = '" . $degreeTypeName . "'");
+    */
+    $stmt = $con->prepare("UPDATE `Degree Types` SET enabled = 0 WHERE degree_type_ID = '" . $degreeTypeID . "'");
     $stmt->execute();
 
     $con = null;
@@ -427,17 +432,23 @@ function deleteDegreeType($degreeTypeName){
 // This function will add a new country to the database, but will check if it's already in the database first
 function addCountry($countryName){
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT * FROM Countries WHERE country = " . $countryName);
+    $stmt = $con->prepare("SELECT * FROM `Countries` WHERE country = '" . $countryName . "'");
     $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($result != null){	//if there is already a country with the same name in the database
+        $enabled = $result['enabled'];
+        if($enabled == "0"){
+            $stmt = $con->prepare("UPDATE `Countries` SET enabled = 1 WHERE country = '" . $countryName . "'");
+            $stmt->execute();
+        }
+        $con = null;
         return true;
     }
     $stmt = null;
     $result = null;
 
-    $stmt = $con->prepare("INSERT INTO Countries (country) values (?)");
+    $stmt = $con->prepare("INSERT INTO `Countries` (country) values (?)");
     $stmt->bindValue(1, $countryName, PDO::PARAM_STR);
     $stmt->execute();
 
@@ -448,7 +459,7 @@ function addCountry($countryName){
 // This function will edit a pre-existing country name in the database
 function editCountry($id, $newName){
     $con = Connection::connect();
-    $stmt = $con->prepare("UPDATE Countries SET country = '" . $newName . "' WHERE country_ID = '" . $id . "'");
+    $stmt = $con->prepare("UPDATE `Countries` SET country = '" . $newName . "' WHERE country_ID = '" . $id . "'");
     $stmt->execute();
 
     $con = null;
@@ -469,13 +480,13 @@ function deleteCountry($country_ID){
 
     $stmt = null;
     */
-    $stmt = $con->prepare("UPDATE `Addresses` SET country_ID = -1 WHERE country_ID = '" . $country_ID . "'" );
-    $stmt->execute();
+    //$stmt = $con->prepare("UPDATE `Addresses` SET country_ID = -1 WHERE country_ID = '" . $country_ID . "'" );
+    //$stmt->execute();
 
     //$row = null;
     //$id = null;
 
-    $stmt = $con->prepare("DELETE FROM `Countries` WHERE country_ID = '" . $country_ID . "'");
+    $stmt = $con->prepare("UPDATE `Countries` SET enabled = 0 WHERE country_ID = '" . $country_ID . "'");
     $stmt->execute();
 
     $con = null;
@@ -628,7 +639,7 @@ function getJobs($account_id) {
 
 function getStatesList($countryID, $account_id){
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT state_name, state_ID FROM States WHERE country_ID = '" . $countryID . "'");
+    $stmt = $con->prepare("SELECT state_name, state_ID FROM States WHERE country_ID = '" . $countryID . "' AND enabled = 1");
     $stmt->execute();
     $list = $stmt->fetchAll();
     $con = null;
@@ -651,9 +662,14 @@ function addState($countryID, $stateName){
     $con = Connection::connect();
     $stmt = $con->prepare("SELECT * FROM States WHERE state_name = '" . $stateName . "' AND country_ID = '" . $countryID . "'");
     $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($result != null){	//if there is already a country with the same name in the database
+        if($result['enabled'] == "0"){
+            $stmt = $con->prepare("UPDATE States SET enabled = 1 WHERE state_ID = '" . $ID . "'");
+            $stmt->execute();
+        }
+        $con = null;
         return true;
     }
     $stmt = null;
@@ -681,7 +697,7 @@ function editState($newName, $ID){
 // This function will delete a state from the database
 function deleteState($ID){
     $con = Connection::connect();
-    $stmt = $con->prepare("DELETE FROM States WHERE state_ID = '" . $ID . "'");
+    $stmt = $con->prepare("UPDATE `States` SET enabled = 0 WHERE state_ID = '" . $ID . "'");
     $stmt->execute();
 
     $con = null;
