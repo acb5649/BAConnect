@@ -22,13 +22,15 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
         die();
     } else {
         $num = $_POST["num"];
-        $search = $_POST["search"];
+        $search = Input::str($_POST["search"]);
 
-        $con = Connection::connect();
-        $stmt = $con->prepare("SELECT `account_ID` FROM UserAddressView where '%" . $search . "%' IN (`state`, `country`, `state_name`, `city`, `post_code`, `street_address`, `street_address2`, `first_name`, `middle_name`, `last_name`, `gender`, `facebook`, `linkedin`, `mentorship_preference`, `dob`, `phone_number`) LIMIT " . $num . " OFFSET " . $offset);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $con = null;
+        //$con = Connection::connect();
+        //$stmt = $con->prepare("SELECT `account_ID` FROM UserAddressView where '%" . $search . "%' IN (`state`, `country`, `state_name`, `city`, `post_code`, `street_address`, `street_address2`, `first_name`, `middle_name`, `last_name`, `gender`, `facebook`, `linkedin`, `mentorship_preference`, `dob`, `phone_number`) LIMIT " . $num . " OFFSET " . $offset);
+        //$stmt->execute();
+        //$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //$con = null;
+
+        $result = searchEntireDBFor($search);
         echo json_encode($result);
         die();
     }
@@ -203,76 +205,6 @@ if (isset($_POST['register'])) {
     <script src="js/registration.js"></script>
     <script src="js/closeModals.js"></script>
     <script src="js/cardHandler.js"></script>
-    <script>
-        // Used to toggle the menu on small screens when clicking on the menu button
-        function toggleNav() {
-            let x = document.getElementById("navMobile");
-            if (x.className.indexOf("w3-show") == -1) {
-                x.className += " w3-show";
-            } else {
-                x.className = x.className.replace(" w3-show", "");
-            }
-        }
-
-        var offset = 0;
-
-        function continuallyLoadCards(num = 10) {
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var array = JSON.parse(this.responseText);
-                    console.log(array);
-                    cardAjax(array);
-                }
-            };
-            let params = "action=loadCards&num=" + num +"&offset=" + offset;
-            xmlhttp.open("POST", "index.php", true);
-            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xmlhttp.send(params);
-            offset += num;
-        }
-
-        continuallyLoadCards(30);
-
-        function searchCards(num = 30, startOver = true) {
-            if (startOver) {
-                document.getElementById("mentorDisplay").innerHTML = "";
-                offset = 0;
-            }
-
-            let term = document.getElementById("searchBox").value;
-            if (term === "") {
-                continuallyLoadCards(30);
-                return;
-            }
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var array = JSON.parse(this.responseText);
-                    console.log(array);
-                    cardAjax([...new Set(array)]);
-                }
-            };
-
-            let params = "action=loadCards&num=" + num +"&offset=" + offset + "&search=" + term;
-            xmlhttp.open("POST", "index.php", true);
-            xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xmlhttp.send(params);
-            offset += num;
-        }
-
-        window.onscroll = function(ev) {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                let term = document.getElementById("searchBox").value;
-                if (term = "") {
-                    continuallyLoadCards(10);
-                } else {
-                    searchCards(10, false);
-                }
-            }
-        };
-    </script>
 </head>
 
 <body class="w3-light-grey" onload="init();">
@@ -283,12 +215,80 @@ if (isset($_POST['register'])) {
 
 </div>
 </body>
+<?php
+if (isset($_SESSION['msg'])) {
+    echo "<script>document.getElementById('registerModal').style.display='block'</script>";
+    session_unset();
+}
+?>
 <script>
-    <?php
-    if (isset($_SESSION['msg'])) {
-        echo "document.getElementById('registerModal').style.display='block'";
-        session_unset();
+    // Used to toggle the menu on small screens when clicking on the menu button
+    function toggleNav() {
+        let x = document.getElementById("navMobile");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+        }
     }
-    ?>
+
+    var offset = 0;
+
+    function continuallyLoadCards(num = 10) {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var array = JSON.parse(this.responseText);
+                console.log(array);
+                cardAjax(array);
+            }
+        };
+        let params = "action=loadCards&num=" + num +"&offset=" + offset;
+        xmlhttp.open("POST", "index.php", true);
+        xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xmlhttp.send(params);
+        offset += num;
+    }
+
+    continuallyLoadCards(30);
+
+    function searchCards(num = 30, startOver = true) {
+        if (startOver) {
+            document.getElementById("mentorDisplay").innerHTML = "";
+            offset = 0;
+        }
+
+        let term = document.getElementById("searchBox").value;
+        if (term === "") {
+            continuallyLoadCards(30);
+            return;
+        }
+
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var array = JSON.parse(this.responseText);
+                console.log(array);
+                cardAjax([...new Set(array)]);
+            }
+        };
+
+        let params = "action=loadCards&num=" + num +"&offset=" + offset + "&search=" + term;
+        xmlhttp.open("POST", "index.php", true);
+        xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xmlhttp.send(params);
+        offset += num;
+    }
+
+    window.onscroll = function(ev) {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            let term = document.getElementById("searchBox").value;
+            if (term = "") {
+                continuallyLoadCards(10);
+            } else {
+                searchCards(10, false);
+            }
+        }
+    };
 </script>
 </html>
