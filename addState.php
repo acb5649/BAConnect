@@ -1,6 +1,5 @@
 <?php
     require_once "database.php";
-
     require_once "session.php";
 
     if($type < 3){
@@ -45,7 +44,20 @@
     //print $msg;
 ?>
 
-<script src="js/showStates.js"></script>
+<script>
+    function showAddStates(countryID) {
+        if(countryID != ""){
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    document.getElementById('stateAddList').innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET", "AJAX.php?action=refreshState&country=" + countryID, true);
+            xmlhttp.send();
+        }
+    }
+</script>
 <div id="addStateModal" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
         <header class="w3-container w3-lime w3-center w3-padding-32">
@@ -59,7 +71,7 @@
             </p>
 
 
-            <select class="w3-select w3-border" name="country" id="country" onchange="showStates(this.value, 'stateAddList')">
+            <select class="w3-select w3-border" name="country" id="country" onchange="showAddStates(this.value)">
                 <?php echo "<option value= '-1'>Please select a Country</option> " . listCountries(); ?>
             </select>
 
@@ -81,7 +93,7 @@
             </p>
 
             <select class="w3-select w3-border" name="state" id="stateAddList">
-                <?php// print getStates($countryID);?>
+
             </select>
 
             <p>
