@@ -41,12 +41,12 @@ function addEducationField() {
     var fieldset = document.getElementById("education");
     var container = document.createElement("div");
     container.id = "eduContainer_" + number;
-    container.className = "w3-card w3-container w3-display-container w3-margin-top w3-margin-bottom";
+    container.className = "w3-card w3-display-container w3-margin-top w3-margin-bottom";
 
     var header = document.createElement("header");
-    header.className = "w3-container w3-center";
+    header.className = "w3-container w3-center w3-pale-red";
     var span = document.createElement("span");
-    span.className = "w3-button w3-lime w3-xlarge w3-display-topright";
+    span.className = "w3-button w3-red w3-xlarge w3-display-topright";
     span.innerHTML = "&times";
     span.id = "eduHeaderSpan_" + number;
     span.onclick = function() {
@@ -65,6 +65,7 @@ function addEducationField() {
 
     var parent = document.createElement("div");
     parent.className = "educationMember";
+    parent.style = "padding: 16px";
     parent.id = "eduMember_" + number;
 
     var select = document.createElement("select");
@@ -75,21 +76,21 @@ function addEducationField() {
 
     parent.appendChild(select);
 
+    parent.appendChild(document.createTextNode("School Name:"));
+
     var schoolNameInput = document.createElement("input");
     schoolNameInput.type = "text";
     schoolNameInput.maxlength = 50;
-    schoolNameInput.value = "";
-    schoolNameInput.placeholder = "School Name";
     schoolNameInput.name = "schoolName_" + number;
     schoolNameInput.id = "schoolName_" + number;
     schoolNameInput.className = "w3-input w3-border";
     parent.appendChild(schoolNameInput);
 
+    parent.appendChild(document.createTextNode("Major:"));
+
     var majorInput = document.createElement("input");
     majorInput.type = "text";
     majorInput.maxlength = 50;
-    majorInput.value = "";
-    majorInput.placeholder = "Major";
     majorInput.name = "major_" + number;
     majorInput.id = "major_" + number;
     majorInput.className = "w3-input w3-border";
@@ -100,7 +101,7 @@ function addEducationField() {
     var startYearInput = document.createElement("input");
     startYearInput.type = "number";
     startYearInput.maxlength = 4;
-    startYearInput.placeholder = "";
+    startYearInput.value = "2000";
     startYearInput.name = "enrollmentYear_" + number;
     startYearInput.id = "enrollmentYear_" + number;
     startYearInput.className = "w3-input w3-border";
@@ -111,7 +112,7 @@ function addEducationField() {
     var graduationYearInput = document.createElement("input");
     graduationYearInput.type = "number";
     graduationYearInput.maxlength = 4;
-    graduationYearInput.placeholder = "";
+    graduationYearInput.value = "2000";
     graduationYearInput.name = "gradYear_" + number;
     graduationYearInput.id = "gradYear_" + number;
     graduationYearInput.className = "w3-input w3-border w3-margin-bottom";
@@ -170,12 +171,12 @@ function addWorkField() {
     var fieldset = document.getElementById("work");
     var container = document.createElement("div");
     container.id = "workContainer_" + number;
-    container.className = "w3-card w3-container w3-display-container w3-margin-top w3-margin-bottom";
+    container.className = "w3-card w3-display-container w3-margin-top w3-margin-bottom";
 
     var header = document.createElement("header");
-    header.className = "w3-container w3-center";
+    header.className = "w3-container w3-center w3-pale-red";
     var span = document.createElement("span");
-    span.className = "w3-button w3-lime w3-xlarge w3-display-topright";
+    span.className = "w3-button w3-red w3-xlarge w3-display-topright";
     span.innerHTML = "&times";
     span.id = "workHeaderSpan_" + number;
     span.onclick = function() {
@@ -194,23 +195,24 @@ function addWorkField() {
 
     var parent = document.createElement("div");
     parent.className = "workMember";
+    parent.style = "padding: 16px";
     parent.id = "workMember_" + number;
+
+    parent.appendChild(document.createTextNode("Name of Employer:"));
 
     var employerNameInput = document.createElement("input");
     employerNameInput.type = "text";
     employerNameInput.maxlength = 50;
-    employerNameInput.value = "";
-    employerNameInput.placeholder = "Name of Employer";
     employerNameInput.name = "employerName_" + number;
     employerNameInput.id = "employerName_" + number;
     employerNameInput.className = "w3-input w3-border";
     parent.appendChild(employerNameInput);
 
+    parent.appendChild(document.createTextNode("Job Title:"));
+
     var jobTitle = document.createElement("input");
     jobTitle.type = "text";
     jobTitle.maxlength = 50;
-    jobTitle.value = "";
-    jobTitle.placeholder = "Job Title";
     jobTitle.name = "jobTitle_" + number;
     jobTitle.id = "jobTitle_" + number;
     jobTitle.className = "w3-input w3-border";
@@ -221,7 +223,7 @@ function addWorkField() {
     var startYearInput = document.createElement("input");
     startYearInput.type = "number";
     startYearInput.maxlength = 4;
-    startYearInput.placeholder = "";
+    startYearInput.value = "2000";
     startYearInput.name = "startYear_" + number;
     startYearInput.id = "startYear_" + number;
     startYearInput.className = "w3-input w3-border";
@@ -232,7 +234,7 @@ function addWorkField() {
     var endYearInput = document.createElement("input");
     endYearInput.type = "number";
     endYearInput.maxlength = 4;
-    endYearInput.placeholder = "";
+    endYearInput.value = "2000";
     endYearInput.name = "endYear_" + number;
     endYearInput.id = "endYear_" + number;
     endYearInput.className = "w3-input w3-border w3-margin-bottom";

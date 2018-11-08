@@ -4,13 +4,22 @@ require_once "database.php";
 
 if (isset($_REQUEST['user']) && isset($_SESSION["account_ID"])) {
     if ($_SESSION["account_ID"] == $_REQUEST['user']) {
-        echo "session matches get user: " . $_REQUEST['user'] . " == " . $_SESSION["account_ID"];
-        //header("location: profile.php");
-        die();
+        $profile_account_id = $_SESSION["account_ID"];
+        if (isset($_REQUEST["action"])) {
+            // we're handling a request, don't redirect!
+
+            $allowEdit = TRUE;
+        } else {
+            //User is on own profile, they get edit privleges.
+            header("location: profile.php");
+            $allowEdit = TRUE;
+        }
     } elseif (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
+        // accessing user is an admin, they get edit privleges too.
         $profile_account_id = $_REQUEST['user'];
         $allowEdit = TRUE;
     } else {
+        // a normal user is looking at another user's profile, no editing.
         $profile_account_id = $_REQUEST['user'];
         $allowEdit = FALSE;
     }

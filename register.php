@@ -51,6 +51,21 @@ if (isset($_POST['submit'])) {
 
 ?>
 
+<script>
+    function showStates(countryID){
+        if(countryID != ""){
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    document.getElementById("state").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET", "AJAX.php?action=refreshState&country=" + countryID, true);
+            xmlhttp.send();
+        }
+    }
+</script>
+
 <div id="registerModal" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
         <header class="w3-container w3-lime w3-center w3-padding-32">
@@ -60,40 +75,54 @@ if (isset($_POST['submit'])) {
         </header>
         <form method='post' action="register.php" enctype='multipart/form-data' class="w3-container">
             <p>
-                <label>First name</label>
+                <label>First name<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="firstName" id="firstName"/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="firstName" id="firstName" required/>
             <p>
                 <label>Middle name</label>
             </p>
             <input class="w3-input w3-border" type="text" maxlength="50" value="" name="middleName" id="middleName"/>
             <p>
-                <label>Last name</label>
+                <label>Last name<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="lastName" id="lastName"/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="lastName" id="lastName" required/>
             <p>
-                <label>Email</label>
+                <label>Email<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="email" id="email"/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="email" id="email" required/>
             <p>
-                <label>User Name</label>
+                <label>User Name<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="username" id="username"/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="username" id="username" required/>
             <p>
-                <label>Password (Must be longer than 12 characters and contains at least 1 digit)</label>
+                <label>Password (Must be longer than 12 characters and contains at least 1 digit)<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="password" maxlength="50" value="" name="password" id="password"/>
+            <input class="w3-input w3-border" type="password" maxlength="50" value="" name="password" id="password" required/>
             <p>
-                <label>Confirm Password</label>
+                <label>Confirm Password<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="password" maxlength="50" value="" name="confirmedPassword"
-                   id="confirmedPassword"/>
+            <input class="w3-input w3-border" type="password" maxlength="50" value="" name="confirmedPassword" id="confirmedPassword" required/>
             <p>
-                <label>Gender</label>
+                <label>Gender<span class="w3-text-red">*</span></label>
             </p>
             <label>Male<input class="w3-radio w3-border" type="radio" name="gender" value="0" checked="checked"/></label>
             <label>Female<input class="w3-radio w3-border" type="radio" name="gender" value="1"/></label>
             <label>Nonbinary<input class="w3-radio w3-border" type="radio" name="gender" value="2"/></label>
+
+            <p>
+                <label>Country<span class="w3-text-red">*</span></label>
+            </p>
+            <select class="w3-select w3-border" name="country" id="country" onchange="showStates(this.value)">
+                <?php echo "<option value= '-1'>Please select a Country</option> " . listCountries(); ?>
+            </select>
+
+            <p>
+                <label>State/Province<span class="w3-text-red">*</span></label>
+            </p>
+            <select class="w3-select w3-border" name="state" id="state">
+
+            </select>
+
             <p>
                 <label>Address Line 1</label>
             </p>
@@ -107,30 +136,46 @@ if (isset($_POST['submit'])) {
             </p>
             <input class="w3-input w3-border" type="text" maxlength="50" value="" name="city" id="city"/>
             <p>
-                <label>State/province</label>
-            </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="state" id="state"/>
-            <p>
                 <label>Postal Code</label>
             </p>
             <input class="w3-input w3-border" type="text" maxlength="50" value="" name="postcode" id="postcode"/>
+
             <p>
-                <label>Country</label>
-            </p>
-            <select class="w3-select w3-border" name="country" id="country">
-                <?php print listCountries(); ?>
-            </select>
-            <p>
-                <label>Phone number</label>
+                <label>Phone number<span class="w3-text-red">*</span></label>
             </p>
             <input class="w3-input w3-border" type="tel" value="" name="phoneNumber"/>
+
             <p>
-                <label>Status</label>
+                <label>Facebook Link</label>
+            </p>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="facebook" id="facebook"/>
+            <p>
+                <label>Twitter Link</label>
+            </p>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="twitter" id="twitter"/>
+            <p>
+                <label>LinkedIn Link</label>
+            </p>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="linkedin" id="linkedin"/>
+
+            <p>
+                <label>Status<span class="w3-text-red">*</span></label>
             </p>
             <label>Student</label>
             <input class="w3-check w3-border" type="checkbox" name="status" value=0/>
             <label>Working Professional</label>
             <input class="w3-check w3-border" type="checkbox" name="status" value=1/>
+
+            <p>
+                <label>Preference</label>
+            </p>
+            <label>Mentor</label>
+            <input class="w3-check w3-border" type="checkbox" name="preference" value=0/>
+            <label>Mentee</label>
+            <input class="w3-check w3-border" type="checkbox" name="preference" value=1/>
+            <label>Not Interested</label>
+            <input class="w3-check w3-border" type="checkbox" name="preference" value=1/>
+
             <p>
                 <h2>Education History</h2>
             </p>

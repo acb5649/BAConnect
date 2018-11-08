@@ -75,8 +75,7 @@
 
 
             <select class="w3-select w3-border" name="country" id="country" onchange="showStates(this.value)">
-                <?php $list = "<option value= '-1'>Please select a Country</option> " . listCountries();
-                print $list; ?>
+                <?php echo "<option value= '-1'>Please select a Country</option> " . listCountries(); ?>
             </select>
 
             <h1>Add new State</h1>
