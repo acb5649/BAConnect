@@ -38,6 +38,157 @@ if(isset($_POST["action"]) && $_POST["action"] == "openModal"){
     echo "<script>document.getElementById('" . $_POST["modal"] . "').style.display='block';</script>";
 }
 
+if (isset($_POST['register'])) {
+    $error = false;
+    $msg = "";
+
+    $requiredPOSTFieldNames = array('password', 'confirmedPassword', 'username', 'firstName', 'lastName', 'email', 'gender', 'phoneNumber', 'status', 'preference', 'state', 'country', 'numDegs', 'numJobs');
+    $optionalPOSTFieldNames = array('middleName', 'street', 'street2', 'city', 'postcode', 'facebook', 'twitter', 'linkedin');
+
+    foreach ($requiredPOSTFieldNames as $req) {
+        if (isset($_REQUEST[$req])) {
+            $_SESSION[$req] = Input::str($_POST[$req]);
+        } else {
+            $error = true;
+        }
+    }
+
+    foreach ($optionalPOSTFieldNames as $req) {
+        $_SESSION[$req] = (isset($_REQUEST[$req]) ? $_SESSION[$req] = Input::str($_POST[$req]) : $_SESSION[$req] = "");
+    }
+
+    // Collect Education and Work Histories
+    $degree = array();
+    for ($degreeNum = 0; $degreeNum < $_SESSION['numDegs']; $degreeNum++) {
+        foreach (array('schoolName_' . $degreeNum, 'degreeType_' . $degreeNum, 'major_' . $degreeNum, 'enrollmentYear_' . $degreeNum, 'gradYear_' . $degreeNum) as $req) {
+            $_SESSION[$req] = (isset($_REQUEST[$req]) ? $_SESSION[$req] = Input::str($_POST[$req]) : $_SESSION[$req] = "");
+        }
+        if ($_SESSION['schoolName_' . $degreeNum] != "" && $_SESSION['major_' . $degreeNum] != "") {
+            $degree[$degreeNum] = new EducationHistoryEntry($_SESSION['schoolName_' . $degreeNum], $_SESSION['degreeType_' . $degreeNum], $_SESSION['major_' . $degreeNum], $_SESSION['enrollmentYear_' . $degreeNum], $_SESSION['gradYear_' . $degreeNum]);
+        }
+    }
+
+    $work = array();
+    for ($jobNum = 0; $jobNum < $_SESSION['numJobs']; $jobNum++) {
+        foreach (array('employerName_' . $degreeNum, 'jobTitle' . $degreeNum, 'startYear_' . $degreeNum, 'endYear_' . $degreeNum) as $req) {
+            $_SESSION[$req] = (isset($_REQUEST[$req]) ? $_SESSION[$req] = Input::str($_POST[$req]) : $_SESSION[$req] = "");
+        }
+        if ($_SESSION['employerName_' . $degreeNum] != "" && $_SESSION['jobTitle' . $degreeNum] != "") {
+            $work[$jobNum] = new WorkHistoryEntry($_SESSION['employerName_' . $degreeNum], $_SESSION['jobTitle' . $degreeNum], $_SESSION['startYear_' . $degreeNum], $_SESSION['endYear_' . $degreeNum]);
+        }
+    }
+
+    // handle files
+    $picturePath = $_FILES['profile']['tmp_name'];
+    $resumePath = $_FILES['resume']['tmp_name'];
+
+    // verify password
+    if ($_SESSION['password'] != $_SESSION['confirmedPassword']) {
+        $error = true;
+        $msg .= "\nPasswords do not match.";
+    } elseif (!(preg_match('/[A-Za-z]/', $_SESSION['password']) && preg_match('/[0-9]/', $_SESSION['password']))) {
+        $error = true;
+        $msg .= "\nPassword must contain a capital letter and a number.";
+    } elseif (strlen($_SESSION['password']) < 12) {
+        $error = true;
+        $msg .= "\nPassword must be 12 or more characters.";
+    }
+
+    // verify email format and if we already have that email in the server
+    $sanitized_email = Input::email($_SESSION['email']);
+    if (!$sanitized_email) {
+        $error = true;
+        $msg .= "\nEmail is not a valid address.";
+    }
+    $_SESSION['email'] = $sanitized_email;
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("select account_ID from Information where email_address = ?");
+    $stmt->bindValue(1, $_SESSION['email'], PDO::PARAM_STR);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row != null) {
+        $error = true;
+        $msg .= "\nAn account with this email already exists.";
+    }
+    $con = null;
+
+    // check that username is unique
+    $con = Connection::connect();
+    $stmt = $con->prepare("select account_ID from Account where username = ?");
+    $stmt->bindValue(1, $_SESSION['username'], PDO::PARAM_STR);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row != null) {
+        $error = true;
+        $msg .= "\nAn account with this username already exists.";
+    }
+    $con = null;
+
+    // check that gender is in range
+    if (!is_numeric($_SESSION['gender']) || $_SESSION['gender'] > 2 || $_SESSION['gender'] < 0) {
+        $error = true;
+        $msg .= "\nInvalid gender.";
+    }
+
+    // check that status is in range
+    if (!is_numeric($_SESSION['status']) || ($_SESSION['status'] != 0 && $_SESSION['status'] != 1)) {
+        $error = true;
+        $msg .= "\nInvalid status.";
+    }
+
+    // check that preference is in range
+    if (!is_numeric($_SESSION['preference']) || $_SESSION['preference'] > 2 || $_SESSION['preference'] < 0) {
+        $error = true;
+        $msg .= "\nInvalid preference.";
+    }
+
+    // check that country is a number that correlates to a country in the db
+    if (!is_numeric($_SESSION['country'])) {
+        $error = true;
+        $msg .= "\nInvalid country.";
+    }
+    $con = Connection::connect();
+    $stmt = $con->prepare("select country from Countries where country_ID = ?");
+    $stmt->bindValue(1, $_SESSION['country'], PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if(empty($row)) {
+        $error = true;
+        $msg .= "\nInvalid country.";
+    }
+    $con = null;
+
+    // check that state is a number that correlates to a state and a country in the db
+    if (!is_numeric($_SESSION['state'])) {
+        $error = true;
+        $msg .= "\nInvalid state.";
+    }
+    $con = Connection::connect();
+    $stmt = $con->prepare("select state from States where state_ID = ? and country_ID = ?");
+    $stmt->bindValue(1, $_SESSION['state'], PDO::PARAM_INT);
+    $stmt->bindValue(2, $_SESSION['country'], PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if(empty($row)) {
+        $error = true;
+        $msg .= "\nInvalid state.";
+    }
+    $con = null;
+
+    if ($error == false) {
+        $user = new User($_SESSION['username'], $_SESSION['password'], $_SESSION['firstName'], $_SESSION['middleName'], $_SESSION['lastName'], $_SESSION['email'], $_SESSION['gender'], $_SESSION['phoneNumber'], $_SESSION['$status']);
+        $address = new Address($_SESSION['street'], $_SESSION['street2'], $_SESSION['city'], $_SESSION['postcode'], $_SESSION['state'], $_SESSION['country']);
+        registerUser($user, $address, $degree, $work, $picturePath, $resumePath);
+        header("Location: created.php");
+        die();
+    } else {
+        $_SESSION['msg'] = $msg;
+        header("Location: index.php");
+        die();
+    }
+}
+
 ?>
 <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
 <!DOCTYPE html>
@@ -121,7 +272,6 @@ if(isset($_POST["action"]) && $_POST["action"] == "openModal"){
                 }
             }
         };
-
     </script>
 </head>
 
@@ -133,4 +283,12 @@ if(isset($_POST["action"]) && $_POST["action"] == "openModal"){
 
 </div>
 </body>
+<script>
+    <?php
+    if (isset($_SESSION['msg'])) {
+        echo "document.getElementById('registerModal').style.display='block'";
+        session_unset();
+    }
+    ?>
+</script>
 </html>

@@ -134,7 +134,7 @@ class WorkHistoryEntry {
 }
 
 class  Input {
-    static $errors = true;
+    static $errors = false;
 
     static function check($arr, $on = false) {
         if ($on === false) {

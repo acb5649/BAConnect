@@ -44,23 +44,8 @@
 
     //print $msg;
 ?>
-<html>
-<head>
-    <script>
-    function showStates(countryID){
-        if(countryID != ""){
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function(){
-                if(this.readyState == 4 && this.status == 200){
-                    document.getElementById("state").innerHTML = this.responseText;
-                }
-            };
-            xmlhttp.open("GET", "AJAX.php?action=refreshState&country=" + countryID, true);
-            xmlhttp.send();
-        }
-    }
-    </script>
-</head>
+
+<script src="js/showStates.js"></script>
 <div id="addStateModal" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
         <header class="w3-container w3-lime w3-center w3-padding-32">
@@ -118,5 +103,3 @@
         </form>
     </div>
 </div>
-
-</html>
