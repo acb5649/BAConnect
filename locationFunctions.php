@@ -142,6 +142,7 @@ function getCountry($account_id) {
 
 /* NOTE: General Address functions section */
 
+
 function registerNewAddress($address) {
     $con = Connection::connect();
     $stmt = $con->prepare("insert into Addresses (country_ID, state, city, post_code, street_address, street_address2) values (?, ?, ?, ?, ?, ?)");
