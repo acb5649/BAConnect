@@ -2,39 +2,35 @@
 require_once "session.php";
 require_once "database.php";
 
+$allowEdit = FALSE;
 
-
-if (isset($_REQUEST['user']) && isset($_SESSION["account_ID"])) {
-    if ($_SESSION["account_ID"] == $_REQUEST['user']) {
-        $profile_account_id = $_SESSION["account_ID"];
-        if (isset($_REQUEST["action"])) {
-            // we're handling a request, don't redirect!
-
-            $allowEdit = TRUE;
-        } else {
-            //User is on own profile, they get edit privleges.
-            //header("location: profile.php");
-            $allowEdit = TRUE;
-        }
-    } elseif (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
-        // accessing user is an admin, they get edit privleges too.
-        $profile_account_id = $_REQUEST['user'];
-        $allowEdit = TRUE;
-    } else {
-        // a normal user is looking at another user's profile, no editing.
-        $profile_account_id = $_REQUEST['user'];
-        $allowEdit = FALSE;
-    }
-} elseif (isset($_SESSION["account_ID"])) {
-    $profile_account_id = $_SESSION["account_ID"];
-    $allowEdit = FALSE;
-} else {
-    if (isset($_REQUEST['user'])) {
-        $profile_account_id = $_REQUEST['user'];
-        $allowEdit = FALSE;
+if (isset($_REQUEST["action"])) {
+    if (isset($_SESSION["profile_ID"])) {
+        $profile_account_id = $_SESSION["profile_ID"];
     } else {
         header("location: index.php");
-        $allowEdit = FALSE;
+    }
+} else {
+    if (isset($_SESSION["account_ID"])) {
+        if (isset($_REQUEST['user'])) {
+            // User parameter set, so we show that user's page.
+            $profile_account_id = $_REQUEST['user'];
+            $_SESSION["profile_ID"] = $_REQUEST['user'];
+            if ($_SESSION["account_ID"] == $_REQUEST['user']) {
+                $allowEdit = TRUE;
+            } elseif (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
+                $allowEdit = TRUE;
+            }
+        } else {
+            // Without a user parameter set, redirect to logged in user's own profile.
+            $profile_account_id = $_SESSION["account_ID"];
+            $_SESSION["profile_ID"] = $_SESSION["account_ID"];
+            $allowEdit = TRUE;
+        }
+    } elseif (isset($_REQUEST['user'])) {
+        // No user is logged in
+        $profile_account_id = $_REQUEST['user'];
+        $_SESSION["profile_ID"] = $_REQUEST['user'];
     }
 }
 
