@@ -334,12 +334,12 @@ function formatMentorships($profile_account_id) {
     $current = getCurrentMentorships($profile_account_id);
     $ended = getEndedMentorships($profile_account_id);
 
-    $result = '<table id="mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Began</th><th>Ended</th></tr></thead><tbody>';
+    $result = '<hr><table id="mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Began</th><th>Ended</th></tr></thead><tbody>';
 
     foreach($current as $cur) {
         $result .= "<tr>";
-        $result .= "<th>" . $cur['mentor_ID'] . "</th>";
-        $result .= "<th>" . $cur['mentee_ID'] . "</th>";
+        $result .= "<th><h6>" . getName($cur['mentor_ID']) . "</h6></th>";
+        $result .= "<th><h6>" . getName($cur['mentee_ID']) . "</h6></th>";
         $result .= "<th>" . $cur['start'] . "</th>";
         $result .= "<th>" . $cur['end'] . "</th>";
         $result .= "</tr>";
@@ -347,8 +347,8 @@ function formatMentorships($profile_account_id) {
 
     foreach($ended as $cur) {
         $result .= "<tr>";
-        $result .= "<th>" . $cur['mentor_ID'] . "</th>";
-        $result .= "<th>" . $cur['mentee_ID'] . "</th>";
+        $result .= "<th><h6>" . getName($cur['mentor_ID']) . "</h6></th>";
+        $result .= "<th><h6>" . getName($cur['mentee_ID']) . "</h6></th>";
         $result .= "<th>" . $cur['start'] . "</th>";
         $result .= "<th>" . $cur['end'] . "</th>";
         $result .= "</tr>";
@@ -362,7 +362,7 @@ function formatPendingMentorships($profile_account_id) {
     $pending = getPendingMentorships($profile_account_id);
 
 
-    $result = '<table id="pending_mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Approve Request</th><th>Delete Request</th></tr></thead><tbody>';
+    $result = '<hr><table id="pending_mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Approve Request</th><th>Delete Request</th></tr></thead><tbody>';
 
     foreach($pending as $cur) {
 
@@ -721,7 +721,7 @@ function formatPendingMentorships($profile_account_id) {
             <?php if ($allowEdit) { echo "
             <div id=\"pending\" class=\"w3-container w3-display-container w3-card w3-white w3-margin-bottom\">
                 <h2 class=\"w3-text-grey w3-padding-16\"><i class=\"fa fa-users fa-fw w3-margin-right w3-xxlarge w3-text-lime\"></i>Pending Mentorships</h2>
-                <div id=\"pending_content\" class=\"w3-container w3-padding-32 w3-text-grey\">
+                <div id=\"pending_content\" class=\"w3-container w3-text-grey\" style=\"padding-bottom:32px\">
                     " . formatPendingMentorships($profile_account_id) . "
                 </div>
             </div>"; } ?>
@@ -738,7 +738,7 @@ function formatPendingMentorships($profile_account_id) {
 
             <div id="mentorships" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-users fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Mentorships</h2>
-                <div class="w3-container w3-padding-32 w3-text-grey">
+                <div class="w3-container w3-text-grey" style="padding-bottom:32px">
                     <?php echo formatMentorships($profile_account_id); ?>
                 </div>
             </div>
