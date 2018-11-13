@@ -1,3 +1,14 @@
+function getDegreeList(i) {
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            document.getElementById('degreeType_' + i).innerHTML = this.responseText;
+        }
+    };
+    xmlhttp.open("GET", "AJAX.php?action=getDegrees", true);
+    xmlhttp.send();
+}
+
 function removeEducationField(number) {
     document.getElementById("eduContainer_" + number).remove();
     //document.getElementById("eduMember_" + number).remove();
@@ -72,7 +83,8 @@ function addEducationField() {
     select.name = "degreeType_" + number;
     select.id = "degreeType_" + number;
     select.className = "w3-select w3-border";
-    select.innerHTML = '<?php print listDegreeTypes(); ?>';
+    select.innerHTML = '';
+    getDegreeList(number);
 
     parent.appendChild(select);
 

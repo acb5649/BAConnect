@@ -15,4 +15,8 @@ if($_GET["action"] == "refreshState"){
     echo $options;
 }
 
+if($_GET["action"] == "getDegrees"){
+    echo listDegreeTypes();
+}
+
 ?>
