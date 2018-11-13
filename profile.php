@@ -261,9 +261,9 @@ function putItInASpan($thing) {
 function formatDegrees($degrees) {
     $result = "";
     foreach($degrees as $degree) {
-        $result .= '<hr><div class="w3-container"><h5 class="w3-opacity"><b>';
+        $result .= '<hr><div class="w3-container"><h5 class="w3-opacity">';
         $result .= $degree[1] . " / " . $degree[0];
-        $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
+        $result .= '</h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
         $result .= $degree[3] . " - " . $degree[2];
         $result .= '</h6></div>';
     }
@@ -298,9 +298,9 @@ function formatDegreesEditable($degrees, $profile_account_ID) {
 function formatJobs($jobs) {
     $result = "";
     foreach ($jobs as $job) {
-        $result .= '<hr><div class="w3-container"><h5 class="w3-opacity"><b>';
+        $result .= '<hr><div class="w3-container"><h5 class="w3-opacity">';
         $result .= $job[1] . " / " . $job[0];
-        $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
+        $result .= '</h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
         $result .= $job[2] . " - " . $job[3];
         $result .= '</h6></div>';
     }
@@ -375,14 +375,14 @@ function formatPendingMentorships($profile_account_id) {
             $disabled = 'disabled=""';
         }
 
-        $accept = '<button ' . $disabled . ' name="accept" class="w3-button w3-third w3-lime w3-section" onclick="handlePendingMentorship(\'' . $id . '\', 1);">Accept</button>';
-        $decline = '<button name="decline" class="w3-button w3-third w3-red w3-section" onclick="handlePendingMentorship(\'' . $id . '\', 0);">Decline</button>';
+        $accept = '<button ' . $disabled . ' name="accept" class="w3-button w3-lime" onclick="handlePendingMentorship(\'' . $id . '\', 1);">Accept</button>';
+        $decline = '<button name="decline" class="w3-button w3-red" onclick="handlePendingMentorship(\'' . $id . '\', 0);">Decline</button>';
 
         $result .= "<tr>";
-        $result .= "<th>" . $cur['mentor_ID'] . "</th>";
-        $result .= "<th>" . $cur['mentee_ID'] . "</th>";
-        $result .= "<th>" . $accept . "</th>";
-        $result .= "<th>" . $decline . "</th>";
+        $result .= "<th><h6>" . getName($cur['mentor_ID']) . "</h6></th>";
+        $result .= "<th><h6>" . getName($cur['mentee_ID']) . "</h6></th>";
+        $result .= "<th><h6>" . $accept . "</h6></th>";
+        $result .= "<th><h6>" . $decline . "</h6></th>";
         $result .= "</tr>";
     }
 
@@ -402,7 +402,7 @@ function formatPendingMentorships($profile_account_id) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="js/closeModals.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script>
         // Used to toggle the menu on small screens when clicking on the menu button
