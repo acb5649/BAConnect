@@ -286,18 +286,18 @@ function getEndedMentorships($account_id){
 
 function proposeMentorship($mentorID, $menteeID, $proposerID){
     if($mentorID == $menteeID){
-        return false;
+        return "mentor and mentee are the same";
     }
     $mentorPreference = getUserMentorshipPreference($mentorID);
     $menteePreference = getUserMentorshipPreference($menteeID);
     if($mentorPreference != "Mentor" || $menteePreference != "Mentee"){
-        if($mentorPreference == "Mentee" || $menteePreference == "Mentor"){
+        if($mentorPreference == "Mentee" && $menteePreference == "Mentor"){
             $temp = $mentorID;
             $mentorID = $menteeID;
             $menteeID = $temp;
         }
         else{
-            return false;
+            return "Incompatible mentorship preferences";
         }
     }
 
@@ -308,7 +308,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if($result != null){
-        return true;
+        return "There is already a pending mentorship with this person";
     }
 
     $stmt = $con->prepare("INSERT INTO `Pending Mentorship` (pending_ID, mentor_ID, mentee_ID, mentor_status, mentee_status, request_date) VALUES (?, ?, ?, ?, ?, ?)");
@@ -356,7 +356,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
         $mentorEmail = getEmail($mentorID);
         mail($mentorEmail, "BAConnect: Mentorship Proposal", "A user has proposed a mentorship relationship with you. Click this link to log-in and view your profile: http://corsair.cs.iupui.edu:22891/courseproject/profile.php");
     }
-    return true;
+    return "Mentorship has been proposed";
 }
 
 function forcePairMentorships($account_id,$mentorAccID, $menteeAccID){

@@ -228,6 +228,15 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest")
     }
 }
 
+if(isset($_REQUEST['action']) && $_REQUEST['action'] == "sendMentorshipRequest"){
+    $user = $_REQUEST['user'];
+    $proposerID = $_SESSION['account_ID'];
+
+    $message = proposeMentorship($user, $proposerID, $proposerID) . "<br>";
+    print $message;
+    die();
+}
+
 
 function makeEditable($allowEdit, $id) {
     if ($allowEdit) {
@@ -398,7 +407,7 @@ function formatPendingMentorships($profile_account_id) {
                 x.className = x.className.replace(" w3-show", "");
             }
         }
-        
+
         function init() {
 
         }
