@@ -87,15 +87,15 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
         updateUserAddress($profile_account_id, $address);
     }
 
-    if (isset($_POST['fb'])) {
+    if (isset($_POST['profile_facebook'])) {
         $stmt = $con->prepare("UPDATE Information set facebook = ? where account_ID = '" . $profile_account_id . "'");
-        $stmt->bindValue(1, $_POST['fb'], PDO::PARAM_STR);
+        $stmt->bindValue(1, $_POST['profile_facebook'], PDO::PARAM_STR);
         $stmt->execute();
     }
 
-    if (isset($_POST['li'])) {
+    if (isset($_POST['profile_linkedin'])) {
         $stmt = $con->prepare("UPDATE Information set linkedin = ? where account_ID = '" . $profile_account_id . "'");
-        $stmt->bindValue(1, $_POST['li'], PDO::PARAM_STR);
+        $stmt->bindValue(1, $_POST['profile_linkedin'], PDO::PARAM_STR);
         $stmt->execute();
     }
 
@@ -334,7 +334,7 @@ function formatMentorships($profile_account_id) {
     $current = getCurrentMentorships($profile_account_id);
     $ended = getEndedMentorships($profile_account_id);
 
-    $result = '<hr><table id="mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Began</th><th>Ended</th></tr></thead><tbody>';
+    $result = '<table id="mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Began</th><th>Ended</th></tr></thead><tbody>';
 
     foreach($current as $cur) {
         $result .= "<tr>";
@@ -362,7 +362,7 @@ function formatPendingMentorships($profile_account_id) {
     $pending = getPendingMentorships($profile_account_id);
 
 
-    $result = '<hr><table id="pending_mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Approve Request</th><th>Delete Request</th></tr></thead><tbody>';
+    $result = '<table id="pending_mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Approve Request</th><th>Delete Request</th></tr></thead><tbody>';
 
     foreach($pending as $cur) {
 
@@ -637,7 +637,7 @@ function formatPendingMentorships($profile_account_id) {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Facebook:</p>
                     <form method="post" action="profile.php">
-                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getFacebookLink($profile_account_id); ?>" name="fb" id="fb"/>
+                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getFacebookLink($profile_account_id); ?>" name="profile_facebook" id="profile_facebook"/>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Facebook</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_facebook');">Cancel</button>
@@ -646,7 +646,7 @@ function formatPendingMentorships($profile_account_id) {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Linkedin:</p>
                     <form method="post" action="profile.php">
-                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getLinkedinLink($profile_account_id); ?>" name="li" id="li"/>
+                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getLinkedinLink($profile_account_id); ?>" name="profile_linkedin" id="profile_linkedin"/>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Linkedin</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_linkedin');">Cancel</button>
@@ -699,12 +699,14 @@ function formatPendingMentorships($profile_account_id) {
                     <p class="w3-display-container" id="status"><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($profile_account_id)) . makeEditable($allowEdit, "status")?></p>
                     <p class="w3-display-container" id="location"><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($profile_account_id)) . makeEditable($allowEdit, "location")?></p>
                     <p class="w3-display-container" id="countrySpan"><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($profile_account_id))?></p>
+                    <?php if ($allowEdit) {
+                        echo "<hr>";
+                        echo '<p class="w3-display-container" id="profile_email"><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getEmail($profile_account_id)) . makeEditable($allowEdit, "profile_email") . '</p>';
+                        echo '<p class="w3-display-container" id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getPhoneNumber($profile_account_id)) . makeEditable($allowEdit, "phone") . '</p>';
+                    } ?>
                     <hr>
-                    <p class="w3-display-container" id="profile_email"><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($profile_account_id)) . makeEditable($allowEdit, "profile_email")?></p>
-                    <p class="w3-display-container" id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($profile_account_id)) . makeEditable($allowEdit, "phone")?></p>
-                    <hr>
-                    <p class="w3-display-container" id="facebook"><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($profile_account_id)) . makeEditable($allowEdit, "profile_facebook")?></p>
-                    <p class="w3-display-container" id="linkedin"><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($profile_account_id)) . makeEditable($allowEdit, "profile_linkedin")?></p>
+                    <p class="w3-display-container" id="profile_facebook"><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($profile_account_id)) . makeEditable($allowEdit, "profile_facebook")?></p>
+                    <p class="w3-display-container" id="profile_linkedin"><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($profile_account_id)) . makeEditable($allowEdit, "profile_linkedin")?></p>
                     <hr>
 
                     <button id="request" <?php if (hasAlreadySentRequest($profile_account_id)) { echo "disabled=''"; } ?> class="w3-button w3-block w3-dark-grey" onclick="sendMentorshipRequest()">+ Connect</button>

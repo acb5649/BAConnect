@@ -168,6 +168,7 @@ table.dataTable.display tbody tr:hover.selected > .sorting_3, table.dataTable.or
   background-color: #a5b2cb;
 }
 table.dataTable.no-footer {
+  border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
 table.dataTable.nowrap th, table.dataTable.nowrap td {
