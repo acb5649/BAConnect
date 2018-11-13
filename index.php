@@ -188,7 +188,9 @@ if (isset($_POST['register'])) {
         header("Location: created.php");
         die();
     } else {
+        $_SESSION['title'] = "Error in Registration";
         $_SESSION['msg'] = $msg;
+        $_SESSION['nextModal'] = 'registerModal';
         header("Location: index.php");
         die();
     }
@@ -211,6 +213,14 @@ if(isset($_POST['editSearch']) && isset($_POST['username'])) {
     $stmt->execute();
 
     $row = $stmt->fetch();
+
+    if ($row == null) {
+        $_SESSION['title'] = "Error in Profile Search";
+        $_SESSION['msg'] = "There is no user with the given username.";
+        $_SESSION['nextModal'] = 'editModal';
+        header("Location: index.php");
+        die();
+    }
 
     header("Location: profile.php?user=" . $row['account_ID']);
     die;
@@ -275,9 +285,14 @@ if(isset($_POST['upgrade'])){
 </div>
 </body>
 <?php
-if (isset($_SESSION['msg'])) {
-    echo "<script>document.getElementById('registerModal').style.display='block'</script>";
-    session_unset();
+
+require_once "dialog.php";
+
+if (isset($_SESSION['title']) && isset($_SESSION['msg']) && isset($_SESSION['nextModal'])) {
+    echo "<script>document.getElementById('dialogModal').style.display='block'</script>";
+    unset($_SESSION['title']);
+    unset($_SESSION['msg']);
+    unset($_SESSION['nextModal']);
 }
 ?>
 <script>
