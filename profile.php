@@ -261,11 +261,11 @@ function putItInASpan($thing) {
 function formatDegrees($degrees) {
     $result = "";
     foreach($degrees as $degree) {
-        $result .= '<div class="w3-container"><h5 class="w3-opacity"><b>';
+        $result .= '<hr><div class="w3-container"><h5 class="w3-opacity"><b>';
         $result .= $degree[1] . " / " . $degree[0];
         $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
         $result .= $degree[3] . " - " . $degree[2];
-        $result .= '</h6><hr></div>';
+        $result .= '</h6></div>';
     }
     return $result;
 }
@@ -298,11 +298,11 @@ function formatDegreesEditable($degrees, $profile_account_ID) {
 function formatJobs($jobs) {
     $result = "";
     foreach ($jobs as $job) {
-        $result .= '<div class="w3-container"><h5 class="w3-opacity"><b>';
+        $result .= '<hr><div class="w3-container"><h5 class="w3-opacity"><b>';
         $result .= $job[1] . " / " . $job[0];
         $result .= '</b></h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
         $result .= $job[2] . " - " . $job[3];
-        $result .= '</h6><hr></div>';
+        $result .= '</h6></div>';
     }
     return $result;
 }
@@ -368,7 +368,14 @@ function formatPendingMentorships($profile_account_id) {
 
         $id = $cur['pending_ID'];
 
-        $accept = '<button name="accept" class="w3-button w3-third w3-lime w3-section" onclick="handlePendingMentorship(\'' . $id . '\', 1);">Accept</button>';
+        $disabled = "";
+        if($profile_account_id == $cur['mentor_ID'] && $cur['mentor_status'] == 1) {
+            $disabled = 'disabled=""';
+        } elseif($profile_account_id == $cur['mentee_ID'] && $cur['mentee_status'] == 1) {
+            $disabled = 'disabled=""';
+        }
+
+        $accept = '<button ' . $disabled . ' name="accept" class="w3-button w3-third w3-lime w3-section" onclick="handlePendingMentorship(\'' . $id . '\', 1);">Accept</button>';
         $decline = '<button name="decline" class="w3-button w3-third w3-red w3-section" onclick="handlePendingMentorship(\'' . $id . '\', 0);">Decline</button>';
 
         $result .= "<tr>";
