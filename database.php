@@ -2,7 +2,7 @@
 
 require_once "dbhelper.php";
 require_once "locationFunctions.php";
-require_once "mentorshipFunctions";
+require_once "mentorshipFunctions.php";
 
 class Connection {
     public static function connect() {

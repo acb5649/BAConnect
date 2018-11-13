@@ -55,7 +55,7 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
     }
 
     if($account_id == $result['mentor_ID']){
-        if($response == TRUE){
+        if($response == 1){
             if($result['mentor_status'] == "1"){
                 return TRUE; //this user has already approved of this relationghip, so nothing happens.
             }
@@ -74,7 +74,7 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
         }
     }
     else if($account_id == $result['mentee_ID']){
-        if($response == TRUE){
+        if($response == 1){
             if($result['mentee_status'] == "1"){
                 return TRUE; //this user has already approved of this relationghip, so nothing happens.
             }

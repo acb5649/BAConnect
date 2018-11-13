@@ -25,9 +25,15 @@ if (isset($_REQUEST['user']) && isset($_SESSION["account_ID"])) {
     }
 } elseif (isset($_SESSION["account_ID"])) {
     $profile_account_id = $_SESSION["account_ID"];
-    $allowEdit = TRUE;
+    $allowEdit = FALSE;
 } else {
-    header("location: index.php");
+    if (isset($_REQUEST['user'])) {
+        $profile_account_id = $_REQUEST['user'];
+        $allowEdit = FALSE;
+    } else {
+        header("location: index.php");
+        $allowEdit = FALSE;
+    }
 }
 
 if (isset($_POST['submit']) && isset($_FILES['profile'])) {
@@ -166,7 +172,7 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     die();
 }
 
-if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == "addEmptyJob") {
     echo '  <form method="post" class="w3-container w3-text-grey" action="profile.php">
             <p><span>Company:</span></p>
             <input class="w3-input w3-border" type="text" value="" name="employer"/>
@@ -185,30 +191,45 @@ if (isset($_GET['action']) && $_GET['action'] == "addEmptyJob") {
     die();
 }
 
-if (isset($_GET['action']) && $_GET['action'] == "addEmptyDegree") {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == "addEmptyDegree") {
     echo '<form method="post" class="w3-container w3-text-grey" action="profile.php"><p><span>Degree Type:</span></p><select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . '</select><p><span>Major:</span></p><input class="w3-input w3-border" type="text" value="" name="major"/><p><span>University/College:</span></p><input class="w3-input w3-border" type="text" value="" name="school"/><p><span>Enrollment Year:</span></p><input class="w3-input w3-border" type="text" value="" name="start"/><p><span>Graduation Year:</span></p><input class="w3-input w3-border" type="text" value="" name="end"/><input type="hidden" id="degree_ID" name="degree_ID" value="-1"><input type="hidden" id="user" name="user" value="' . $_REQUEST['user'] . '"><button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button><button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button><hr></form>';
     die();
 }
 
-if (isset($_GET['action']) && $_GET['action'] == "getFormattedDegrees") {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == "getFormattedDegrees") {
     echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>' . formatDegrees(getDegrees($profile_account_id)) . makeHistoryElementEditable($allowEdit, "degrees");
     die();
 }
 
-if (isset($_GET['action']) && $_GET['action'] == "getFormattedJobs") {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == "getFormattedJobs") {
     echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>' . formatJobs(getJobs($profile_account_id)) . makeHistoryElementEditable($allowEdit, "jobs");
     die();
 }
 
-if (isset($_GET['action']) && $_GET['action'] == "getEditableFormattedDegrees") {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == "getEditableFormattedDegrees") {
     echo formatDegreesEditable(getDegrees($profile_account_id), $profile_account_id);
     die();
 }
 
-if (isset($_GET['action']) && $_GET['action'] == "getEditableFormattedJobs") {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == "getEditableFormattedJobs") {
     echo formatJobsEditable(getJobs($profile_account_id), $profile_account_id);
     die();
 }
+
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest") {
+    $user = $_REQUEST['user'];
+    $pending = $_REQUEST['pending'];
+    $response = $_REQUEST['response'];
+
+    $success = pendingMentorshipResponse($user, $pending, $response);
+    if ($success) {
+        echo formatPendingMentorships($profile_account_id);
+        die();
+    } else {
+        die();
+    }
+}
+
 
 function makeEditable($allowEdit, $id) {
     if ($allowEdit) {
@@ -330,6 +351,31 @@ function formatMentorships($profile_account_id) {
     return $result;
 }
 
+function formatPendingMentorships($profile_account_id) {
+    $pending = getPendingMentorships($profile_account_id);
+
+
+    $result = '<table id="pending_mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Approve Request</th><th>Delete Request</th></tr></thead><tbody>';
+
+    foreach($pending as $cur) {
+
+        $id = $cur['pending_ID'];
+
+        $accept = '<button name="accept" class="w3-button w3-third w3-lime w3-section" onclick="handlePendingMentorship(\'' . $id . '\', 1);">Accept</button>';
+        $decline = '<button name="decline" class="w3-button w3-third w3-red w3-section" onclick="handlePendingMentorship(\'' . $id . '\', 0);">Decline</button>';
+
+        $result .= "<tr>";
+        $result .= "<th>" . $cur['mentor_ID'] . "</th>";
+        $result .= "<th>" . $cur['mentee_ID'] . "</th>";
+        $result .= "<th>" . $accept . "</th>";
+        $result .= "<th>" . $decline . "</th>";
+        $result .= "</tr>";
+    }
+
+    $result .= '</tbody></table>';
+    return $result;
+}
+
 ?>
 <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
 <!DOCTYPE html>
@@ -366,6 +412,12 @@ function formatMentorships($profile_account_id) {
                 "info":     false,
                 "searching":   false
             });
+            $('#pending_mentorship_history_table').DataTable({
+                "paging":   false,
+                "ordering": false,
+                "info":     false,
+                "searching":   false
+            });
         });
 
         function showStates(countryID){
@@ -379,6 +431,25 @@ function formatMentorships($profile_account_id) {
                 xmlhttp.open("GET", "AJAX.php?action=refreshState&country=" + countryID, true);
                 xmlhttp.send();
             }
+        }
+
+        function handlePendingMentorship(pending_id, accept = 0) {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    $('#pending_mentorship_history_table').DataTable().destroy();
+                    document.getElementById("pending_content").innerHTML = this.responseText;
+                    $('#pending_mentorship_history_table').DataTable({
+                        "paging":   false,
+                        "ordering": false,
+                        "info":     false,
+                        "searching":   false
+                    });
+                }
+            };
+
+            xmlhttp.open("POST", "profile.php?action=handlePendingRequest&user=<?php echo $profile_account_id?>&pending=" + pending_id+ "&response=" +  accept, true);
+            xmlhttp.send();
         }
 
         function enterHistoryElementEditState(id) {
@@ -621,6 +692,14 @@ function formatMentorships($profile_account_id) {
         <!-- Right Column -->
         <div class="w3-twothird">
 
+            <?php if ($allowEdit) { echo "
+            <div id=\"pending\" class=\"w3-container w3-display-container w3-card w3-white w3-margin-bottom\">
+                <h2 class=\"w3-text-grey w3-padding-16\"><i class=\"fa fa-users fa-fw w3-margin-right w3-xxlarge w3-text-lime\"></i>Pending Mentorships</h2>
+                <div id=\"pending_content\" class=\"w3-container w3-padding-32 w3-text-grey\">
+                    <?php echo formatPendingMentorships($profile_account_id); ?>
+                </div>
+            </div>"; } ?>
+
             <div id="degrees" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>
                 <?php echo formatDegrees(getDegrees($profile_account_id)) . makeHistoryElementEditable($allowEdit, "degrees"); ?>
@@ -632,7 +711,7 @@ function formatMentorships($profile_account_id) {
             </div>
 
             <div id="mentorships" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
-                <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Mentorships</h2>
+                <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-users fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Mentorships</h2>
                 <div class="w3-container w3-padding-32 w3-text-grey">
                     <?php echo formatMentorships($profile_account_id); ?>
                 </div>
