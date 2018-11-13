@@ -452,6 +452,18 @@ function formatPendingMentorships($profile_account_id) {
             xmlhttp.send();
         }
 
+        function sendMentorshipRequest() {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+
+                }
+            };
+
+            xmlhttp.open("POST", "profile.php?action=sendMentorshipRequest&user=<?php echo $profile_account_id?>", true);
+            xmlhttp.send();
+        }
+
         function enterHistoryElementEditState(id) {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
@@ -681,7 +693,7 @@ function formatPendingMentorships($profile_account_id) {
                     <p class="w3-display-container" id="linkedin"><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($profile_account_id)) . makeEditable($allowEdit, "linkedin")?></p>
                     <hr>
 
-                    <button class="w3-button w3-block w3-dark-grey">+ Connect</button>
+                    <button id="request" <?php if (hasAlreadySentRequest($profile_account_id)) { echo "disabled=''"; } ?> class="w3-button w3-block w3-dark-grey" onclick="sendMentorshipRequest()">+ Connect</button>
                     <br>
                 </div>
             </div><br>

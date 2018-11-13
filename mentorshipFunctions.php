@@ -1,4 +1,7 @@
 <?php
+
+require_once "session.php";
+
 function getUserMentorshipPreference($account_id){
   $con = Connection::connect();
   $stmt = $con->prepare("SELECT mentorship_preference FROM `Information` WHERE account_ID = '" . $account_id . "'");
@@ -377,4 +380,18 @@ function forcePairMentorships($account_id,$mentorAccID, $menteeAccID){
 		$con = null;
 	}
 }//jonathan
-?>
+
+function hasAlreadySentRequest($target_user) {
+    if (isset($_SESSION['account_ID'])) {
+        $current_user = $_SESSION['account_ID'];
+
+        $con = Connection::connect();
+        $stmt = $con->prepare("SELECT * FROM `Pending Mentorship` WHERE (mentor_ID = '" . $target_user . "' AND mentee_ID = '" . $current_user . "') OR (mentor_ID = '" . $current_user . "' AND mentee_ID = '" . $target_user . "')");
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return count($result) > 0;
+    } else {
+        return FALSE;
+    }
+}
