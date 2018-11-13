@@ -212,24 +212,56 @@ function fetchMentorID($mentorship_ID){
 	return $row['mentor_ID'];
 }//jonathan
 
-function forceEndMentorship($account_id,$targetMentorshipID){
+function endMentorship($account_id,$targetMentorshipID){
 	$accountType=getAccountTypeFromAccountID($account_id);
-	if($accountType >= 2){
-		$con = Connection::connect();
-		$date = new Datetime('NOW');
-		$dateStr = $date->format('Y-m-d H:i:s');//end date
-		$menteeID=fetchMenteeID($targetMentorshipID);
-		$mentorID=fetchMentorID($targetMentorshipID);
-		$menteeEmail = getEmail($menteeID);
-        $mentorEmail = getEmail($mentorID);
-		$menteeName=getName($menteeID);
-		$mentorName=getName($mentorID);
-		mail($menteeEmail, "BAConnect: Mentorship", "Congradulations! You have completed your mentorship with ".$mentorName.".");
-		mail($mentorEmail, "BAConnect: Mentorship", "Congradulations! You have completed your mentorship with ".$menteeEmail.".");
-		$stmt = $con->prepare("UPDATE `Mentorship` SET end = '".$dateStr."' WHERE mentorship_ID = '" . $targetMentorshipID. "'");
+
+    $con = Connection::connect();
+
+    $date = new Datetime('NOW');
+    $dateStr = $date->format('Y-m-d H:i:s');//end date
+
+    $menteeID=fetchMenteeID($targetMentorshipID);
+    $mentorID=fetchMentorID($targetMentorshipID);
+
+    $menteeEmail = getEmail($menteeID);
+    $mentorEmail = getEmail($mentorID);
+
+    $menteeName=getName($menteeID);
+    $mentorName=getName($mentorID);
+
+    if($account_id == $menteeID){
+        $message = $menteeName. " has ended your mentorship with them.";
+        mail($mentorEmail, "BAConnect: Mentorship", $message);
+
+        $message = "You have ended your mentorship with " . $mentorName . ".";
+        mail($menteeEmail, "BAConnect: Mentorship", $message);
+
+        $stmt = $con->prepare("UPDATE `Mentorship` SET (end = '".$dateStr."', terminator_ID = '". $account_id ."')  WHERE mentorship_ID = '" . $targetMentorshipID. "'");
 		$stmt->execute();
-		$con = null;
+    }
+    else if($account_id == $mentorID){
+        $message = $mentorName. " has ended your mentorship with them.";
+        mail($menteeEmail, "BAConnect: Mentorship", $message);
+
+        $message = "You have ended your mentorship with " . $menteeName . ".";
+        mail($mentorEmail, "BAConnect: Mentorship", $message);
+
+        $stmt = $con->prepare("UPDATE `Mentorship` SET (end = '".$dateStr."', terminator_ID = '". $account_id ."')  WHERE mentorship_ID = '" . $targetMentorshipID. "'");
+		$stmt->execute();
+    }
+	else if($accountType >= 2){
+		mail($menteeEmail, "BAConnect: Mentorship", "An admin has ended your mentorship with ".$mentorName.".");
+		mail($mentorEmail, "BAConnect: Mentorship", "An admin has ended your mentorship with ".$menteeName.".");
+		$stmt = $con->prepare("UPDATE `Mentorship` SET (end = '".$dateStr."', terminator_ID = '". $account_id ."')  WHERE mentorship_ID = '" . $targetMentorshipID. "'");
+		$stmt->execute();
 	}
+    else{
+        $con = null;
+        return FALSE;
+    }
+
+    $con = null;
+    return TRUE;
 }//jonathan
 
 
