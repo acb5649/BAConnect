@@ -60,6 +60,7 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
     if($account_id == $result['mentor_ID']){
         if($response == 1){
             if($result['mentor_status'] == "1"){
+                $con = null;
                 return TRUE; //this user has already approved of this relationghip, so nothing happens.
             }
             else{
@@ -68,17 +69,20 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
                 if($result['mentee_status'] == "1"){
                     resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
                 }
+                $con = null;
                 return TRUE;
             }
         }
         else{
             resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+            $con = null;
             return TRUE;
         }
     }
     else if($account_id == $result['mentee_ID']){
         if($response == 1){
             if($result['mentee_status'] == "1"){
+                $con = null;
                 return TRUE; //this user has already approved of this relationghip, so nothing happens.
             }
             else{
@@ -87,11 +91,13 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
                 if($result['mentor_status'] == "1"){
                     resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
                 }
+                $con = null;
                 return TRUE;
             }
         }
         else{
             resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+            $con = null;
             return TRUE;
         }
     }
@@ -99,12 +105,15 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
 
         if(getAccountTypeFromAccountID($account_id) == "1"){
             //the current user isn't the mentee, mentor, or an admin, so they shouldn't be here.
+            $con = null;
             return FALSE;
         }
         else{
             resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
         }
     }
+    $con = null;
+    return TRUE;
 }
 //this function will create an entry in the Mentorship table based on the info in the related entry
 //in the Pending Mentorship table. It will then delete the entry in the Pending Mentorship table.
@@ -122,6 +131,7 @@ function resolvePendingMentorship($mentorID, $menteeID, $userID){
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($result == NULL){
+        $con = null;
         return false;
     }
 
@@ -149,6 +159,9 @@ function resolvePendingMentorship($mentorID, $menteeID, $userID){
     $stmt = $con->prepare("DELETE FROM `Pending Mentorship` WHERE mentor_ID = '" . $mentorID . "' AND mentee_ID = '" . $menteeID . "'");
     $stmt->execute();
 
+    $con = null;
+
+    return TRUE;
 }
 
 
@@ -290,6 +303,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if($result != null){
+        $con = null;
         return "There is already a pending mentorship with this person";
     }
 
@@ -340,6 +354,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
         $mentorEmail = getEmail($mentorID);
         mail($mentorEmail, "BAConnect: Mentorship Proposal", "A user has proposed a mentorship relationship with you. Click this link to log-in and view your profile: http://corsair.cs.iupui.edu:22891/courseproject/profile.php");
     }
+    $con = null;
     return "Mentorship has been proposed";
 }
 
