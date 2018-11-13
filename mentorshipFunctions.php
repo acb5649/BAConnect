@@ -125,43 +125,25 @@ function resolvePendingMentorship($mentorID, $menteeID, $userID){
         return false;
     }
 
-    $stmt = $con->prepare("INSERT INTO `Mentorship` (mentorship_ID, mentor_ID, mentee_ID, start, end, terminator_ID) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bindValue(1, null , PDO::PARAM_NULL);
-    $stmt->bindValue(2, $mentorID, PDO::PARAM_INT);
-    $stmt->bindValue(3, $menteeID, PDO::PARAM_INT);
-
-    //now start building the rest of the INSERT command piece-meal depending on the Information
-    //from the Pending Mentorship entry
-
-    /*
-    if($result['mentee_status'] == "-1"){   //the mentee rejected the proposal
+    if($result['mentee_status'] == "1" && $result['mentor_status'] == "1"){ //the proposal was accepted by both the mentor and mentee
+        $stmt = $con->prepare("INSERT INTO `Mentorship` (mentorship_ID, mentor_ID, mentee_ID, start, end, terminator_ID) VALUES (?, ?, ?, CURRENT_TIMESTAMP , ?, ?)");
+        $stmt->bindValue(1, null , PDO::PARAM_NULL);
+        $stmt->bindValue(2, $mentorID, PDO::PARAM_INT);
+        $stmt->bindValue(3, $menteeID, PDO::PARAM_INT);
         $stmt->bindValue(4, NULL, PDO::PARAM_NULL);
-        $stmt->bindValue(5, NULL, PDO::CURRENT_TIMESTAMP);
-    }
-    else if($result['mentor_status'] == "-1"){ //the mentor rejected the proposal
-        $stmt->bindValue(4, NULL, PDO::PARAM_NULL);
-        $stmt->bindValue(5, NULL, PDO::CURRENT_TIMESTAMP);
-    }
-    else*/ if($result['mentee_status'] == "1" && $result['mentor_status'] == "1"){ //the proposal was accepted by both the mentor and mentee
-        $stmt->bindValue(4, null, PDO::CURRENT_TIMESTAMP);
         $stmt->bindValue(5, NULL, PDO::PARAM_NULL);
-        $stmt->bindValue(6, NULL, PDO::PARAM_NULL);
+        $stmt->execute();
 
-        //Do we send an email here?
-
-    }
-    /*else{   //the proposal was rejected by an admin
+    } else { //the proposal was denied
+        $stmt = $con->prepare("INSERT INTO `Mentorship` (mentorship_ID, mentor_ID, mentee_ID, start, end, terminator_ID) VALUES (?, ?, ?, ? , CURRENT_TIMESTAMP, ?)");
+        $stmt->bindValue(1, null , PDO::PARAM_NULL);
+        $stmt->bindValue(2, $mentorID, PDO::PARAM_INT);
+        $stmt->bindValue(3, $menteeID, PDO::PARAM_INT);
         $stmt->bindValue(4, NULL, PDO::PARAM_NULL);
-        $stmt->bindValue(5, NULL, PDO::CURRENT_TIMESTAMP);
-    }
-    */
-    else{ //the proposal was denied
-        $stmt->bindValue(4, NULL, PDO::PARAM_NULL);
-        $stmt->bindValue(5, NULL, PDO::CURRENT_TIMESTAMP);
-        $stmt->bindValue(6, $userID, PDO::PARAM_INT);
-    }
+        $stmt->bindValue(5, $userID, PDO::PARAM_INT);
+        $stmt->execute();
 
-    $stmt->execute();
+    }
 
     //now delete the entry from the Pending Mentorship table
     $stmt = $con->prepare("DELETE FROM `Pending Mentorship` WHERE mentor_ID = '" . $mentorID . "' AND mentee_ID = '" . $menteeID . "'");
