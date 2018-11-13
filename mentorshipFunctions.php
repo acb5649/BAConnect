@@ -319,17 +319,19 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
     $mentor = FALSE;
     $mentee = FALSE;
 
-    if($menteeID == $proposerID){
+
+
+    if($mentorID == $proposerID){
         $stmt->bindValue(4, 1, PDO::PARAM_INT);
-        $mentee = TRUE;
+        $mentor = FALSE;
     }
     else{
         $stmt->bindValue(4, 0, PDO::PARAM_INT);
     }
 
-    if($mentorID == $proposerID){
+    if($menteeID == $proposerID){
         $stmt->bindValue(5, 1, PDO::PARAM_INT);
-        $mentor = FALSE;
+        $mentee = TRUE;
     }
     else{
         $stmt->bindValue(5, 0, PDO::PARAM_INT);
