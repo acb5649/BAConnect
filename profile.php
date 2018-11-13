@@ -228,6 +228,18 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest")
     }
 }
 
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == "endMentorship") {
+    $mentorship_ID = $_REQUEST['id'];
+
+    $success = endMentorship($_SESSION['account_ID'], $mentorship_ID);
+    if ($success) {
+        echo formatMentorships($profile_account_id);
+        die();
+    } else {
+        die();
+    }
+}
+
 if(isset($_REQUEST['action']) && $_REQUEST['action'] == "sendMentorshipRequest"){
     $user = $_REQUEST['user'];
     $proposerID = $_SESSION['account_ID'];
@@ -333,24 +345,35 @@ function formatJobsEditable($jobs, $profile_account_ID) {
 function formatMentorships($profile_account_id) {
     $current = getCurrentMentorships($profile_account_id);
     $ended = getEndedMentorships($profile_account_id);
+    $combined = array_merge($current, $ended);
 
-    $result = '<table id="mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Began</th><th>Ended</th></tr></thead><tbody>';
+    $result = '<table id="mentorship_history_table"><thead><tr><th>Mentor</th><th>Mentee</th><th>Date Began</th><th>Date Ended</th><th>End Mentorship</th></tr></thead><tbody>';
 
-    foreach($current as $cur) {
+    foreach($combined as $cur) {
+        if ($profile_account_id == $cur['mentor_ID']) {
+            $mentorLink = getName($cur['mentor_ID']);
+            $menteeLink = '<a href="profile.php?user=' . $cur['mentee_ID'] . '">' . getName($cur['mentee_ID']) . '</a>';
+        } elseif ($profile_account_id == $cur['mentee_ID']) {
+            $mentorLink = '<a href="profile.php?user=' . $cur['mentor_ID'] . '">' . getName($cur['mentor_ID']) . '</a>';
+            $menteeLink = getName($cur['mentee_ID']);
+        }
+
+        if ($cur['end'] == null) {
+            $end = "Ongoing";
+            $endMentorship = '<button name="end" class="w3-button w3-red" onclick="endMentorship(\'' . $cur['mentorship_ID'] . '\')">End</button>';
+        } else {
+            $end = $cur['end'];
+            $endMentorship = "";
+        }
+
+
+
         $result .= "<tr>";
-        $result .= "<th><h6>" . getName($cur['mentor_ID']) . "</h6></th>";
-        $result .= "<th><h6>" . getName($cur['mentee_ID']) . "</h6></th>";
+        $result .= "<th><h6>" . $mentorLink . "</h6></th>";
+        $result .= "<th><h6>" . $menteeLink . "</h6></th>";
         $result .= "<th>" . $cur['start'] . "</th>";
-        $result .= "<th>" . $cur['end'] . "</th>";
-        $result .= "</tr>";
-    }
-
-    foreach($ended as $cur) {
-        $result .= "<tr>";
-        $result .= "<th><h6>" . getName($cur['mentor_ID']) . "</h6></th>";
-        $result .= "<th><h6>" . getName($cur['mentee_ID']) . "</h6></th>";
-        $result .= "<th>" . $cur['start'] . "</th>";
-        $result .= "<th>" . $cur['end'] . "</th>";
+        $result .= "<th>" . $end . "</th>";
+        $result .= "<th>" . $endMentorship . "</th>";
         $result .= "</tr>";
     }
 
@@ -378,9 +401,17 @@ function formatPendingMentorships($profile_account_id) {
         $accept = '<button ' . $disabled . ' name="accept" class="w3-button w3-lime" onclick="handlePendingMentorship(\'' . $id . '\', 1);">Accept</button>';
         $decline = '<button name="decline" class="w3-button w3-red" onclick="handlePendingMentorship(\'' . $id . '\', 0);">Decline</button>';
 
+        if ($profile_account_id == $cur['mentor_ID']) {
+            $mentorLink = getName($cur['mentor_ID']);
+            $menteeLink = '<a href="profile.php?user=' . $cur['mentee_ID'] . '">' . getName($cur['mentee_ID']) . '</a>';
+        } elseif ($profile_account_id == $cur['mentee_ID']) {
+            $mentorLink = '<a href="profile.php?user=' . $cur['mentor_ID'] . '">' . getName($cur['mentor_ID']) . '</a>';
+            $menteeLink = getName($cur['mentee_ID']);
+        }
+
         $result .= "<tr>";
-        $result .= "<th><h6>" . getName($cur['mentor_ID']) . "</h6></th>";
-        $result .= "<th><h6>" . getName($cur['mentee_ID']) . "</h6></th>";
+        $result .= "<th><h6>" . $mentorLink . "</h6></th>";
+        $result .= "<th><h6>" . $menteeLink . "</h6></th>";
         $result .= "<th><h6>" . $accept . "</h6></th>";
         $result .= "<th><h6>" . $decline . "</h6></th>";
         $result .= "</tr>";
@@ -445,6 +476,25 @@ function formatPendingMentorships($profile_account_id) {
                 xmlhttp.open("GET", "AJAX.php?action=refreshState&country=" + countryID, true);
                 xmlhttp.send();
             }
+        }
+
+        function endMentorship(mentorship_ID) {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    $('#mentorship_history_table').DataTable().destroy();
+                    document.getElementById("mentorships_content").innerHTML = this.responseText;
+                    $('#mentorship_history_table').DataTable({
+                        "paging":   false,
+                        "ordering": false,
+                        "info":     false,
+                        "searching":   false
+                    });
+                }
+            };
+
+            xmlhttp.open("POST", "profile.php?action=endMentorship&id=" + mentorship_ID, true);
+            xmlhttp.send();
         }
 
         function handlePendingMentorship(pending_id, accept = 0) {
@@ -740,7 +790,7 @@ function formatPendingMentorships($profile_account_id) {
 
             <div id="mentorships" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-users fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Mentorships</h2>
-                <div class="w3-container w3-text-grey" style="padding-bottom:32px">
+                <div id="mentorships_content" class="w3-container w3-text-grey" style="padding-bottom:32px">
                     <?php echo formatMentorships($profile_account_id); ?>
                 </div>
             </div>
