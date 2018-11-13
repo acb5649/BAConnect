@@ -1,3 +1,9 @@
+<?php
+require_once "session.php";
+require_once "database.php";
+
+?>
+
 <div id="editModal" class="w3-modal">
    <div class="w3-modal-content w3-animate-top w3-card-4">
       <header class="w3-container w3-lime w3-center w3-padding-32">
@@ -6,18 +12,16 @@
             <i class="w3-margin-right"></i>Edit Account
          </h2>
       </header>
-      <form id="editAcc" class="w3-container" method="post">
-         <?php
-            // CONNECT to DB & read in MYSQL DATA
-
-            ?>
-         <!--Username-->
+      <form id="editAcc" class="w3-container" method="post" action="index.php">
          <p>
             <label><i class="fa fa-user"></i> Username</label>
          </p>
-         <input type="text" id="editSearchUser" placeholder="Enter Username" name="editSearchUser" class="w3-input w3-border" required autofocus>
+          <input type="text" list="users" id="username" name="username" value="" class="w3-input w3-border" onkeyup="getUserHints(this.value)" required autofocus />
+          <datalist id="users" >
+
+          </datalist>
          <!-- Submit -->
-         <button type="submit" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" name="editSearch" id="editSearch">Search</button>
+         <button type="submit" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" name="editSearch" id="editSearch">Go to Profile</button>
       </form>
    </div>
 </div>

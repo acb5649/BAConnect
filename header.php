@@ -13,6 +13,25 @@ require_once "session.php";
     }
 </script>
 
+<?php
+
+include "register.php";
+
+if ($type == 0) {
+    include "login.php";
+    include "forgot.php";
+}
+
+if ($type > 1) {
+    include "match.php";
+    include "edit.php";
+    include "upgrade.php";
+    include "addCountry.php";
+    include "addDegreeType.php";
+    include "addState.php";
+}
+?>
+
 <div style="position: sticky; position: -webkit-sticky; padding-bottom: 16px;" class="w3-top">
     <div class="w3-bar w3-lime w3-card" style="z-index: 0;">
         <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="toggleNav()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
@@ -72,22 +91,3 @@ require_once "session.php";
     }
     ?>
 </div>
-
-<?php
-
-include "register.php";
-
-if ($type == 0) {
-    include "login.php";
-    include "forgot.php";
-}
-
-if ($type > 1) {
-    include "match.php";
-    include "edit.php";
-    include "upgrade.php";
-    include "addCountry.php";
-    include "addDegreeType.php";
-    include "addState.php";
-}
-?>

@@ -194,6 +194,62 @@ if (isset($_POST['register'])) {
     }
 }
 
+if(isset($_POST['editSearch']) && isset($_POST['username'])) {
+
+    if(!isset($type)){
+        header("Location: index.php");
+        die;
+    }
+    if($type <= 2){
+        header("Location: index.php");
+        die;
+    }
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
+    $stmt->bindValue(1, $_POST['username'], PDO::PARAM_STR);
+    $stmt->execute();
+
+    $row = $stmt->fetch();
+
+    header("Location: profile.php?user=" . $row['account_ID']);
+    die;
+}
+
+if(isset($_POST['upgrade'])){
+
+    if(!isset($type)){
+        header("Location: index.php");
+        die;
+    }
+    if($type <= 2){
+        header("Location: index.php");
+        die;
+    }
+
+    $username = $_POST["username"];
+    $newType = $_POST["type"];
+    $id = getAccountIDFromUsername($username);
+
+    $oldType = getAccountTypeFromAccountID($id);
+
+    if($newType != $oldType && $_SESSION['account_ID'] != $id){
+
+        if($oldType > $newType){
+            if($type > $oldType){
+                editAccountType($id, $newType);
+            }
+        }
+        else{
+            if($type > $newType){
+                editAccountType($id, $newType);
+            }
+        }
+    }
+    header("Location: index.php");
+    die;
+}
+
 ?>
 <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
 <!DOCTYPE html>
