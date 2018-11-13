@@ -2,6 +2,8 @@
 require_once "session.php";
 require_once "database.php";
 
+
+
 if (isset($_REQUEST['user']) && isset($_SESSION["account_ID"])) {
     if ($_SESSION["account_ID"] == $_REQUEST['user']) {
         $profile_account_id = $_SESSION["account_ID"];
@@ -11,7 +13,7 @@ if (isset($_REQUEST['user']) && isset($_SESSION["account_ID"])) {
             $allowEdit = TRUE;
         } else {
             //User is on own profile, they get edit privleges.
-            header("location: profile.php");
+            //header("location: profile.php");
             $allowEdit = TRUE;
         }
     } elseif (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
@@ -456,7 +458,7 @@ function formatPendingMentorships($profile_account_id) {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){
-
+                    $('#request').attr("disabled",true);
                 }
             };
 
