@@ -30,6 +30,16 @@ if ($type > 1) {
     include "addDegreeType.php";
     include "addState.php";
 }
+
+require_once "dialog.php";
+
+if (isset($_SESSION['title']) && isset($_SESSION['msg']) && isset($_SESSION['nextModal'])) {
+    echo "<script>document.getElementById('dialogModal').style.display='block'</script>";
+    unset($_SESSION['title']);
+    unset($_SESSION['msg']);
+    unset($_SESSION['nextModal']);
+}
+
 ?>
 
 <div style="position: sticky; position: -webkit-sticky; padding-bottom: 16px;" class="w3-top">
