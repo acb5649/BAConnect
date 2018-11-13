@@ -279,14 +279,19 @@ function getStateID($account_id) {
     return $result['state'];
 }
 
-function getStatesList($countryID, $account_id){
+function getStatesList($countryID, $account_id = -1){
     $con = Connection::connect();
     $stmt = $con->prepare("SELECT state_name, state_ID FROM States WHERE country_ID = '" . $countryID . "' AND enabled = 1");
     $stmt->execute();
     $list = $stmt->fetchAll();
     $con = null;
 
-    $selected = getStateID($account_id);
+    if ($account_id == -1) {
+        $selected = -1;
+    } else {
+        $selected = getStateID($account_id);
+    }
+
 
     $html = "";
     foreach ($list as $option) {

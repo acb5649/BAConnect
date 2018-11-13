@@ -35,6 +35,22 @@
     }
 ?>
 
+<script>
+
+    function getUserHints(str) {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function(){
+            if(this.readyState == 4 && this.status == 200){
+                document.getElementById("users").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "AJAX.php?action=getUsernames&matching=" + str, true);
+        xmlhttp.send();
+    }
+
+
+</script>
+
 <div id="upgradeModal" class="w3-modal">
    <div class="w3-modal-content w3-animate-top w3-card-4">
       <header class="w3-container w3-lime w3-center w3-padding-32">
@@ -66,7 +82,10 @@
          <p>
             <label><i class="fa fa-user"></i> Username</label>
          </p>
-         <input type="text" id="username" placeholder="" name="username" class="w3-input w3-border" required autofocus>
+          <input type="text" list="users" id="username" name="username" value="" class="w3-input w3-border" onkeyup="getUserHints(this.value)" required autofocus />
+          <datalist id="users" >
+
+          </datalist>
          <br>
          <select id="type" class="w3-select w3-border" name="type">
          <?php
