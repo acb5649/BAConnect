@@ -1,5 +1,5 @@
 <?php
-require_once "database.php";
+//require_once "database.php";
 
 /*
     This should be for all functions that are about a physical location, so addresses, countries, states, etc.
@@ -216,6 +216,11 @@ function listCountries($account_id = 0) {
 // This function will add a new country to the database, but will check if it's already in the database first
 function addCountry($countryName){
     $con = Connection::connect();
+
+    if($con == null){
+        $report = new Report("Error connecting to database", "We were unable to connect to the database at this time", "addCountry", FALSE);
+        return $report;
+    }
     $stmt = $con->prepare("SELECT * FROM `Countries` WHERE country = '" . $countryName . "'");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -224,31 +229,56 @@ function addCountry($countryName){
         $enabled = $result['enabled'];
         if($enabled == "0"){
             $stmt = $con->prepare("UPDATE `Countries` SET enabled = 1 WHERE country = '" . $countryName . "'");
-            $stmt->execute();
+            $success = $stmt->execute();
+
+            if($success){
+                $report = new Report("Success!", "The country was successfully re-enabled", "addCountry", TRUE);
+            }
+            else{
+                $report = new Report("Failed to re-enable country", "There was an error while trying to re-enable the country", "addCountry", FALSE);
+            }
+
+        }
+        else{
+            $report = new Report("Redundant Entry", "There is already a country with that name", "addCountry", FALSE);
         }
         $con = null;
-        return true;
+        return $report;
     }
     $stmt = null;
     $result = null;
 
     $stmt = $con->prepare("INSERT INTO `Countries` (country) values (?)");
     $stmt->bindValue(1, $countryName, PDO::PARAM_STR);
-    $stmt->execute();
+    $success = $stmt->execute();
+
+    if($success){
+        $report = new Report("Success!", "The new country was successfully inserted into the database", "addCountry", TRUE);
+    }
+    else{
+        $report = new Report("Failed to add new country", "There was an error while trying to create the new country", "addCountry", FALSE);
+    }
 
     $stmt = null;
     $con = null;
-    return true;
+    return $report;
 }
 // This function will edit a pre-existing country name in the database
 function editCountry($id, $newName){
     $con = Connection::connect();
     $stmt = $con->prepare("UPDATE `Countries` SET country = '" . $newName . "' WHERE country_ID = '" . $id . "'");
-    $stmt->execute();
+    $success = $stmt->execute();
+
+    if($success){
+        $report = new Report("Success!", "The country name was successfully changed", "addCountry", TRUE);
+    }
+    else{
+        $report = new Report("Failed to edit country", "There was an error while trying to edit the country's name", "addCountry", FALSE);
+    }
 
     $con = null;
     $stmt = null;
-    return true;
+    return $report;
 }
 // This function will delete a country from the database
 function deleteCountry($country_ID){

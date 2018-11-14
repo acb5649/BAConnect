@@ -4,6 +4,32 @@ require_once "dbhelper.php";
 require_once "locationFunctions.php";
 require_once "mentorshipFunctions.php";
 
+class Report{
+    public var $title;
+    public var $msg;
+    public var $nextModal;
+    public var $success;
+    public var $inputs; //associative array of all the users' inputs, so you
+                        //can reset them when the modal re-opens.
+
+    function __construct($worked){
+        $this->title = null;
+        $this->msg = null;
+        $this->nextModal = null;
+        $this->success = $worked;
+        $this->inputs = null;
+    }
+
+    function __construct($name, $message, $next, $worked){
+        $this->title = $name;
+        $this->msg = $message;
+        $this->nextModal = $next;
+        $this->success = $worked;
+        $this->inputs = null;
+    }
+
+}
+
 class Connection {
     public static function connect() {
         try {
