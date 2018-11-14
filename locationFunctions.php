@@ -1,5 +1,5 @@
 <?php
-//require_once "database.php";
+require_once "database.php";
 
 /*
     This should be for all functions that are about a physical location, so addresses, countries, states, etc.

@@ -1,7 +1,7 @@
 <?php
 
 require_once "session.php";
-include "database.php";
+require_once "database.php";
 
 function getUserMentorshipPreference($account_id){
   $con = Connection::connect();
