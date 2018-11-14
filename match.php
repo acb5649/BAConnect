@@ -4,9 +4,26 @@ require_once "database.php";
 
 ?>
 <script>
-
-
-
+    function getMentorHints(str) {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("mentors").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "AJAX.php?action=getMentors&matching=" + str, true);
+        xmlhttp.send();
+    }
+    function getMenteeHints(str) {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("mentees").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "AJAX.php?action=getMentees&matching=" + str, true);
+        xmlhttp.send();
+    }
 </script>
 <div id="matchModal" class="w3-modal">
    <div class="w3-modal-content w3-animate-top w3-card-4">
@@ -22,7 +39,7 @@ require_once "database.php";
                <div class="w3-half">
                  <p>
 					<label>Mentor </label>
-					<input type="text" list="mentors" id="mentor" name="mentor username" value="" class="w3-input w3-border" placeholder = "Enter a Mentor Username" onkeyup="getMentorHints(this.value)" required autofocus />
+					<input type="text" list="mentors" id="mentor" name="mentor" value="" class="w3-input w3-border" placeholder="Enter a Mentor Username" onkeyup="getMentorHints(this.value)" required autofocus />
 					<datalist id="mentors" >
 					</datalist>
                  </p>
@@ -30,7 +47,7 @@ require_once "database.php";
                <div class="w3-half">
                  <p>
 					<label>Mentee </label>
-					<input type="text" list="mentees" id="mentee " name=" mentee username" value="" class="w3-input w3-border" placeholder = "Enter a Mentee Username" onkeyup="getMenteeHints(this.value)" required />
+					<input type="text" list="mentees" id="mentee" name="mentee" value="" class="w3-input w3-border" placeholder="Enter a Mentee Username" onkeyup="getMenteeHints(this.value)" required />
 					<datalist id="mentees" >
 					</datalist>
                  </p>

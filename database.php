@@ -487,8 +487,3 @@ function getLinkedinLink($account_id) {
     $con = null;
     return $row['linkedin'];
 }
-
-include "locationFunctions.php";
-include "mentorshipFunctions.php";
-
-?>

@@ -208,49 +208,44 @@ if (isset($_POST['register'])) {
         die();
     }
 }
-if(isset($_POST['match']) && isset($_POST['mentor username']) && isset($_POST['mentee username'])) {
-
-	if(!isset($type)){
+if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee'])) {
+	if ($type <= 2) {
 		header("Location: index.php");
 		die;
-	}
-	if($type <= 2){
-		header("Location: index.php");
-		die;
-	}elseif($type >2){
+	} elseif ($type >2) {
 
 		$con = Connection::connect();
 		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-		$stmt->bindValue(1, $_POST['mentor username'], PDO::PARAM_STR);
+		$stmt->bindValue(1, $_POST['mentor'], PDO::PARAM_STR);
 		$stmt->execute();
-
 		$row = $stmt->fetch();
-
 		if ($row == null) {
-			$_SESSION['title'] = "Error in manuel match";
-			$_SESSION['msg'] = "There is invalid user was given.";
-			$_SESSION['nextModal'] = 'editModal';
+			$_SESSION['title'] = "Manual Match Error";
+			$_SESSION['msg'] = "An invalid user was specified.";
+			$_SESSION['nextModal'] = 'matchModal';
 			header("Location: index.php");
 			die();
 		}
-
 		$mentorID = $row['account_ID'];
+
 		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-		$stmt->bindValue(1, $_POST['mentor username'], PDO::PARAM_STR);
+		$stmt->bindValue(1, $_POST['mentee'], PDO::PARAM_STR);
 		$stmt->execute();
-
 		$row = $stmt->fetch();
-
 		if ($row == null) {
-			$_SESSION['title'] = "Error in manuel match";
-			$_SESSION['msg'] = "There is invalid user was given.";
-			$_SESSION['nextModal'] = 'editModal';
+			$_SESSION['title'] = "Manual Match Error";
+			$_SESSION['msg'] = "An invalid user was specified.";
+			$_SESSION['nextModal'] = 'matchModal';
 			header("Location: index.php");
 			die();
 		}
 		$menteeID = $row['account_ID'];
-		$proposerID = getAccountIDFromUsername($_SESSION['username']);
-		proposeMentorship($mentorID, $menteeID, $proposerID);
+
+		proposeMentorship($mentorID, $menteeID, $_SESSION['account_ID']);
+        $_SESSION['title'] = "Manual Match Completed";
+        $_SESSION['msg'] = "Users were matched.";
+        $_SESSION['nextModal'] = 'matchModal';
+        header("Location: index.php");
 		die;
 	}
 }

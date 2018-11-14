@@ -1,11 +1,5 @@
 <?php
-<<<<<<< HEAD
 include_once "database.php";
-
-=======
-//require_once "session.php";
-//require_once "database.php";
->>>>>>> 16e71c604adb2ea4f0f6bba8431697d47afbf1d8
 /*
     This should be for all functions that are about a physical location, so addresses, countries, states, etc.
     This includes adding, editing, or "deleting" a state or country, calculating distance, retrieving addresses,

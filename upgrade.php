@@ -16,26 +16,6 @@ require_once "database.php";
         xmlhttp.open("GET", "AJAX.php?action=getUsernames&matching=" + str, true);
         xmlhttp.send();
     }
-	function getMenotrHints(str) {
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("mentors").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET", "AJAX.php?action=getMentors&matching=" + str, true);
-        xmlhttp.send();
-    }
-	function getMenteeHints(str) {
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("mentees").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET", "AJAX.php?action=getMentees&matching=" + str, true);
-        xmlhttp.send();
-    }
 
 </script>
 
