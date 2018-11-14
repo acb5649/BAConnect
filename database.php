@@ -1,6 +1,7 @@
 <?php
 
 require_once "dbhelper.php";
+<<<<<<< HEAD
 require_once "locationFunctions.php";
 require_once "mentorshipFunctions.php";
 
@@ -21,6 +22,10 @@ class Report{
     }
 
 }
+=======
+//require_once "locationFunctions.php";
+//require_once "mentorshipFunctions.php";
+>>>>>>> 16e71c604adb2ea4f0f6bba8431697d47afbf1d8
 
 class Connection {
     public static function connect() {
@@ -538,6 +543,7 @@ function getLinkedinLink($account_id) {
     return $row['linkedin'];
 }
 
-
+include "locationFunctions.php";
+include "mentorshipFunctions.php";
 
 ?>
