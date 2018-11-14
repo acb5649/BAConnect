@@ -1,7 +1,6 @@
 <?php
 
 require_once "dbhelper.php";
-<<<<<<< HEAD
 require_once "locationFunctions.php";
 require_once "mentorshipFunctions.php";
 
@@ -22,10 +21,6 @@ class Report{
     }
 
 }
-=======
-//require_once "locationFunctions.php";
-//require_once "mentorshipFunctions.php";
->>>>>>> 16e71c604adb2ea4f0f6bba8431697d47afbf1d8
 
 class Connection {
     public static function connect() {
@@ -36,56 +31,6 @@ class Connection {
         }
         return null;
     }
-}
-
-function searchEntireDBFor($str) {
-
-    $con = Connection::connect();
-    $stmt = $con->prepare("select account_ID from Information where first_name like concat('%', ?, '%') limit 10");
-    $stmt->bindValue(1, $str, PDO::PARAM_STR);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $arr1 = array_values($result);
-
-    print_r($arr1);
-
-    $stmt = $con->prepare("select account_ID from Information where last_name like concat('%', ?, '%') limit 10");
-    $stmt->bindValue(1, $str, PDO::PARAM_STR);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $arr2 = array_values($result);
-
-    print_r($arr2);
-
-    $stmt = $con->prepare("select account_ID from `Job History` where employer like concat('%', ?, '%') limit 10");
-    $stmt->bindValue(1, $str, PDO::PARAM_STR);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $arr3 = array_values($result);
-
-    print_r($arr3);
-
-    $stmt = $con->prepare("select account_ID from `Job History` where profession_field like concat('%', ?, '%') limit 10");
-    $stmt->bindValue(1, $str, PDO::PARAM_STR);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $arr4 = array_values($result);
-
-    print_r($arr4);
-
-    $stmt = $con->prepare("select account_ID from `Degrees` where school like concat('%', ?, '%') limit 10");
-    $stmt->bindValue(1, $str, PDO::PARAM_STR);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $arr5 = array_values($result);
-
-    print_r($arr5);
-
-    $stmt = $con->prepare("select account_ID from `Degrees` where major like concat('%', ?, '%') limit 10");
-    $stmt->bindValue(1, $str, PDO::PARAM_STR);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $arr6 = array_values($result);
-
-    print_r($arr6);
-
-    $con = null;
-
-    return $arr1;
 }
 
 function registerUser($user, $address, $educationHistory, $workHistory, $picture, $resume) {
