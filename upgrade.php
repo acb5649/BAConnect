@@ -16,7 +16,26 @@ require_once "database.php";
         xmlhttp.open("GET", "AJAX.php?action=getUsernames&matching=" + str, true);
         xmlhttp.send();
     }
-
+	function getMenotrHints(str) {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("mentors").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "AJAX.php?action=getMentors&matching=" + str, true);
+        xmlhttp.send();
+    }
+	function getMenteeHints(str) {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("mentees").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "AJAX.php?action=getMentees&matching=" + str, true);
+        xmlhttp.send();
+    }
 
 </script>
 
@@ -34,7 +53,7 @@ require_once "database.php";
             <p>
                 <label><i class="fa fa-user"></i> Username</label>
             </p>
-            <input type="text" list="users" id="username" name="username" value="" class="w3-input w3-border"
+            <input type="text" list="users" id="username" name="username" placeholder="Enter a Username" value="" class="w3-input w3-border"
                    onkeyup="getUserHints(this.value)" required autofocus/>
             <datalist id="users">
 

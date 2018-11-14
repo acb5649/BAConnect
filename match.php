@@ -1,3 +1,13 @@
+<?php
+require_once "session.php";
+require_once "database.php";
+
+?>
+<script>
+
+
+
+</script>
 <div id="matchModal" class="w3-modal">
    <div class="w3-modal-content w3-animate-top w3-card-4">
       <header class="w3-container w3-lime w3-center w3-padding-32">
@@ -7,54 +17,22 @@
          </h2>
       </header>
       <form id="matchUser" class="w3-container" method="post">
-         <?php
-            // CONNECT to DB & read in MYSQL DATA
-
-            /*******Associative Arrays use a name/value pair to access a value **********/
-
-            //assign values directly
-            $mentor["first"] = "uSam67";
-            $mentor["second"] = "pEdna987";
-            $mentor["third"] = "rMark5";
-            $mentor["fourth"] = "jClayton_Star";
-            $mentor["fifth"] = "FishJunior1";
-
-            //assign values directly
-            $mentee["first"] = "sSteve";
-            $mentee["second"] = "uKarla98";
-            $mentee["third"] = "jenSarahK67";
-            $mentee["fourth"] = "Judd4";
-            $mentee["fifth"] = "Marv3n";
-            ?>
+         
             <div class="w3-row-padding">
                <div class="w3-half">
                  <p>
-                 <label>Mentor </label>
-                 <select id="mentor" class="w3-select w3-border" name="mentor">
-                 <?php
-                    //using foreach to assign the label to a variable and the value to a variable
-
-                    foreach ($mentor as $pos => $value) {
-                        print '
-                    <option value = "'.$pos.'">'.$value.'</option>';
-                    }
-                    ?>
-                 </select>
+					<label>Mentor </label>
+					<input type="text" list="mentors" id="mentor" name="mentor username" value="" class="w3-input w3-border" placeholder = "Enter a Mentor Username" onkeyup="getMentorHints(this.value)" required autofocus />
+					<datalist id="mentors" >
+					</datalist>
                  </p>
                </div>
                <div class="w3-half">
                  <p>
-                 <label>Mentee </label>
-                 <select id="mentee" class="w3-select w3-border" name="mentee">
-                 <?php
-                    //using foreach to assign the label to a variable and the value to a variable
-
-                    foreach ($mentee as $pos => $value) {
-                        print '
-                    <option value = "'.$pos.'">'.$value.'</option>';
-                    }
-                    ?>
-                 </select>
+					<label>Mentee </label>
+					<input type="text" list="mentees" id="mentee " name=" mentee username" value="" class="w3-input w3-border" placeholder = "Enter a Mentee Username" onkeyup="getMenteeHints(this.value)" required />
+					<datalist id="mentees" >
+					</datalist>
                  </p>
                </div>
 

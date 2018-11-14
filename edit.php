@@ -16,9 +16,8 @@ require_once "database.php";
          <p>
             <label><i class="fa fa-user"></i> Username</label>
          </p>
-          <input type="text" list="users" id="username" name="username" value="" class="w3-input w3-border" onkeyup="getUserHints(this.value)" required autofocus />
+          <input type="text" list="users" id="username" name="username" value="" class="w3-input w3-border" placeholder = "Enter a Username" onkeyup="getUserHints(this.value)" required autofocus />
           <datalist id="users" >
-
           </datalist>
          <!-- Submit -->
          <button type="submit" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" name="editSearch" id="editSearch">Go to Profile</button>
