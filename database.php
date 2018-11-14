@@ -5,11 +5,11 @@ require_once "locationFunctions.php";
 require_once "mentorshipFunctions.php";
 
 class Report{
-    public var $title;
-    public var $msg;
-    public var $nextModal;
-    public var $success;
-    public var $inputs; //associative array of all the users' inputs, so you
+    public $title;
+    public $msg;
+    public $nextModal;
+    public $success;
+    public $inputs; //associative array of all the users' inputs, so you
                         //can reset them when the modal re-opens.
 
     function __construct($name, $message, $next, $worked){
