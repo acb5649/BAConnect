@@ -27,13 +27,26 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
         $num = $_POST["num"];
         $search = Input::str($_POST["search"]);
 
-        //$con = Connection::connect();
-        //$stmt = $con->prepare("SELECT `account_ID` FROM UserAddressView where '%" . $search . "%' IN (`state`, `country`, `state_name`, `city`, `post_code`, `street_address`, `street_address2`, `first_name`, `middle_name`, `last_name`, `gender`, `facebook`, `linkedin`, `mentorship_preference`, `dob`, `phone_number`) LIMIT " . $num . " OFFSET " . $offset);
-        //$stmt->execute();
-        //$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        //$con = null;
+        $con = Connection::connect();
+	$match = "";
+	$words = preg_split('/\s+/', $search);
+	$columns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender', 'facebook', 'linkedin');
+	for ($i=0; $i<count($words); $i++) {
+		if ($i != 0) {
+			$match .= "OR ";
+		}
+		for ($j=0; $j<count($columns); $j++) {
+			$match .= "(`" . $columns[$j] . "` LIKE '%" . $words[$i] . "%') ";
+			if ($j != count($columns) - 1) {
+				$match .= "OR ";
+			}
+		}
+	}
+	$stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressView WHERE ". $match ."  LIMIT " . $num . " OFFSET " . $offset);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $con = null;
 
-        $result = searchEntireDBFor($search);
         echo json_encode($result);
         die();
     }
