@@ -10,9 +10,10 @@
     if(isset($_POST['add'])){
         $countryName = trim($_POST['addCountry']);
 
-        addCountry($countryName);
-        //header('Location: index.php');
-        //die;
+        $report = addCountry($countryName);
+        $_SESSION['report'] = $report;
+        header('Location: index.php');
+        die;
     } elseif (isset($_POST['edit'])) {
         $id = trim($_POST['country']);
         $newName = trim($_POST['editCountry']);
@@ -69,7 +70,7 @@
             <p>
                 <label>Or Delete Selected Country</label>
             </p>
-            <button class="w3-button w3-red w3-section" type = "submit" name = "delete">Delete
+            <button class="w3-button w3-red w3-section" type = "submit" name = "delete">Disable
                 <i class="fa fa-remove"></i>
             </button>
 

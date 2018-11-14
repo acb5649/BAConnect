@@ -11,7 +11,7 @@ include_once "database.php";
 
 
 function getAddressIDFromAccount($account_id) {
-	
+
     $con = Connection::connect();
     $stmt = $con->prepare("SELECT address_ID FROM `Address History` where account_ID = '" . $account_id . "' and isnull(end) ");
     $stmt->execute();
@@ -216,6 +216,12 @@ function listCountries($account_id = 0) {
 // This function will add a new country to the database, but will check if it's already in the database first
 function addCountry($countryName){
     $con = Connection::connect();
+
+	if($con == null){
+        $report = new Report("Error connecting to database", "We were unable to connect to the database at this time", "addCountry", FALSE);
+        return $report;
+    }
+
     $stmt = $con->prepare("SELECT * FROM `Countries` WHERE country = '" . $countryName . "'");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -224,41 +230,84 @@ function addCountry($countryName){
         $enabled = $result['enabled'];
         if($enabled == "0"){
             $stmt = $con->prepare("UPDATE `Countries` SET enabled = 1 WHERE country = '" . $countryName . "'");
-            $stmt->execute();
+            $success = $stmt->execute();
+
+			if($success){
+                $report = new Report("Success!", "The country was successfully re-enabled", "addCountry", TRUE);
+            }
+            else{
+            	$report = new Report("Failed to re-enable country", "There was an error while trying to re-enable the country", "addCountry", FALSE);
+            }
         }
+		else{
+			$report = new Report("Redundant Entry", "There is already a country with that name", "addCountry", FALSE);
+		}
         $con = null;
-        return true;
+        return $report;
     }
     $stmt = null;
     $result = null;
 
     $stmt = $con->prepare("INSERT INTO `Countries` (country) values (?)");
     $stmt->bindValue(1, $countryName, PDO::PARAM_STR);
-    $stmt->execute();
+    $success = $stmt->execute();
+
+	if($success){
+        $report = new Report("Success!", "The new country was successfully inserted into the database", "addCountry", TRUE);
+    }
+    else{
+        $report = new Report("Failed to add new country", "There was an error while trying to create the new country", "addCountry", FALSE);
+    }
 
     $stmt = null;
     $con = null;
-    return true;
+    return $report;
 }
 // This function will edit a pre-existing country name in the database
 function editCountry($id, $newName){
     $con = Connection::connect();
+
+	if($con == null){
+        $report = new Report("Error connecting to database", "We were unable to connect to the database at this time", "addCountry", FALSE);
+        return $report;
+    }
+
     $stmt = $con->prepare("UPDATE `Countries` SET country = '" . $newName . "' WHERE country_ID = '" . $id . "'");
-    $stmt->execute();
+	$success = $stmt->execute();
+
+    if($success){
+        $report = new Report("Success!", "The country name was successfully changed", "addCountry", TRUE);
+    }
+    else{
+        $report = new Report("Failed to edit country", "There was an error while trying to edit the country's name", "addCountry", FALSE);
+    }
 
     $con = null;
     $stmt = null;
-    return true;
+    return $report;
 }
 // This function will delete a country from the database
 function deleteCountry($country_ID){
     $con = Connection::connect();
+
+	if($con == null){
+        $report = new Report("Error connecting to database", "We were unable to connect to the database at this time", "addCountry", FALSE);
+        return $report;
+    }
+
     $stmt = $con->prepare("UPDATE `Countries` SET enabled = 0 WHERE country_ID = '" . $country_ID . "'");
-    $stmt->execute();
+    $success = $stmt->execute();
+
+	if($success){
+        $report = new Report("Success!", "The country name was successfully disabled", "addCountry", TRUE);
+    }
+    else{
+        $report = new Report("Failed to disable country", "There was an error while trying to disable the country", "addCountry", FALSE);
+    }
 
     $con = null;
     $stmt = null;
-    return true;
+    return $report;
 }
 
 
@@ -307,6 +356,12 @@ function getStatesList($countryID, $account_id = -1){
 //this function will add a new state to the database, and associate it with the given country
 function addState($countryID, $stateName){
     $con = Connection::connect();
+
+	if($con == null){
+        $report = new Report("Error connecting to database", "We were unable to connect to the database at this time", "addState", FALSE);
+        return $report;
+    }
+
     $stmt = $con->prepare("SELECT * FROM States WHERE state_name = '" . $stateName . "' AND country_ID = '" . $countryID . "'");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -314,10 +369,20 @@ function addState($countryID, $stateName){
     if($result != null){	//if there is already a country with the same name in the database
         if($result['enabled'] == "0"){
             $stmt = $con->prepare("UPDATE States SET enabled = 1 WHERE state_ID = '" . $ID . "'");
-            $stmt->execute();
+            $success = $stmt->execute();
+
+			if($success){
+				$report = new Report("Success!", "The state was successfully re-enabled", "addState", TRUE);
+			}
+			else{
+				$report = new Report("Failed", "There was an error while trying to add the new state to the database", "addState", FALSE);
+			}
         }
+		else{
+			$report = new Report("Redundant Request", "The there is already a state with that name in that country in the database", "addState", FALSE);
+		}
         $con = null;
-        return true;
+        return $report;
     }
     $stmt = null;
     $result = null;
@@ -325,31 +390,64 @@ function addState($countryID, $stateName){
     $stmt = $con->prepare("INSERT INTO States (country_ID, state_name, state_ID) values (?, ?, DEFAULT)");
     $stmt->bindValue(1, $countryID, PDO::PARAM_INT);
     $stmt->bindValue(2, $stateName, PDO::PARAM_STR);
-    $stmt->execute();
+    $success = $stmt->execute();
+
+	if($success){
+		$report = new Report("Success!", "The new state was successfully inserted into the database", "addState", TRUE);
+	}
+	else{
+		$report = new Report("Failed", "There was an error while trying to add the new state to the database", "addState", FALSE);
+	}
 
     $stmt = null;
     $con = null;
-    return true;
+    return $report;
 }
 // This function will edit a pre-existing state name in the database
 function editState($newName, $ID){
     $con = Connection::connect();
+
+	if($con == null){
+        $report = new Report("Error connecting to database", "We were unable to connect to the database at this time", "addState", FALSE);
+        return $report;
+    }
+
     $stmt = $con->prepare("UPDATE States SET state_name = '" . $newName . "' WHERE state_ID = '" . $ID . "'");
-    $stmt->execute();
+    $success = $stmt->execute();
+
+	if($success){
+		$report = new Report("Success!", "The state was successfully edited", "addState", TRUE);
+	}
+	else{
+		$report = new Report("Failed", "There was an error while trying to edit the state", "addState", FALSE);
+	}
 
     $con = null;
     $stmt = null;
-    return true;
+    return $report;
 }
 // This function will delete a state from the database
 function deleteState($ID){
     $con = Connection::connect();
+
+	if($con == null){
+        $report = new Report("Error connecting to database", "We were unable to connect to the database at this time", "addState", FALSE);
+        return $report;
+    }
+
     $stmt = $con->prepare("UPDATE `States` SET enabled = 0 WHERE state_ID = '" . $ID . "'");
-    $stmt->execute();
+    $success = $stmt->execute();
+
+	if($success){
+		$report = new Report("Success!", "The state was successfully disabled", "addState", TRUE);
+	}
+	else{
+		$report = new Report("Failed", "There was an error while trying to disable the state", "addState", FALSE);
+	}
 
     $con = null;
     $stmt = null;
-    return true;
+    return $report;
 }
 
 ?>

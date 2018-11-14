@@ -40,6 +40,11 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg']) && isset($_SESSION['nex
     unset($_SESSION['nextModal']);
 }
 
+if(isset($_SESSION['report'])){
+    echo "<script>document.getElementById('dialogModal').style.display='block'</script>";
+    unset($_SESSION['report']);
+}
+
 ?>
 
 <div style="position: sticky; position: -webkit-sticky; padding-bottom: 16px;" class="w3-top">
