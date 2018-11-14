@@ -208,7 +208,52 @@ if (isset($_POST['register'])) {
         die();
     }
 }
+if(isset($_POST['match']) && isset($_POST['mentor username']) && isset($_POST['mentee username'])) {
 
+	if(!isset($type)){
+		header("Location: index.php");
+		die;
+	}
+	if($type <= 2){
+		header("Location: index.php");
+		die;
+	}elseif($type >2){
+
+		$con = Connection::connect();
+		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
+		$stmt->bindValue(1, $_POST['mentor username'], PDO::PARAM_STR);
+		$stmt->execute();
+
+		$row = $stmt->fetch();
+
+		if ($row == null) {
+			$_SESSION['title'] = "Error in manuel match";
+			$_SESSION['msg'] = "There is invalid user was given.";
+			$_SESSION['nextModal'] = 'editModal';
+			header("Location: index.php");
+			die();
+		}
+
+		$mentorID = $row['account_ID'];
+		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
+		$stmt->bindValue(1, $_POST['mentor username'], PDO::PARAM_STR);
+		$stmt->execute();
+
+		$row = $stmt->fetch();
+
+		if ($row == null) {
+			$_SESSION['title'] = "Error in manuel match";
+			$_SESSION['msg'] = "There is invalid user was given.";
+			$_SESSION['nextModal'] = 'editModal';
+			header("Location: index.php");
+			die();
+		}
+		$menteeID = $row['account_ID'];
+		$proposerID = getAccountIDFromUsername($_SESSION['username']);
+		proposeMentorship($mentorID, $menteeID, $proposerID);
+		die;
+	}
+}
 if(isset($_POST['editSearch']) && isset($_POST['username'])) {
 
     if(!isset($type)){
