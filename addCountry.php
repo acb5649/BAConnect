@@ -11,22 +11,27 @@
         $countryName = trim($_POST['addCountry']);
 
         $report = addCountry($countryName);
-        $_SESSION['report'] = $report;
+        $_SESSION['report'] = serialize($report);
         header('Location: index.php');
         die;
     } elseif (isset($_POST['edit'])) {
         $id = trim($_POST['country']);
         $newName = trim($_POST['editCountry']);
 
-        editCountry($id, $newName);
+        $report = editCountry($id, $newName);
+        $_SESSION['report'] = serialize($report);
         header('Location: index.php');
         die;
     } elseif (isset($_POST['delete'])) {
         $countryID = trim($_POST['country']);
 
-        deleteCountry($countryID);
+        $report = deleteCountry($countryID);
+        $_SESSION['report'] = serialize($report);
         header('Location: index.php');
         die;
+    }
+    else if(isset($_SESSION['report'])){
+        unset($_SESSION['report']);
     }
 ?>
 

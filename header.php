@@ -42,7 +42,9 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg']) && isset($_SESSION['nex
 
 if(isset($_SESSION['report'])){
     echo "<script>document.getElementById('dialogModal').style.display='block'</script>";
-    unset($_SESSION['report']);
+    if($_SESSION['report']->inputs == null){
+        unset($_SESSION['report']);
+    }
 }
 
 ?>
