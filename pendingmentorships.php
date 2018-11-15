@@ -9,8 +9,8 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "rejectMentorship") {
     }
 
     $pendingMentorship_ID = $_REQUEST['id'];
-    $success = pendingMentorshipResponse($_SESSION['account_ID'],$pendingMentorship_ID, -1 );
-    if ($success) {
+    $report = pendingMentorshipResponse($_SESSION['account_ID'],$pendingMentorship_ID, -1 );
+    if ($report->success) {
         echo formatPendingMentorships();
     }
     $report = new Report("Pending Mentorship Request Has Been Revoked Successfully", "Emails have been sent to both parties notifying them of the change.", "", TRUE);
@@ -24,7 +24,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "rejectMentorship") {
 
 function formatPendingMentorships() {
     $pendingMentorships = getPendingMentorships();
-    $result = '<table id="pending_mentorship_history_table"><thead><tr><th>Mentor |</th><th>Mentee |</th><th>Request Date |</th><th>Remove Request Button</th></tr></thead><tbody>';
+    $result = '<table id="pending_mentorship_history_table"  align = "center"><thead><tr><th>Mentor |</th><th>Mentee |</th><th>Request Date |</th><th>Remove Request Button</th></tr></thead><tbody>';
     foreach($pendingMentorships as $pen) {
 
         $id = $pen['pending_ID'];
