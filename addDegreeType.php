@@ -11,7 +11,13 @@
     if(isset($_POST['add'])){
         $degreeTypeName = trim($_POST['addDegreeType']);
 
-        addDegreeType($degreeTypeName);
+        $report = addDegreeType($degreeTypeName);
+
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
 
         header("Location:index.php");
         die;
@@ -20,7 +26,13 @@
         $degreeTypeID = trim($_POST['degreeType']);
         $newName = trim($_POST['editDegreeType']);
 
-        editDegreeType($degreeTypeID, $newName);
+        $report = editDegreeType($degreeTypeID, $newName);
+
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
 
         header("Location:index.php");
         die;
@@ -28,7 +40,13 @@
     elseif (isset($_POST['delete'])) {
         $degreeTypeID = trim($_POST['degreeType']);
 
-        deleteDegreeType($degreeTypeID);
+        $report = deleteDegreeType($degreeTypeID);
+
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
 
         header("Location:index.php");
         die;

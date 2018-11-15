@@ -273,29 +273,46 @@ function addDegreeType($degreeType){
         if($result['enabled'] == "0"){
             $stmt = $con->prepare("UPDATE `Degree Types` SET enabled = 1 WHERE degree = '" . $degreeType . "'");
             $stmt->execute();
+            $report = new Report("Success!", "The degree type was successfully re-enabled", "addDegreeType", TRUE);
+        }
+        else{
+            $report = new Report("Duplicate", "That degree type already exists", "addDegreeType", FALSE);
         }
         $con = null;
         $stmt = null;
-        return true;
+        return $report;
     }
     $stmt = null;
     $result = null;
 
     $stmt = $con->prepare("INSERT INTO `Degree Types` (degree) values (?)");
     $stmt->bindValue(1, $degreeType, PDO::PARAM_STR);
-    $stmt->execute();
+    $success = $stmt->execute();
+
+    if($success){
+        $report = new Report("Success!", "The degree type was successfully added", "addDegreeType", TRUE);
+    }
+    else{
+        $report = new Report("Error", "An error occured while adding that degree type", "addDegreeType", FALSE);
+    }
 
     $con = null;
-    return true;
+    return $report;
 }
 
 // This function will edit a pre-existing degree type name in the database
 function editDegreeType($id, $newName){
     $con = Connection::connect();
     $stmt = $con->prepare("UPDATE `Degree Types` SET degree = '" . $newName . "' WHERE degree_type_ID = '" . $id . "'");
-    $stmt->execute();
+    $success = $stmt->execute();
+    if($success){
+        $report = new Report("Success!", "The degree type was successfully changed", "addDegreeType", TRUE);
+    }
+    else{
+        $report = new Report("Error", "An error occured while changing that degree type", "addDegreeType", FALSE);
+    }
     $con = null;
-    return true;
+    return $report;
 }
 
 // This function will delete a degree type from the database
@@ -303,11 +320,18 @@ function deleteDegreeType($degreeTypeID){
     $con = Connection::connect();
 
     $stmt = $con->prepare("UPDATE `Degree Types` SET enabled = 0 WHERE degree_type_ID = '" . $degreeTypeID . "'");
-    $stmt->execute();
+    $success = $stmt->execute();
+
+    if($success){
+        $report = new Report("Success!", "The degree type was successfully disabled", "addDegreeType", TRUE);
+    }
+    else{
+        $report = new Report("Error", "An error occured while disabling that degree type", "addDegreeType", FALSE);
+    }
 
     $con = null;
     $stmt = null;
-    return true;
+    return $report;
 }
 
 

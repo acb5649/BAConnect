@@ -18,7 +18,13 @@
     if(isset($_POST["add"])){
         $country = trim($_POST["country"]);
         $name = trim($_POST["addState"]);
-        addState($country, $name);
+        $report = addState($country, $name);
+
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
 
         header('Location: index.php');
         die;
@@ -26,7 +32,13 @@
     else if(isset($_POST["edit"])){
         $stateID = trim($_POST["state"]);
         $newName = trim($_POST["editState"]);
-        editState($newName, $stateID);
+        $report = editState($newName, $stateID);
+
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
 
         header('Location: index.php');
         die;
@@ -34,7 +46,13 @@
 
     else if(isset($_POST["delete"])){
         $stateID = trim($_POST["state"]);
-        deleteState($stateID);
+        $report = deleteState($stateID);
+
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
 
         header('Location: index.php');
         die;
