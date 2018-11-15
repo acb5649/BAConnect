@@ -112,9 +112,9 @@ function formatPendingMentorships() {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
-                        let table = $('#pending_mentorships');
+                        let table = $('#pending_mentorship_history_table');
                         table.DataTable().destroy();
-                        document.getElementById("pending_mentorships").innerHTML = this.responseText;
+                        document.getElementById("table_container").innerHTML = this.responseText;
                         table.DataTable({ 
 						"paging":   true,
                         "ordering": true,
@@ -124,12 +124,12 @@ function formatPendingMentorships() {
                     }
                 };
 
-                xmlhttp.open("POST", "pendingmentorships.php?action=handePendingMentorship&pending_ID=" + mentorship_ID + "&response=" +  accept, true);
+                xmlhttp.open("POST", "pendingmentorships.php?action=handlePendingRequest&pending_ID=" + mentorship_ID + "&response=" +  accept, true);
                 xmlhttp.send();
             }
 
             $(document).ready(function () {
-                $('#pending_mentorships').DataTable({ 
+                $('#pending_mentorship_history_table').DataTable({
 						"paging":   true,
                         "ordering": true,
                         "info":     false,
@@ -145,10 +145,8 @@ function formatPendingMentorships() {
     <?php include "header.php"; ?>
     <!-- Page content -->
     <div class="w3-content" style="max-width:1400px;">
-    <div class="w3-container w3-card w3-white w3-padding-large">
-        <table id="pending_mentorships" class="display">
-            <?php echo formatPendingMentorships() ?>
-        </table>
+    <div id="table_container" class="w3-container w3-card w3-white w3-padding-large">
+        <?php echo formatPendingMentorships() ?>
     </div>
     </div>
     </body>
