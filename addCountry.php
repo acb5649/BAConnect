@@ -11,7 +11,7 @@
         $countryName = trim($_POST['addCountry']);
 
         $report = addCountry($countryName);
-        $_SESSION['report'] = $report;
+        $_SESSION['report'] = serialize($report);
         header('Location: index.php');
         die;
     } elseif (isset($_POST['edit'])) {
@@ -19,14 +19,14 @@
         $newName = trim($_POST['editCountry']);
 
         $report = editCountry($id, $newName);
-        $_SESSION['report'] = $report;
+        $_SESSION['report'] = serialize($report);
         header('Location: index.php');
         die;
     } elseif (isset($_POST['delete'])) {
         $countryID = trim($_POST['country']);
 
         $report = deleteCountry($countryID);
-        $_SESSION['report'] = $report;
+        $_SESSION['report'] = serialize($report);
         header('Location: index.php');
         die;
     }
