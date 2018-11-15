@@ -412,7 +412,8 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
         mail($mentorEmail, "BAConnect: Mentorship Proposal", "A user has proposed a mentorship relationship with you. Click this link to log-in and view your profile: http://corsair.cs.iupui.edu:22891/courseproject/profile.php");
     }
     $con = null;
-    return "Mentorship has been proposed";
+    $report = new Report("Success", "The Mentorship has been proposed", NULL, TRUE);
+    return $report;
 }
 
 function forcePairMentorships($account_id,$mentorAccID, $menteeAccID){
