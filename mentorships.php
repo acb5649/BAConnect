@@ -21,7 +21,56 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "revokeMentorship") {
     $_SESSION['inputs'] = $report->inputs;
     die();
 }
+if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee'])) {
+	if ($type <= 2) {
+		header("Location: index.php");
+		die;
+	} elseif ($type >2) {
 
+		$con = Connection::connect();
+		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
+		$stmt->bindValue(1, $_POST['mentor'], PDO::PARAM_STR);
+		$stmt->execute();
+		$row = $stmt->fetch();
+		if ($row == null) {
+            $report = new Report("Manual Match Error!", "An invalid user was specified.", "matchModal", FALSE);
+            $_SESSION['title'] = $report->title;
+            $_SESSION['msg'] = $report->msg;
+            $_SESSION['nextModal'] = $report->nextModal;
+            $_SESSION['success'] = $report->success;
+            $_SESSION['inputs'] = $report->inputs;
+			header("Location: index.php");
+			die();
+		}
+		$mentorID = $row['account_ID'];
+
+		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
+		$stmt->bindValue(1, $_POST['mentee'], PDO::PARAM_STR);
+		$stmt->execute();
+		$row = $stmt->fetch();
+		if ($row == null) {
+            $report = new Report("Manual Match Error!", "An invalid user was specified.", "matchModal", FALSE);
+            $_SESSION['title'] = $report->title;
+            $_SESSION['msg'] = $report->msg;
+            $_SESSION['nextModal'] = $report->nextModal;
+            $_SESSION['success'] = $report->success;
+            $_SESSION['inputs'] = $report->inputs;
+			header("Location: index.php");
+			die();
+		}
+		$menteeID = $row['account_ID'];
+
+		proposeMentorship($mentorID, $menteeID, $_SESSION['account_ID']);
+        $report = new Report("Manual Match Completed", "Users were matched.", "matchModal", TRUE);
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        header("Location: index.php");
+		die;
+	}
+}
 function formatMentorships() {
     $mentorships = getCurrentMentorships();
     $result = "<thead><tr><th>Mentor</th><th>Mentee</th><th>Start Date</th><th>Revoke Mentorship</th></tr></thead><tbody>";
