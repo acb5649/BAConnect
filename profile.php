@@ -213,7 +213,6 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "getEditableFormattedJo
     echo formatJobsEditable(getJobs($profile_account_id), $profile_account_id);
     die();
 }
-
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest") {
     $user = $_REQUEST['user'];
     $pending = $_REQUEST['pending'];
@@ -392,6 +391,9 @@ function formatPendingMentorships($profile_account_id) {
         $id = $cur['pending_ID'];
 
         $disabled = "";
+		if($profile_account_id != $_SESSION['account_ID']){
+			$disabled = 'disabled=""';
+		}
         if($profile_account_id == $cur['mentor_ID'] && $cur['mentor_status'] == 1) {
             $disabled = 'disabled=""';
         } elseif($profile_account_id == $cur['mentee_ID'] && $cur['mentee_status'] == 1) {
