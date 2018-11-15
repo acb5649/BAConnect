@@ -274,7 +274,7 @@ function endMentorship($account_id,$targetMentorshipID){
 
     $con = null;
     $report = new Report("Success", "You have Successfully ended this mentorship", NULL, TRUE);
-    return TRUE;
+    return $report;
 }
 
 
