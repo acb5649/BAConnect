@@ -746,6 +746,7 @@ function formatPendingMentorships($profile_account_id) {
                 </div>
                 <div class="w3-container">
                     <p class="w3-display-container" id="preference"><i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getUserMentorshipPreference($profile_account_id)) . makeEditable($allowEdit, "preference")?></p>
+                    <p class="w3-display-container" id="preference"><i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getMentorshipStatus($profile_account_id)); ?></p>
                     <hr>
                     <p class="w3-display-container" id="gender"><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getGender($profile_account_id)) . makeEditable($allowEdit, "gender")?></p>
                     <p class="w3-display-container" id="status"><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($profile_account_id)) . makeEditable($allowEdit, "status")?></p>
