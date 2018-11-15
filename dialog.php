@@ -8,7 +8,7 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg']) && isset($_SESSION['nex
 
 
 if(isset($_SESSION['report'])){
-    $report = $_SESSION['report'];
+    $report = unserialize($_SESSION['report']);
     echo makeDialog($report->title, $report->msg, $report->nextModal);
 }
 function makeDialog($title, $message, $nextModal) {
