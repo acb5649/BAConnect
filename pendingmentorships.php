@@ -2,29 +2,26 @@
 require_once "session.php";
 require_once "database.php";
 
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == "rejectMentorship") {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest") {
     if ($type < 2) {
         header("location: index.php");
         die();
     }
 
-    $pendingMentorship_ID = $_REQUEST['id'];
-    $report = pendingMentorshipResponse($_SESSION['account_ID'],$pendingMentorship_ID, -1 );
-    if ($report->success) {
+    $pendingMentorship_ID = $_REQUEST['pending_ID'];
+	$response = $_REQUEST['response'];
+    $success = pendingMentorshipResponse($_SESSION['account_ID'],$pendingMentorship_ID, $response );
+    if ($success) {
         echo formatPendingMentorships();
+        die();
+    } else {
+        die();
     }
-    $report = new Report("Pending Mentorship Request Has Been Revoked Successfully", "Emails have been sent to both parties notifying them of the change.", "", TRUE);
-    $_SESSION['title'] = $report->title;
-    $_SESSION['msg'] = $report->msg;
-    $_SESSION['nextModal'] = $report->nextModal;
-    $_SESSION['success'] = $report->success;
-    $_SESSION['inputs'] = $report->inputs;
-    die();
 }
 
 function formatPendingMentorships() {
     $pendingMentorships = getPendingMentorships();
-    $result = '<table id="pending_mentorship_history_table"  align = "center"><thead><tr><th>Mentor |</th><th>Mentee |</th><th>Request Date |</th><th>Remove Request Button</th></tr></thead><tbody>';
+    $result = '<table id="pending_mentorship_history_table"  align = "center"><thead><tr><th>Mentor</th><th>|</th><th>Mentee</th><th>|</th><th>Request Date</th><th>|<th><th>Remove Request Button</th></tr></thead><tbody>';
     foreach($pendingMentorships as $pen) {
 
         $id = $pen['pending_ID'];
@@ -34,10 +31,10 @@ function formatPendingMentorships() {
         $menteeLink = '<a href="profile.php?user=' . $pen['mentee_ID'] . '">' . getName($pen['mentee_ID']) . '</a>';
 
         $result .= "<tr>";
-        $result .= "<th><h6>" . $mentorLink . "</h6></th>";
-        $result .= "<th><h6>" . $menteeLink . "</h6></th>";
-        $result .= "<th><h6>" . $pen['request_date'] . "</h6></th>";
-        $result .= "<th><h6>" . $decline . "</h6></th>";
+        $result .= "<th><h6>" . $mentorLink . "</h6></th><th> </th>";
+        $result .= "<th><h6>" . $menteeLink . "</h6></th><th> </th>";
+        $result .= "<th><h6>" . $pen['request_date'] . "</h6></th><th> </th>";
+        $result .= "<th></th><th><h6>" . $decline . "</h6></th>";
         $result .= "</tr>";
     }
 
@@ -62,23 +59,33 @@ function formatPendingMentorships() {
         <script src="js/registration.js"></script>
         <script src="js/closeModals.js"></script>
         <script>
-            function handePendingMentorship(mentorship_ID) {
+            function handePendingMentorship(mentorship_ID, accept = 0) {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
                         let table = $('#pending_mentorships');
                         table.DataTable().destroy();
                         document.getElementById("pending_mentorships").innerHTML = this.responseText;
-                        table.DataTable();
+                        table.DataTable({ 
+						"paging":   true,
+                        "ordering": true,
+                        "info":     false,
+                        "searching":   true
+						});
                     }
                 };
 
-                xmlhttp.open("POST", "pendingmentorships.php?action=rejectMentorship&id=" + mentorship_ID, true);
+                xmlhttp.open("POST", "pendingmentorships.php?action=handePendingMentorship&pending_ID=" + mentorship_ID + "&response=" +  accept, true);
                 xmlhttp.send();
             }
 
             $(document).ready(function () {
-                $('#pending_mentorships').DataTable();
+                $('#pending_mentorships').DataTable({ 
+						"paging":   true,
+                        "ordering": true,
+                        "info":     false,
+                        "searching":   true
+						});
             });
 
         </script>
