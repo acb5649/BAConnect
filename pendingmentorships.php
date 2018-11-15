@@ -115,12 +115,7 @@ function formatPendingMentorships() {
                         let table = $('#pending_mentorship_history_table');
                         table.DataTable().destroy();
                         document.getElementById("table_container").innerHTML = this.responseText;
-                        table.DataTable({ 
-						"paging":   true,
-                        "ordering": true,
-                        "info":     false,
-                        "searching":   true
-						});
+                        table.DataTable();
                     }
                 };
 
@@ -129,12 +124,7 @@ function formatPendingMentorships() {
             }
 
             $(document).ready(function () {
-                $('#pending_mentorship_history_table').DataTable({
-						"paging":   true,
-                        "ordering": true,
-                        "info":     false,
-                        "searching":   true
-						});
+                $('#pending_mentorship_history_table').DataTable();
             });
 
         </script>
