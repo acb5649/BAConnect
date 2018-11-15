@@ -30,7 +30,7 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
         $con = Connection::connect();
 	$match = "";
 	$words = preg_split('/\s+/', $search);
-	$columns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender', 'facebook', 'linkedin');
+	$columns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
 	for ($i=0; $i<count($words); $i++) {
 		if ($i != 0) {
 			$match .= "OR ";
@@ -42,7 +42,7 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
 			}
 		}
 	}
-	$stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressView WHERE ". $match ."  LIMIT " . $num . " OFFSET " . $offset);
+	$stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressGenderJobsDegreesView WHERE ". $match ."  LIMIT " . $num . " OFFSET " . $offset);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $con = null;
