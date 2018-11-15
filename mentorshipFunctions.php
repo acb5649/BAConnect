@@ -55,14 +55,16 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($result == null){
-        return false;
+        $report = new Report("Error", "The selected Pending Mentorship is invalid", NULL, FALSE);
+        return $report;
     }
 
     if($account_id == $result['mentor_ID']){
         if($response == 1){
             if($result['mentor_status'] == "1"){
                 $con = null;
-                return TRUE; //this user has already approved of this relationghip, so nothing happens.
+                $report = new Report("Error", "You have already approved of this mentorship", NULL, FALSE);
+                return $report; //this user has already approved of this relationghip, so nothing happens.
             }
             else{
                 $stmt = $con->prepare("UPDATE `Pending Mentorship` SET mentor_status = 1 WHERE pending_ID = '" . $pending_id . "'");
@@ -71,20 +73,23 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
                     resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
                 }
                 $con = null;
-                return TRUE;
+                $report = new Report("Success", "You have Successfully approved of this mentorship", NULL, TRUE);
+                return $report;
             }
         }
         else{
             resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
             $con = null;
-            return TRUE;
+            $report = new Report("Success", "You have Successfully rejected this mentorship", NULL, TRUE);
+            return $report;
         }
     }
     else if($account_id == $result['mentee_ID']){
         if($response == 1){
             if($result['mentee_status'] == "1"){
                 $con = null;
-                return TRUE; //this user has already approved of this relationghip, so nothing happens.
+                $report = new Report("Error", "You have already approved of this mentorship", NULL, FALSE);
+                return $report; //this user has already approved of this relationghip, so nothing happens.
             }
             else{
                 $stmt = $con->prepare("UPDATE `Pending Mentorship` SET mentee_status = 1 WHERE pending_ID = '" . $pending_id . "'");
@@ -93,13 +98,15 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
                     resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
                 }
                 $con = null;
-                return TRUE;
+                $report = new Report("Success", "You have Successfully approved of this mentorship", NULL, TRUE);
+                return $report;
             }
         }
         else{
             resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
             $con = null;
-            return TRUE;
+            $report = new Report("Success", "You have Successfully rejected this mentorship", NULL, TRUE);
+            return $report;
         }
     }
     else{
@@ -107,14 +114,17 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
         if(getAccountTypeFromAccountID($account_id) == "1"){
             //the current user isn't the mentee, mentor, or an admin, so they shouldn't be here.
             $con = null;
-            return FALSE;
+            $report = new Report("Error", "You do not have permission to vote on this mentorship", NULL, FALSE);
+            return $report;
         }
         else{
             resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+
+            $report = new Report("Success", "You have Successfully rejected this mentorship", NULL, TRUE);
         }
     }
     $con = null;
-    return TRUE;
+    return $report;
 }
 //this function will create an entry in the Mentorship table based on the info in the related entry
 //in the Pending Mentorship table. It will then delete the entry in the Pending Mentorship table.
@@ -258,12 +268,14 @@ function endMentorship($account_id,$targetMentorshipID){
 	}
     else{
         $con = null;
-        return FALSE;
+        $report = new Report("Error", "You do not have permission to end this mentorship", NULL, FALSE);
+        return $report;
     }
 
     $con = null;
+    $report = new Report("Success", "You have Successfully ended this mentorship", NULL, TRUE);
     return TRUE;
-}//jonathan
+}
 
 
 /* NOTE: Inactive mentorship functions section*/
@@ -325,7 +337,8 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
             $menteeID = $temp;
         }
         else{
-            return "Incompatible mentorship preferences";
+            $report = new Report("Error", "The proposed mentor and mentee have incompatible preferences", NULL, FALSE);
+            return $report;
         }
     }
 
@@ -337,7 +350,18 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
 
     if($result != null){
         $con = null;
-        return "There is already a pending mentorship with this person";
+        $report = new Report("Duplicate detected", "Duplicate mentorships are not allowed", NULL, FALSE);
+        return $report;
+    }
+
+    $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE mentor_ID = '" . $mentorID . "' AND mentee_ID = '" . $menteeID . "'");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if($result != null){
+        $con = null;
+        $report = new Report("Duplicate detected", "Duplicate mentorships are not allowed", NULL, FALSE);
+        return $report;
     }
 
     $stmt = $con->prepare("INSERT INTO `Pending Mentorship` (pending_ID, mentor_ID, mentee_ID, mentor_status, mentee_status, request_date) VALUES (?, ?, ?, ?, ?, ?)");
@@ -388,7 +412,8 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
         mail($mentorEmail, "BAConnect: Mentorship Proposal", "A user has proposed a mentorship relationship with you. Click this link to log-in and view your profile: http://corsair.cs.iupui.edu:22891/courseproject/profile.php");
     }
     $con = null;
-    return "Mentorship has been proposed";
+    $report = new Report("Success", "The Mentorship has been proposed", NULL, TRUE);
+    return $report;
 }
 
 function forcePairMentorships($account_id,$mentorAccID, $menteeAccID){
