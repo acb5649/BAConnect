@@ -14,7 +14,11 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "revokeMentorship") {
         echo formatMentorships();
     }
     $report = new Report("Mentorship Has Been Revoked Successfully", "Emails have been sent to both parties notifying them of the change.", "", TRUE);
-    $_SESSION['report'] = $report;
+    $_SESSION['title'] = $report->title;
+    $_SESSION['msg'] = $report->msg;
+    $_SESSION['nextModal'] = $report->nextModal;
+    $_SESSION['success'] = $report->success;
+    $_SESSION['inputs'] = $report->inputs;
     die();
 }
 

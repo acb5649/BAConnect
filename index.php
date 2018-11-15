@@ -202,7 +202,11 @@ if (isset($_POST['register'])) {
         die();
     } else {
         $report = new Report("Error in Registration!", $msg, "registerModal", FALSE);
-        $_SESSION['report'] = $report;
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
         header("Location: index.php");
         die();
     }
@@ -220,7 +224,11 @@ if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee']))
 		$row = $stmt->fetch();
 		if ($row == null) {
             $report = new Report("Manual Match Error!", "An invalid user was specified.", "matchModal", FALSE);
-            $_SESSION['report'] = $report;
+            $_SESSION['title'] = $report->title;
+            $_SESSION['msg'] = $report->msg;
+            $_SESSION['nextModal'] = $report->nextModal;
+            $_SESSION['success'] = $report->success;
+            $_SESSION['inputs'] = $report->inputs;
 			header("Location: index.php");
 			die();
 		}
@@ -232,7 +240,11 @@ if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee']))
 		$row = $stmt->fetch();
 		if ($row == null) {
             $report = new Report("Manual Match Error!", "An invalid user was specified.", "matchModal", FALSE);
-            $_SESSION['report'] = $report;
+            $_SESSION['title'] = $report->title;
+            $_SESSION['msg'] = $report->msg;
+            $_SESSION['nextModal'] = $report->nextModal;
+            $_SESSION['success'] = $report->success;
+            $_SESSION['inputs'] = $report->inputs;
 			header("Location: index.php");
 			die();
 		}
@@ -240,7 +252,11 @@ if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee']))
 
 		proposeMentorship($mentorID, $menteeID, $_SESSION['account_ID']);
         $report = new Report("Manual Match Completed", "Users were matched.", "matchModal", TRUE);
-        $_SESSION['report'] = $report;
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
         header("Location: index.php");
 		die;
 	}
@@ -265,7 +281,11 @@ if(isset($_POST['editSearch']) && isset($_POST['username'])) {
 
     if ($row == null) {
         $report = new Report("Error in Profile Search", "There is no user with the given username.", "editModal", TRUE);
-        $_SESSION['report'] = $report;
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
         header("Location: index.php");
         die();
     }
