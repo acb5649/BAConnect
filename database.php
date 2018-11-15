@@ -381,7 +381,33 @@ function getEmail($account_id) {
     return $row['email_address'];
 }
 
+function getMentorshipStatus($account_id) {
 
+    $result = "";
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("select * from Mentorship where mentor_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $mentees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($mentees) > 0) {
+        $result .= "Currently a mentor.";
+    }
+
+    $con = Connection::connect();
+    $stmt = $con->prepare("select * from Mentorship where mentee_ID = '" . $account_id . "'");
+    $stmt->execute();
+    $mentors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($mentors) > 0) {
+        $result .= "Currently being mentored.";
+    }
+
+    if ($result == "") {
+        $result .= "Not in a mentorship.";
+    }
+
+    $con = null;
+    return $result;
+}
 
 function getStatus($account_id) {
     $con = Connection::connect();
