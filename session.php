@@ -1,4 +1,20 @@
 <?php
+class Report{
+    public $title;
+    public $msg;
+    public $nextModal;
+    public $success;
+    public $inputs; //associative array of all the users' inputs, so you
+                        //can reset them when the modal re-opens.
+
+    function __construct($name, $message, $next, $worked){
+        $this->title = $name;
+        $this->msg = $message;
+        $this->nextModal = $next;
+        $this->success = $worked;
+        $this->inputs = null;
+    }
+}
 
 if(session_id() == '') {
     session_start();

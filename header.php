@@ -38,15 +38,21 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg']) && isset($_SESSION['nex
     unset($_SESSION['title']);
     unset($_SESSION['msg']);
     unset($_SESSION['nextModal']);
+    if(isset($_SESSION['success'])){
+        unset($_SESSION['success']);
+    }
+    if(isset($_SESSION['inputs'])){
+        unset($_SESSION['success']);
+    }
 }
-
+/*
 if(isset($_SESSION['report'])){
     echo "<script>document.getElementById('dialogModal').style.display='block'</script>";
     if($_SESSION['report']->inputs == null){
-        unset($_SESSION['report']);
+        //unset($_SESSION['report']);
     }
 }
-
+*/
 ?>
 
 <div style="position: sticky; position: -webkit-sticky; padding-bottom: 16px;" class="w3-top">

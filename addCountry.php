@@ -11,7 +11,12 @@
         $countryName = trim($_POST['addCountry']);
 
         $report = addCountry($countryName);
-        $_SESSION['report'] = serialize($report);
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        //$_SESSION['report'] = serialize($report);
         header('Location: index.php');
         die;
     } elseif (isset($_POST['edit'])) {
@@ -19,14 +24,24 @@
         $newName = trim($_POST['editCountry']);
 
         $report = editCountry($id, $newName);
-        $_SESSION['report'] = serialize($report);
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        //$_SESSION['report'] = serialize($report);
         header('Location: index.php');
         die;
     } elseif (isset($_POST['delete'])) {
         $countryID = trim($_POST['country']);
 
         $report = deleteCountry($countryID);
-        $_SESSION['report'] = serialize($report);
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        //$_SESSION['report'] = serialize($report);
         header('Location: index.php');
         die;
     }

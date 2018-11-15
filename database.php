@@ -4,23 +4,7 @@ require_once "dbhelper.php";
 require_once "locationFunctions.php";
 require_once "mentorshipFunctions.php";
 
-class Report{
-    public $title;
-    public $msg;
-    public $nextModal;
-    public $success;
-    public $inputs; //associative array of all the users' inputs, so you
-                        //can reset them when the modal re-opens.
 
-    function __construct($name, $message, $next, $worked){
-        $this->title = $name;
-        $this->msg = $message;
-        $this->nextModal = $next;
-        $this->success = $worked;
-        $this->inputs = null;
-    }
-
-}
 
 class Connection {
     public static function connect() {
@@ -381,33 +365,7 @@ function getEmail($account_id) {
     return $row['email_address'];
 }
 
-function getMentorshipStatus($account_id) {
 
-    $result = "";
-
-    $con = Connection::connect();
-    $stmt = $con->prepare("select * from Mentorship where mentor_ID = '" . $account_id . "'");
-    $stmt->execute();
-    $mentees = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if (count($mentees) > 0) {
-        $result .= "Currently a mentor.";
-    }
-
-    $con = Connection::connect();
-    $stmt = $con->prepare("select * from Mentorship where mentee_ID = '" . $account_id . "'");
-    $stmt->execute();
-    $mentors = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if (count($mentors) > 0) {
-        $result .= "Currently being mentored.";
-    }
-
-    if ($result == "") {
-        $result .= "Not in a mentorship.";
-    }
-
-    $con = null;
-    return $result;
-}
 
 function getStatus($account_id) {
     $con = Connection::connect();
