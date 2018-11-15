@@ -273,7 +273,7 @@ function putItInASpan($thing) {
 function formatDegrees($degrees) {
     $result = "";
     foreach($degrees as $degree) {
-        $result .= '<hr><div class="w3-container"><h5 class="w3-opacity">';
+        $result .= '<hr><div class="w3-container w3-margin-bottom"><h5 class="w3-opacity">';
         $result .= $degree[1] . " / " . $degree[0];
         $result .= '</h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
         $result .= $degree[3] . " - " . $degree[2];
@@ -310,7 +310,7 @@ function formatDegreesEditable($degrees, $profile_account_ID) {
 function formatJobs($jobs) {
     $result = "";
     foreach ($jobs as $job) {
-        $result .= '<hr><div class="w3-container"><h5 class="w3-opacity">';
+        $result .= '<hr><div class="w3-container w3-margin-bottom"><h5 class="w3-opacity">';
         $result .= $job[1] . " / " . $job[0];
         $result .= '</h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
         $result .= $job[2] . " - " . $job[3];
