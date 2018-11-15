@@ -2,9 +2,8 @@
 
 if (isset($_POST['userInformation'])) {
     if ($type < 2) {
-        $_SESSION['title'] = "Report Generation Error";
-        $_SESSION['msg'] = "Insufficient privileges.";
-        $_SESSION['nextModal'] = '';
+        $report = new Report("Report Generation Error", "Insufficient privileges.", "", FALSE);
+        $_SESSION['report'] = $report;
         header("Location: index.php");
         die();
     }
