@@ -29,12 +29,12 @@ if ($type > 1) {
     include "addCountry.php";
     include "addDegreeType.php";
     include "addState.php";
-	
+
 }
 
 require_once "dialog.php";
 
-if (isset($_SESSION['title']) && isset($_SESSION['msg']) && isset($_SESSION['nextModal'])) {
+if (isset($_SESSION['title']) && isset($_SESSION['msg']) /* && isset($_SESSION['nextModal']) */) {
     echo "<script>document.getElementById('dialogModal').style.display='block'</script>";
     unset($_SESSION['title']);
     unset($_SESSION['msg']);
@@ -42,9 +42,9 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg']) && isset($_SESSION['nex
     if(isset($_SESSION['success'])){
         unset($_SESSION['success']);
     }
-    if(isset($_SESSION['inputs'])){
-        unset($_SESSION['success']);
-    }
+    //if(isset($_SESSION['inputs'])){
+    //    unset($_SESSION['success']);
+    //}
 }
 /*
 if(isset($_SESSION['report'])){
@@ -79,7 +79,7 @@ if(isset($_SESSION['report'])){
         }
 
         if($type > 1){
-			
+
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'matchModal'".').style.display='."'block'".'">MATCH USERS</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'editModal'".').style.display='."'block'".'">EDIT ACCOUNTS </a>';

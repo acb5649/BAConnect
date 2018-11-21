@@ -3,17 +3,59 @@ require_once "database.php";
 require_once "session.php";
 
 if (!isset($_SESSION['email']) || !isset($_SESSION['code'])) {
-    header("Location: index.php");
+    if(!isset($_SESSION['inputs'])){
+        $_SESSION['title'] = "Error";
+        $_SESSION['msg'] = "email or code were not set";
+        $_SESSION['nextModal'] = "changePassModal";
+        $_SESSION['success'] = TRUE;
+        $_SESSION['inputs'] = null;
+        header("Location: index.php");
+        die();
+    }
+    else{
+        $_SESSION['email'] = $_SESSION['inputs'][1];
+        $_SESSION['code'] = $_SESSION['inputs'][2];
+
+        unset($_SESSION['inputs']);
+    }
 }
 
 if (isset($_POST['submit'])) {
     $pw_1 = filter_input(INPUT_POST, "password_1");
     $pw_2 = filter_input(INPUT_POST, "password_2");
+    $email = filter_input(INPUT_POST, "email");
 
-    if (($pw_1 == $pw_2) && changePassword($_SESSION['email'], $_SESSION['code'], $pw_1)) {
-        header("Location: success.php");
+    //$email = urlencode($email);
+
+    if (($pw_1 == $pw_2) && ($email == $_SESSION['email'])) {
+        $report = changePassword($_SESSION['email'], $_SESSION['code'], $pw_1);
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        header("Location: index.php");
+        die();
     } else {
-        header("Location: failed.php");
+        $sessionEmail = $_SESSION['email'];
+        $code = $_SESSION['code'];
+
+        $_SESSION['title'] = "Error";
+        $_SESSION['nextModal'] = "changePassModal";
+        $_SESSION['success'] = FALSE;
+        $_SESSION['inputs'] = array($sessionEmail, $code);
+
+        if($pw_1 != $pw_2){
+            $_SESSION['msg'] = "passwords were not the same";
+        }
+        else if($email != $_SESSION['email']){
+            $_SESSION['msg'] = "Incorrect Email";
+        }
+        else{
+            $_SESSION['msg'] = "An unknown error has occured";
+        }
+        header("Location: index.php");
+        die();
     }
 }
 
@@ -44,6 +86,14 @@ if (isset($_POST['submit'])) {
             </h2>
         </header>
         <form method="post" action="changePassword.php" class="w3-container">
+
+            <p>
+                <label>
+                    <i class="fa fa-lock"></i> Email
+                </label>
+            </p>
+            <input class="w3-input w3-border" type="text" placeholder="" name="email" id="email">
+
             <p>
                 <label>
                     <i class="fa fa-lock"></i> New Password

@@ -144,7 +144,14 @@ function resetPassword($email) {
     $stmt->execute();
     $con = null;
 
-    mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
+    $url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+    $url = str_replace("forgot.php", "verify.php", $url);
+
+    mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://" . $url . "?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
+
+
+    //mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
 
     return TRUE;
 }
@@ -152,21 +159,39 @@ function resetPassword($email) {
 function changePassword($email, $code, $newPassword) {
     if (verifyCode($code, $email)) {
         $con = Connection::connect();
+        if($con == null){
+            $report = new Report("Error", "verifyCode returned false", "changePassModal", FALSE);
+            return report;
+        }
         $stmt = $con->prepare("select account_ID from `Password Recovery` where code = '".$code."'");
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($row == null){
+            $con = null;
+            $report = new Report("Error", "There are no entries with the given code", "changePassModal", FALSE);
+            return $report;
+        }
         $account_id = $row['account_ID'];
 
-        if (!$account_id) {
-            $con = null;
-            return False;
-        }
+        //if (!$account_id) {
+        //    $con = null;
+        //    return False;
+        //}
 
         $stmt = $con->prepare("UPDATE Account set password = '" . $newPassword . "' where account_ID = '" . $account_id . "'");
-        $stmt->execute();
+        if($stmt->execute()){
+            $report = new Report("Success!", "Your password was successfully changed", "loginModal", TRUE);
+        }
+        else{
+            $report = new Report("Error", "Your password could not be changed", "changePassModal", FALSE);
+        }
 
         $con = null;
-        return True;
+        return $report;
+    }
+    else{
+        $report = new Report("Error", "verifyCode returned false", "changePassModal", FALSE);
+        return $report;
     }
 }
 
