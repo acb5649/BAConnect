@@ -13,7 +13,8 @@ include_once "database.php";
 function getAddressIDFromAccount($account_id) {
 
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT address_ID FROM `Address History` where account_ID = '" . $account_id . "' and isnull(end) ");
+    $stmt = $con->prepare("SELECT address_ID FROM `Address History` where account_ID = ? and isnull(end) ");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -38,7 +39,8 @@ function updateUserAddress($account_id, $address) {
 
 function getApproximateLocation($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select address_ID from `Address History` where account_ID = '" . $account_id . "'  and isnull(end)");
+    $stmt = $con->prepare("select address_ID from `Address History` where account_ID = ? and isnull(end)");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row == null){
@@ -46,7 +48,8 @@ function getApproximateLocation($account_id) {
     }
 
     $address_id = $row['address_ID'];
-    $stmt = $con->prepare("select * from `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt = $con->prepare("select * from `Addresses` where address_ID = ?");
+    $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row == null){
@@ -68,7 +71,8 @@ function getAddressLine1($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
 
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT street_address FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt = $con->prepare("SELECT street_address FROM `Addresses` where address_ID = ?");
+    $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -82,7 +86,8 @@ function getAddressLine2($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
 
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT street_address2 FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt = $con->prepare("SELECT street_address2 FROM `Addresses` where address_ID = ?");
+    $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -96,7 +101,8 @@ function getCity($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
 
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT city FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt = $con->prepare("SELECT city FROM `Addresses` where address_ID = ?");
+    $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -110,7 +116,8 @@ function getPostCode($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
 
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT post_code FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt = $con->prepare("SELECT post_code FROM `Addresses` where address_ID = ?");
+    $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -124,12 +131,14 @@ function getCountry($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
 
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT country_ID FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt = $con->prepare("SELECT country_ID FROM `Addresses` where address_ID = ?");
+    $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $country_ID = $result['country_ID'];
 
-    $stmt = $con->prepare("SELECT country FROM `Countries` where country_ID = '" . $country_ID . "'");
+    $stmt = $con->prepare("SELECT country FROM `Countries` where country_ID = ?");
+    $stmt->bindValue(1, $country_ID, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -158,7 +167,13 @@ function registerNewAddress($address) {
 
 function getAddressID($address) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select address_ID from Addresses where street_address = '" . $address->street . "' and street_address2 = '" . $address->street2 . "' and post_code = '" . $address->postcode . "' and city = '" . $address->city . "' and country_id = '" . $address->country . "' and state = '" . $address->state . "'");
+    $stmt = $con->prepare("select address_ID from Addresses where street_address = ? and street_address2 = ? and post_code = ? and city = ? and country_id = ? and state = ?");
+    $stmt->bindValue(1, $address->street, PDO::PARAM_STR);
+    $stmt->bindValue(2, $address->street2, PDO::PARAM_STR);
+    $stmt->bindValue(3, $address->postcode, PDO::PARAM_STR);
+    $stmt->bindValue(4, $address->city, PDO::PARAM_STR);
+    $stmt->bindValue(5, $address->country, PDO::PARAM_INT);
+    $stmt->bindValue(6, $address->state, PDO::PARAM_STR);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $con = null;
@@ -177,7 +192,8 @@ function getCountryID($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
 
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT country_ID FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt = $con->prepare("SELECT country_ID FROM `Addresses` where address_ID = ?");
+    $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -222,14 +238,16 @@ function addCountry($countryName){
         return $report;
     }
 
-    $stmt = $con->prepare("SELECT * FROM `Countries` WHERE country = '" . $countryName . "'");
+    $stmt = $con->prepare("SELECT * FROM `Countries` WHERE country = ?");
+    $stmt->bindValue(1, $countryName, PDO::PARAM_STR);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($result != null){	//if there is already a country with the same name in the database
         $enabled = $result['enabled'];
         if($enabled == "0"){
-            $stmt = $con->prepare("UPDATE `Countries` SET enabled = 1 WHERE country = '" . $countryName . "'");
+            $stmt = $con->prepare("UPDATE `Countries` SET enabled = 1 WHERE country = ?");
+            $stmt->bindValue(1, $countryName, PDO::PARAM_STR);
             $success = $stmt->execute();
 
 			if($success){
@@ -272,7 +290,9 @@ function editCountry($id, $newName){
         return $report;
     }
 
-    $stmt = $con->prepare("UPDATE `Countries` SET country = '" . $newName . "' WHERE country_ID = '" . $id . "'");
+    $stmt = $con->prepare("UPDATE `Countries` SET country = ? WHERE country_ID = ?");
+    $stmt->bindValue(1, $newName, PDO::PARAM_STR);
+    $stmt->bindValue(2, $id, PDO::PARAM_INT);
 	$success = $stmt->execute();
 
     if($success){
@@ -295,7 +315,8 @@ function deleteCountry($country_ID){
         return $report;
     }
 
-    $stmt = $con->prepare("UPDATE `Countries` SET enabled = 0 WHERE country_ID = '" . $country_ID . "'");
+    $stmt = $con->prepare("UPDATE `Countries` SET enabled = 0 WHERE country_ID = ?");
+    $stmt->bindValue(1, $country_ID, PDO::PARAM_INT);
     $success = $stmt->execute();
 
 	if($success){
@@ -318,7 +339,8 @@ function getStateID($account_id) {
     $address_id = getAddressIDFromAccount($account_id);
 
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT state FROM `Addresses` where address_ID = '" . $address_id . "'");
+    $stmt = $con->prepare("SELECT state FROM `Addresses` where address_ID = ?");
+    $stmt->bindValue(1, $address_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -330,7 +352,8 @@ function getStateID($account_id) {
 
 function getStatesList($countryID, $account_id = -1){
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT state_name, state_ID FROM States WHERE country_ID = '" . $countryID . "' AND enabled = 1");
+    $stmt = $con->prepare("SELECT state_name, state_ID FROM States WHERE country_ID = ? AND enabled = 1");
+    $stmt->bindValue(1, $countryID, PDO::PARAM_INT);
     $stmt->execute();
     $list = $stmt->fetchAll();
     $con = null;
@@ -362,13 +385,16 @@ function addState($countryID, $stateName){
         return $report;
     }
 
-    $stmt = $con->prepare("SELECT * FROM States WHERE state_name = '" . $stateName . "' AND country_ID = '" . $countryID . "'");
+    $stmt = $con->prepare("SELECT * FROM States WHERE state_name = ? AND country_ID = ?");
+    $stmt->bindValue(1, $stateName, PDO::PARAM_STR);
+    $stmt->bindValue(2, $countryID, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($result != null){	//if there is already a country with the same name in the database
         if($result['enabled'] == "0"){
-            $stmt = $con->prepare("UPDATE States SET enabled = 1 WHERE state_ID = '" . $ID . "'");
+            $stmt = $con->prepare("UPDATE States SET enabled = 1 WHERE state_name = ?");
+            $stmt->bindValue(1, $stateName, PDO::PARAM_STR);
             $success = $stmt->execute();
 
 			if($success){
@@ -412,7 +438,9 @@ function editState($newName, $ID){
         return $report;
     }
 
-    $stmt = $con->prepare("UPDATE States SET state_name = '" . $newName . "' WHERE state_ID = '" . $ID . "'");
+    $stmt = $con->prepare("UPDATE States SET state_name = ? WHERE state_ID = ?");
+    $stmt->bindValue(1, $newName, PDO::PARAM_STR);
+    $stmt->bindValue(2, $ID, PDO::PARAM_INT);
     $success = $stmt->execute();
 
 	if($success){
@@ -435,7 +463,8 @@ function deleteState($ID){
         return $report;
     }
 
-    $stmt = $con->prepare("UPDATE `States` SET enabled = 0 WHERE state_ID = '" . $ID . "'");
+    $stmt = $con->prepare("UPDATE `States` SET enabled = 0 WHERE state_ID = ?");
+    $stmt->bindValue(1, $ID, PDO::PARAM_INT);
     $success = $stmt->execute();
 
 	if($success){

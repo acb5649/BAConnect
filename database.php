@@ -108,7 +108,8 @@ function registerNewPicture($account_id, $picture) {
     $file = fopen($picture,'rb');
 
     $con = Connection::connect();
-    $stmt = $con->prepare("delete from Pictures where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("delete from Pictures where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
 
     $stmt = $con->prepare("insert into Pictures (picture_ID, account_ID, date_uploaded, picture) values (?, ?, ?, ?)");
@@ -138,7 +139,8 @@ function resetPassword($email) {
     $code = makeCode($email);
 
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from `Password Recovery` where account_ID = '".$account_id."'");
+    $stmt = $con->prepare("select * from `Password Recovery` where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -170,7 +172,8 @@ function changePassword($email, $code, $newPassword) {
             $report = new Report("Database Error", "Could not secure connection.", "changePassModal", FALSE);
             return $report;
         }
-        $stmt = $con->prepare("select account_ID from `Password Recovery` where code = '".$code."'");
+        $stmt = $con->prepare("select account_ID from `Password Recovery` where code = ?");
+        $stmt->bindValue(1, $code, PDO::PARAM_STR);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if($row == null){
@@ -180,7 +183,9 @@ function changePassword($email, $code, $newPassword) {
         }
         $account_id = $row['account_ID'];
 
-        $stmt = $con->prepare("update Account set password = '" . $newPassword . "' where account_ID = '" . $account_id . "'");
+        $stmt = $con->prepare("update Account set password = ? where account_ID = ?");
+        $stmt->bindValue(1, $newPassword, PDO::PARAM_STR);
+        $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
         if($stmt->execute()){
             $report = new Report("Success!", "Your password was successfully changed", "loginModal", TRUE);
         }
@@ -189,7 +194,9 @@ function changePassword($email, $code, $newPassword) {
         }
 
         // Change was successful, delete row from table.
-        $stmt = $con->prepare("delete from `Password Recovery` where code = '" . $code . "' and account_ID = '" . $account_id . "'");
+        $stmt = $con->prepare("delete from `Password Recovery` where code = ? and account_ID = ?");
+        $stmt->bindValue(1, $code, PDO::PARAM_STR);
+        $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
         $stmt->execute();
 
         $con = null;
@@ -202,20 +209,22 @@ function changePassword($email, $code, $newPassword) {
 }
 
 function editAccountType($account_id, $newType){
-  $con = Connection::connect();
-  $stmt = $con->prepare("UPDATE `Account` SET type = '" . $newType . "' WHERE account_ID = '" . $account_id . "'");
-  $stmt->execute();
+    $con = Connection::connect();
+    $stmt = $con->prepare("UPDATE `Account` SET type = ? WHERE account_ID = ?");
+    $stmt->bindValue(1, $newType, PDO::PARAM_INT);
+    $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
+    $stmt->execute();
 
-  $con = null;
-  $stmt = null;
-
+    $con = null;
+    $stmt = null;
 }
 
 function login($username, $password) {
     $con = Connection::connect();
     $account_id = getAccountIDFromUsername($username);
 
-    $stmt = $con->prepare("select password from Account where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select password from Account where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $con = null;
@@ -297,12 +306,14 @@ function listDegreeTypes(){
 // This function will add a new degree type to the database, but will check if it's already in the database first
 function addDegreeType($degreeType){
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT * FROM `Degree Types` WHERE degree = '" . $degreeType . "'");
+    $stmt = $con->prepare("SELECT * FROM `Degree Types` WHERE degree = ?");
+    $stmt->bindValue(1, $degreeType, PDO::PARAM_STR);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if($result != null){	//if there is already a degree type with the same name in the database
         if($result['enabled'] == "0"){
-            $stmt = $con->prepare("UPDATE `Degree Types` SET enabled = 1 WHERE degree = '" . $degreeType . "'");
+            $stmt = $con->prepare("UPDATE `Degree Types` SET enabled = 1 WHERE degree = ?");
+            $stmt->bindValue(1, $degreeType, PDO::PARAM_STR);
             $stmt->execute();
             $report = new Report("Success!", "The degree type was successfully re-enabled", "addDegreeType", TRUE);
         }
@@ -334,7 +345,9 @@ function addDegreeType($degreeType){
 // This function will edit a pre-existing degree type name in the database
 function editDegreeType($id, $newName){
     $con = Connection::connect();
-    $stmt = $con->prepare("UPDATE `Degree Types` SET degree = '" . $newName . "' WHERE degree_type_ID = '" . $id . "'");
+    $stmt = $con->prepare("UPDATE `Degree Types` SET degree = ? WHERE degree_type_ID = ?");
+    $stmt->bindValue(1, $newName, PDO::PARAM_STR);
+    $stmt->bindValue(2, $id, PDO::PARAM_INT);
     $success = $stmt->execute();
     if($success){
         $report = new Report("Success!", "The degree type was successfully changed", "addDegreeType", TRUE);
@@ -350,7 +363,8 @@ function editDegreeType($id, $newName){
 function deleteDegreeType($degreeTypeID){
     $con = Connection::connect();
 
-    $stmt = $con->prepare("UPDATE `Degree Types` SET enabled = 0 WHERE degree_type_ID = '" . $degreeTypeID . "'");
+    $stmt = $con->prepare("UPDATE `Degree Types` SET enabled = 0 WHERE degree_type_ID = ?");
+    $stmt->bindValue(1, $degreeTypeID, PDO::PARAM_INT);
     $success = $stmt->execute();
 
     if($success){
@@ -371,7 +385,8 @@ function deleteDegreeType($degreeTypeID){
 
 function getAccountTypeFromAccountID($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select type from Account where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select type from Account where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $con = null;
@@ -380,7 +395,8 @@ function getAccountTypeFromAccountID($account_id) {
 
 function getAccountIDFromUsername($username) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select account_ID from Account where username = '" . $username . "'");
+    $stmt = $con->prepare("select account_ID from Account where username = ?");
+    $stmt->bindValue(1, $username, PDO::PARAM_STR);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $con = null;
@@ -389,7 +405,8 @@ function getAccountIDFromUsername($username) {
 
 function getAccountIDFromEmail($email) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select account_ID from Information where email_address = '" . $email . "'");
+    $stmt = $con->prepare("select account_ID from Information where email_address = ?");
+    $stmt->bindValue(1, $email, PDO::PARAM_STR);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $con = null;
@@ -398,7 +415,8 @@ function getAccountIDFromEmail($email) {
 
 function getName($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from Information where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select * from Information where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row == null){
@@ -410,7 +428,8 @@ function getName($account_id) {
 
 function getEmail($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from Information where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select * from Information where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row == null){
@@ -423,14 +442,16 @@ function getEmail($account_id) {
 function getMentorshipStatus($account_id) {
     $result = "";
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from Mentorship where mentor_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select * from Mentorship where mentor_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $mentees = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (count($mentees) > 0) {
         $result .= "Currently a mentor.";
     }
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from Mentorship where mentee_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select * from Mentorship where mentee_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $mentors = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (count($mentors) > 0) {
@@ -446,7 +467,8 @@ function getMentorshipStatus($account_id) {
 
 function getStatus($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select status from Information where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select status from Information where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row == null){
@@ -465,7 +487,8 @@ function getStatus($account_id) {
 
 function getPhoneNumber($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select phone_number from `Phone Numbers` where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select phone_number from `Phone Numbers` where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row == null){
@@ -477,7 +500,8 @@ function getPhoneNumber($account_id) {
 
 function getGender($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select gender from `Information` where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select gender from `Information` where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row == null){
@@ -496,7 +520,8 @@ function getGender($account_id) {
 
 function getDegrees($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT * FROM Degrees where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("SELECT * FROM Degrees where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -510,13 +535,15 @@ function getDegrees($account_id) {
 
 function getJobs($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT job_ID FROM `Job History` where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("SELECT job_ID FROM `Job History` where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $jobs = array();
     foreach ($result as $job_id) {
-        $stmt = $con->prepare("SELECT * FROM `Job History` where job_ID = '" . $job_id['job_ID'] . "'");
+        $stmt = $con->prepare("SELECT * FROM `Job History` where job_ID = ?");
+        $stmt->bindValue(1, $job_id['job_ID'], PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         array_push($jobs, array($result['employer'], $result['profession_field'], $result['start'], $result['end'], $result['job_ID']));
@@ -527,7 +554,8 @@ function getJobs($account_id) {
 
 function getFacebookLink($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select facebook from `Information` where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select facebook from `Information` where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row['facebook'] == ""){
@@ -539,7 +567,8 @@ function getFacebookLink($account_id) {
 
 function getLinkedinLink($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select linkedin from `Information` where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select linkedin from `Information` where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row['linkedin'] == ""){
