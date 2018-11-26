@@ -84,10 +84,21 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     }
 
     if (isset($_POST['phone'])) {
-        $stmt = $con->prepare("UPDATE `Phone Numbers` set phone_number = ? where account_ID = ?");
-        $stmt->bindValue(1, $_POST['phone'], PDO::PARAM_INT);
-        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
-        $stmt->execute();
+        if(is_numeric($_POST['phone'])){
+            $stmt = $con->prepare("UPDATE `Phone Numbers` set phone_number = ? where account_ID = ?");
+            $stmt->bindValue(1, $_POST['phone'], PDO::PARAM_INT);
+            $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
+            $stmt->execute();
+        }
+        else{
+            $_SESSION['title'] = "Invalid Phone Number";
+            $_SESSION['msg'] = "Please enter a valid phone number (digits only)";
+            $_SESSION['nextModal'] = "";
+            $_SESSION['success'] = FALSE;
+            $_SESSION['inputs'] = null;
+            header("profile.php?user=" . $_REQUEST['user']);
+            die();
+        }
     }
 
     if (isset($_POST['addr1']) && isset($_POST['addr2']) && isset($_POST['city']) && isset($_POST['state']) && isset($_POST['postcode']) && isset($_POST['country'])) {
