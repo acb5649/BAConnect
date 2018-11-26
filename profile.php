@@ -5,8 +5,18 @@ require_once "database.php";
 $allowEdit = FALSE;
 
 if (isset($_REQUEST["action"])) {
-    if (isset($_SESSION["profile_ID"])) {
-        $profile_account_id = $_SESSION["profile_ID"];
+    if (isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
+        if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
+            // user is editing own account
+            $profile_account_id = $_SESSION["profile_ID"];
+        } elseif ($_SESSION['type'] > 1) {
+            // user is an admin performing an edit action
+            $profile_account_id = $_SESSION["profile_ID"];
+        } else {
+            $_SESSION['title'] = "Error: Forbidden Access";
+            $_SESSION['msg'] = "Contact an admin if you believe this is a error.";
+            header("location: index.php");
+        }
     } else {
         header("location: index.php");
     }
