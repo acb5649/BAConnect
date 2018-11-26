@@ -221,14 +221,30 @@ function editAccountType($account_id, $newType){
 
 function login($username, $password) {
     $con = Connection::connect();
+    if($con == null){
+        $report = new Report("Error", "Could not connect to database.", "login", FALSE);
+        return $report;
+    }
     $account_id = getAccountIDFromUsername($username);
 
-    $stmt = $con->prepare("select password from Account where account_ID = ?");
-    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    if($account_id == null){
+        $report = new Report("Error", "Invalid username or password", "login", FALSE);
+        return $report;
+    }
+
+    $stmt = $con->prepare("select password from Account where account_ID = '" . $account_id . "'");
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $con = null;
-    return $password == $row['password'];
+
+    if($password == $row['password']){
+        $report = new Report("Success", "Login Successful", "login", TRUE);
+    }
+    else{
+        $report = new Report("Error", "Invalid username or password", "login", FALSE);
+    }
+
+    return $report;
 }
 
 function makeCode($email) {

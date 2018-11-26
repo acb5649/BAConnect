@@ -10,6 +10,9 @@ class Report{
     function __construct($name, $message, $next, $worked){
         $this->title = $name;
         $this->msg = $message;
+        if(strpos($next, 'Modal') === false){
+            $next = $next . "Modal";
+        }
         $this->nextModal = $next;
         $this->success = $worked;
         $this->inputs = null;
