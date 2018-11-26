@@ -1,5 +1,9 @@
 <?php
 
+require_once "database.php";
+
+require_once "session.php";
+
 if (isset($_POST['submit'])) {
     require_once "database.php";
     $user_email = $_POST['email'];
