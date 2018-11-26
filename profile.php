@@ -3,6 +3,7 @@ require_once "session.php";
 require_once "database.php";
 
 $allowEdit = FALSE;
+$trustedUser = FALSE;
 
 if (isset($_REQUEST["action"])) {
     if (isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
@@ -42,6 +43,16 @@ if (isset($_REQUEST["action"])) {
         $profile_account_id = $_REQUEST['user'];
         $_SESSION["profile_ID"] = $_REQUEST['user'];
     }
+}
+
+$currentMentorships = getCurrentMentorships($profile_account_id);
+$approvedUserArr = array();
+foreach($currentMentorships as $mentorship) {
+    array_push($approvedUserArr, $mentorship['mentor_ID'], $mentorship['mentee_ID']);
+}
+$approvedUserArr = array_unique($approvedUserArr);
+if (in_array($_SESSION["account_ID"], $approvedUserArr)) {
+    $trustedUser = TRUE;
 }
 
 if (isset($_POST['submit']) && isset($_FILES['profile'])) {
@@ -780,7 +791,7 @@ function formatPendingMentorships($profile_account_id) {
                     <p class="w3-display-container" id="status"><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getStatus($profile_account_id)) . makeEditable($allowEdit, "status")?></p>
                     <p class="w3-display-container" id="location"><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($profile_account_id)) . makeEditable($allowEdit, "location")?></p>
                     <p class="w3-display-container" id="countrySpan"><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($profile_account_id))?></p>
-                    <?php if ($allowEdit) {
+                    <?php if ($allowEdit || $trustedUser) {
                         echo "<hr>";
                         echo '<p class="w3-display-container" id="profile_email"><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getEmail($profile_account_id)) . makeEditable($allowEdit, "profile_email") . '</p>';
                         echo '<p class="w3-display-container" id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getPhoneNumber($profile_account_id)) . makeEditable($allowEdit, "phone") . '</p>';
