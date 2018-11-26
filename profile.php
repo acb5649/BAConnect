@@ -53,26 +53,30 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     $con = Connection::connect();
 
     if (isset($_POST['gender'])) {
-        $stmt = $con->prepare("UPDATE Information set gender = ? where account_ID = '" . $profile_account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set gender = ? where account_ID = ?");
         $stmt->bindValue(1, $_POST['gender'], PDO::PARAM_INT);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['status'])) {
-        $stmt = $con->prepare("UPDATE Information set status = ? where account_ID = '" . $profile_account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set status = ? where account_ID = ?");
         $stmt->bindValue(1, $_POST['status'], PDO::PARAM_INT);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['email'])) {
-        $stmt = $con->prepare("UPDATE Information set email_address = ? where account_ID = '" . $profile_account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set email_address = ? where account_ID = ?");
         $stmt->bindValue(1, $_POST['email'], PDO::PARAM_STR);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['phone'])) {
-        $stmt = $con->prepare("UPDATE `Phone Numbers` set phone_number = ? where account_ID = '" . $profile_account_id . "'");
+        $stmt = $con->prepare("UPDATE `Phone Numbers` set phone_number = ? where account_ID = ?");
         $stmt->bindValue(1, $_POST['phone'], PDO::PARAM_INT);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
@@ -88,20 +92,23 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     }
 
     if (isset($_POST['profile_facebook'])) {
-        $stmt = $con->prepare("UPDATE Information set facebook = ? where account_ID = '" . $profile_account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set facebook = ? where account_ID = ?");
         $stmt->bindValue(1, $_POST['profile_facebook'], PDO::PARAM_STR);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['profile_linkedin'])) {
-        $stmt = $con->prepare("UPDATE Information set linkedin = ? where account_ID = '" . $profile_account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set linkedin = ? where account_ID = ?");
         $stmt->bindValue(1, $_POST['profile_linkedin'], PDO::PARAM_STR);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['preference'])) {
-        $stmt = $con->prepare("UPDATE Information set mentorship_preference = ? where account_ID = '" . $profile_account_id . "'");
+        $stmt = $con->prepare("UPDATE Information set mentorship_preference = ? where account_ID = ?");
         $stmt->bindValue(1, $_POST['preference'], PDO::PARAM_STR);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 

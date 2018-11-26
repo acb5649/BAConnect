@@ -5,7 +5,7 @@
 
 function getUserMentorshipPreference($account_id){
     $con = Connection::connect();
-    $stmt = $con->prepare("SELECT mentorship_preference FROM `Information` WHERE account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("SELECT mentorship_preference FROM `Information` WHERE account_ID = ?");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
