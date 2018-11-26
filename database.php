@@ -138,47 +138,49 @@ function resetPassword($email) {
     $code = makeCode($email);
 
     $con = Connection::connect();
-    $stmt = $con->prepare("insert into `Password Recovery` (account_ID, code) values (?, ?)");
-    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
-    $stmt->bindValue(2, $code, PDO::PARAM_STR);
+    $stmt = $con->prepare("select * from `Password Recovery` where account_ID = '".$account_id."'");
     $stmt->execute();
-    $con = null;
+    $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    if (count($row) < 2) {
+        $stmt = $con->prepare("insert into `Password Recovery` (account_ID, code) values (?, ?)");
+        $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+        $stmt->bindValue(2, $code, PDO::PARAM_STR);
+        $stmt->execute();
+        $con = null;
 
-    $url = str_replace("forgot.php", "verify.php", $url);
+        $url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-    mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://" . $url . "?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
+        $url = str_replace("forgot.php", "verify.php", $url);
+
+        mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://" . $url . "?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
+
+        return new Report("Success!", "An email has been sent to the address registered with your account.", "", TRUE);
+    } else {
+        return new Report("Maximum Reset Attempts Limit Reached", "Contact an admin for further assistance.", "", FALSE);
+    }
 
 
-    //mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
-
-    return TRUE;
 }
 
 function changePassword($email, $code, $newPassword) {
     if (verifyCode($code, $email)) {
         $con = Connection::connect();
         if($con == null){
-            $report = new Report("Error", "verifyCode returned false", "changePassModal", FALSE);
-            return report;
+            $report = new Report("Database Error", "Could not secure connection.", "changePassModal", FALSE);
+            return $report;
         }
         $stmt = $con->prepare("select account_ID from `Password Recovery` where code = '".$code."'");
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if($row == null){
             $con = null;
-            $report = new Report("Error", "There are no entries with the given code", "changePassModal", FALSE);
+            $report = new Report("Verification Error", "Invalid verification code.", "changePassModal", FALSE);
             return $report;
         }
         $account_id = $row['account_ID'];
 
-        //if (!$account_id) {
-        //    $con = null;
-        //    return False;
-        //}
-
-        $stmt = $con->prepare("UPDATE Account set password = '" . $newPassword . "' where account_ID = '" . $account_id . "'");
+        $stmt = $con->prepare("update Account set password = '" . $newPassword . "' where account_ID = '" . $account_id . "'");
         if($stmt->execute()){
             $report = new Report("Success!", "Your password was successfully changed", "loginModal", TRUE);
         }
@@ -186,11 +188,15 @@ function changePassword($email, $code, $newPassword) {
             $report = new Report("Error", "Your password could not be changed", "changePassModal", FALSE);
         }
 
+        // Change was successful, delete row from table.
+        $stmt = $con->prepare("delete from `Password Recovery` where code = '" . $code . "' and account_ID = '" . $account_id . "'");
+        $stmt->execute();
+
         $con = null;
         return $report;
     }
     else{
-        $report = new Report("Error", "verifyCode returned false", "changePassModal", FALSE);
+        $report = new Report("Verification Error", "Invalid verification code", "changePassModal", FALSE);
         return $report;
     }
 }

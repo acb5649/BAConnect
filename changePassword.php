@@ -46,15 +46,13 @@ if (isset($_POST['submit'])) {
         $_SESSION['inputs'] = array($sessionEmail, $code);
 
         if($pw_1 != $pw_2){
-            $_SESSION['msg'] = "passwords were not the same";
-        }
-        else if($email != $_SESSION['email']){
+            $_SESSION['msg'] = "Passwords were not the same";
+        } else if($email != $_SESSION['email']){
             $_SESSION['msg'] = "Incorrect Email";
-        }
-        else{
+        } else {
             $_SESSION['msg'] = "An unknown error has occured";
         }
-        header("Location: index.php");
+        header("Location: changePassword.php");
         die();
     }
 }

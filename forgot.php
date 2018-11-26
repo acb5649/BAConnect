@@ -3,11 +3,14 @@
 if (isset($_POST['submit'])) {
     require_once "database.php";
     $user_email = $_POST['email'];
-    if (resetPassword($user_email)) {
-        header("Location: success.php");
-    } else {
-        header("Location: failed.php");
-    }
+    $report = resetPassword($user_email);
+    $_SESSION['title'] = $report->title;
+    $_SESSION['msg'] = $report->msg;
+    $_SESSION['nextModal'] = $report->nextModal;
+    $_SESSION['success'] = $report->success;
+    $_SESSION['inputs'] = $report->inputs;
+    header("Location: index.php");
+    die();
 }
 ?>
 
