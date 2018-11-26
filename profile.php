@@ -96,7 +96,7 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
             $_SESSION['nextModal'] = "";
             $_SESSION['success'] = FALSE;
             $_SESSION['inputs'] = null;
-            header("profile.php?user=" . $_REQUEST['user']);
+            header("Location: profile.php?user=" . $_REQUEST['user']);
             die();
         }
     }
@@ -258,11 +258,27 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest")
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == "endMentorship") {
     $mentorship_ID = $_REQUEST['id'];
 
-    $success = endMentorship($_SESSION['account_ID'], $mentorship_ID);
-    if ($success) {
+    $report = endMentorship($_SESSION['account_ID'], $mentorship_ID);
+    if ($report->success) {
         echo formatMentorships($profile_account_id);
+        /*
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        header("Location: profile.php?user=" . $_REQUEST['user']);
+        */
         die();
     } else {
+        /*
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        header("Location: profile.php?user=" . $_REQUEST['user']);
+        */
         die();
     }
 }

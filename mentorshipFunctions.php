@@ -375,7 +375,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
         return $report;
     }
 
-    $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE mentor_ID = ? AND mentee_ID = ?");
+    $stmt = $con->prepare("SELECT * FROM `Mentorship` WHERE mentor_ID = ? AND mentee_ID = ? AND isnull(end)");
     $stmt->bindValue(1, $mentorID, PDO::PARAM_INT);
     $stmt->bindValue(2, $menteeID, PDO::PARAM_INT);
     $stmt->execute();
