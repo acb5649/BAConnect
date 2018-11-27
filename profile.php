@@ -846,12 +846,13 @@ function formatPendingMentorships($profile_account_id) {
                 <?php echo formatJobs(getJobs($profile_account_id)) . makeHistoryElementEditable($allowEdit, "jobs"); ?>
             </div>
 
+            <?php if ($allowEdit) { echo '
             <div id="mentorships" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-users fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Mentorships</h2>
                 <div id="mentorships_content" class="w3-container w3-text-grey" style="padding-bottom:32px">
-                    <?php echo formatMentorships($profile_account_id); ?>
+                    ' . formatMentorships($profile_account_id) . '
                 </div>
-            </div>
+            </div>'; } ?>
             <!-- End Right Column -->
         </div>
         <!-- End Grid -->
