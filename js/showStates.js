@@ -1,4 +1,8 @@
-function showStates(countryID, elementID = "state") {
+function showStates(countryID, elementID) {
+    if (elementID = "") {
+        elementID = "state";
+    }
+
     if(countryID != ""){
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function(){

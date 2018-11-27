@@ -34,8 +34,9 @@ function imageAjax(id) {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    localStorage.setItem(id["account_ID"] + "_img", this.responseText);
-                    document.getElementById(id["account_ID"]).src = this.responseText;
+                    let elementID = id["account_ID"];
+                    localStorage.setItem(elementID + "_img", this.responseText);
+                    document.getElementById(elementID).src = this.responseText;
                 }
             };
             xmlhttp.open("GET", "image.php?account_id=" + id["account_ID"], true);

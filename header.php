@@ -92,7 +92,7 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
         $filename = basename($_SERVER['REQUEST_URI']);
         if ($filename == "index.php" || $filename == "courseproject") {
             echo "<div id=\"search\" class=\"w3-center w3-hide w3-container w3-card w3-dark-grey w3-animate-top w3-padding-16\" style=\"width: 50%; margin: auto; z-index: -1;\">
-                    <input id=\"searchBox\" class=\"w3-input w3-border\" type=\"text\" placeholder=\"Search...\" style=\"width: 100%\" onkeyup=\"searchCards()\">
+                    <input id=\"searchBox\" class=\"w3-input w3-border\" type=\"text\" placeholder=\"Search...\" style=\"width: 100%\" onkeyup=\"searchCards(30, true)\">
                   </div>";
         }
     ?>

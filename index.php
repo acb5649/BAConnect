@@ -365,7 +365,7 @@ if(isset($_POST['upgrade'])){
 
     var offset = 0;
 
-    function continuallyLoadCards(num = 10) {
+    function continuallyLoadCards(num) {
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
@@ -383,7 +383,7 @@ if(isset($_POST['upgrade'])){
 
     continuallyLoadCards(30);
 
-    function searchCards(num = 30, startOver = true) {
+    function searchCards(num, startOver) {
         if (startOver) {
             document.getElementById("mentorDisplay").innerHTML = "";
             offset = 0;
@@ -399,8 +399,9 @@ if(isset($_POST['upgrade'])){
         xmlhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 var array = JSON.parse(this.responseText);
-                console.log(array);
-                cardAjax([...new Set(array)]);
+                //console.log(array);
+                //cardAjax([...new Set(array)]);
+                cardAjax(array);
             }
         };
 
@@ -411,8 +412,20 @@ if(isset($_POST['upgrade'])){
         offset += num;
     }
 
+    window.compatibleInnerHeight= function(){
+        if(window.innerWidth != undefined){
+            return window.innerHeight;
+        }
+        else{
+            var B= document.body,
+                D= document.documentElement;
+            return Math.max(D.clientHeight, B.clientHeight);
+        }
+    };
+
+    /*
     window.onscroll = function(ev) {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        if ((window.compatibleInnerHeight + window.pageYOffset) >= document.body.offsetHeight) {
             let term = document.getElementById("searchBox").value;
             if (term = "") {
                 continuallyLoadCards(10);
@@ -420,6 +433,20 @@ if(isset($_POST['upgrade'])){
                 searchCards(10, false);
             }
         }
-    };
+    };*/
+
+    $(window).on("load", function(){
+        $(window).on("scroll", function(){
+            if (($(window).scrollTop() - ($(document).height() - $(window).height()) <= 5) && ($(window).scrollTop() - ($(document).height() - $(window).height()) >= -5)) {
+                let term = document.getElementById("searchBox").value;
+                if (term = "") {
+                    continuallyLoadCards(10);
+                } else {
+                    searchCards(10, false);
+                }
+            }
+        });
+    });
+
 </script>
 </html>
