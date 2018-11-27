@@ -9,68 +9,22 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "revokeMentorship") {
     }
 
     $mentorship_ID = $_REQUEST['id'];
-    $success = endMentorship($_SESSION['account_ID'], $mentorship_ID);
-    if ($success) {
-        echo formatMentorships();
+    $report = endMentorship($_SESSION['account_ID'], $mentorship_ID);
+    if ($report->success) {
+        $report = new Report("Mentorship Has Been Revoked Successfully", "Emails have been sent to both parties notifying them of the change.", "", TRUE);
     }
-    $report = new Report("Mentorship Has Been Revoked Successfully", "Emails have been sent to both parties notifying them of the change.", "", TRUE);
+
     $_SESSION['title'] = $report->title;
     $_SESSION['msg'] = $report->msg;
     $_SESSION['nextModal'] = $report->nextModal;
     $_SESSION['success'] = $report->success;
     $_SESSION['inputs'] = $report->inputs;
-    die();
+
+    //echo formatMentorships();
+    //header("Location: mentorships.php");
+    //die();
 }
-if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee'])) {
-	if ($type <= 2) {
-		header("Location: index.php");
-		die;
-	} elseif ($type >2) {
 
-		$con = Connection::connect();
-		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-		$stmt->bindValue(1, $_POST['mentor'], PDO::PARAM_STR);
-		$stmt->execute();
-		$row = $stmt->fetch();
-		if ($row == null) {
-            $report = new Report("Manual Match Error!", "An invalid user was specified.", "matchModal", FALSE);
-            $_SESSION['title'] = $report->title;
-            $_SESSION['msg'] = $report->msg;
-            $_SESSION['nextModal'] = $report->nextModal;
-            $_SESSION['success'] = $report->success;
-            $_SESSION['inputs'] = $report->inputs;
-			header("Location: index.php");
-			die();
-		}
-		$mentorID = $row['account_ID'];
-
-		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-		$stmt->bindValue(1, $_POST['mentee'], PDO::PARAM_STR);
-		$stmt->execute();
-		$row = $stmt->fetch();
-		if ($row == null) {
-            $report = new Report("Manual Match Error!", "An invalid user was specified.", "matchModal", FALSE);
-            $_SESSION['title'] = $report->title;
-            $_SESSION['msg'] = $report->msg;
-            $_SESSION['nextModal'] = $report->nextModal;
-            $_SESSION['success'] = $report->success;
-            $_SESSION['inputs'] = $report->inputs;
-			header("Location: index.php");
-			die();
-		}
-		$menteeID = $row['account_ID'];
-
-		proposeMentorship($mentorID, $menteeID, $_SESSION['account_ID']);
-        $report = new Report("Manual Match Completed", "Users were matched.", "matchModal", TRUE);
-        $_SESSION['title'] = $report->title;
-        $_SESSION['msg'] = $report->msg;
-        $_SESSION['nextModal'] = $report->nextModal;
-        $_SESSION['success'] = $report->success;
-        $_SESSION['inputs'] = $report->inputs;
-        header("Location: index.php");
-		die;
-	}
-}
 function formatMentorships() {
     $mentorships = getCurrentMentorships();
     $result = "<thead><tr><th>Mentor</th><th>Mentee</th><th>Start Date</th><th>Revoke Mentorship</th></tr></thead><tbody>";
@@ -113,17 +67,9 @@ function formatMentorships() {
         <script>
             function revokeMentorship(mentorship_ID) {
                 let xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = function(){
-                    if(this.readyState == 4 && this.status == 200){
-                        let table = $('#current_mentorships');
-                        table.DataTable().destroy();
-                        document.getElementById("current_mentorships").innerHTML = this.responseText;
-                        table.DataTable();
-                    }
-                };
-
-                xmlhttp.open("POST", "mentorships.php?action=revokeMentorship&id=" + mentorship_ID, true);
-                xmlhttp.send();
+                xmlhttp.open("POST", "mentorships.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("action=revokeMentorship&id=" + mentorship_ID);
             }
 
             $(document).ready(function () {
