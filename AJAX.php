@@ -4,7 +4,6 @@ if(!isset($_GET["action"])){
     header("Location:index.php");
 }
 
-
 if($_GET["action"] == "refreshState"){
     if(!isset($_GET["country"])){
         header("Location:index.php");
@@ -19,7 +18,7 @@ if($_GET["action"] == "getDegrees"){
     echo listDegreeTypes();
 }
 
-if($_GET["action"] == "getUsernames"){
+if($_GET["action"] == "getUsernames" && $type > 1){
     if (isset($_GET["matching"])) {
         $con = Connection::connect();
         $stmt = $con->prepare("select username from `Account` where username LIKE '%".$_GET["matching"]."%'");
@@ -35,7 +34,7 @@ if($_GET["action"] == "getUsernames"){
         echo "";
     }
 }
-if($_GET["action"] == "getMentees"){
+if($_GET["action"] == "getMentees" && $type > 1){
     if (isset($_GET["matching"])) {
         $con = Connection::connect();
         $stmt = $con->prepare("select username from `MenteeOptions` where username LIKE '%".$_GET["matching"]."%'");
@@ -51,7 +50,7 @@ if($_GET["action"] == "getMentees"){
         echo "";
     }
 }
-if($_GET["action"] == "getMentors"){
+if($_GET["action"] == "getMentors" && $type > 1){
     if (isset($_GET["matching"])) {
         $con = Connection::connect();
         $stmt = $con->prepare("select username from `MentorOptions` where username LIKE '%".$_GET["matching"]."%'");
