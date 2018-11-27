@@ -446,7 +446,6 @@ function formatPendingMentorships($profile_account_id) {
     foreach($pending as $cur) {
 
         $id = $cur['pending_ID'];
-		$type = $_SESSION['type']
         $disabled = "";
 		if($profile_account_id != $_SESSION['account_ID']){
 			$disabled = 'disabled=""';
