@@ -154,10 +154,18 @@ function finalizeRegistration($account_id, $email) {
 }
 
 function resetPassword($email) {
+    // ensure email is attached to an account before doing a reset
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT COUNT(*) FROM Information where email_address = ?");
+    $stmt->bindValue(1, $email, PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->fetchColumn() < 1) {
+        return new Report("Error", "This email address is not associated with an account.", "forgotModal", FALSE);
+    }
+
     $account_id = getAccountIDFromEmail($email);
     $code = makeCode($email);
 
-    $con = Connection::connect();
     $stmt = $con->prepare("select * from `Password Recovery` where account_ID = ?");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
