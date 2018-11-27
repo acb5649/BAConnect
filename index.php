@@ -369,8 +369,8 @@ if(isset($_POST['upgrade'])){
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                var array = JSON.parse(this.responseText);
-                console.log(array);
+                let array = JSON.parse(this.responseText);
+                //console.log(array);
                 cardAjax(array);
             }
         };
@@ -398,7 +398,7 @@ if(isset($_POST['upgrade'])){
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                var array = JSON.parse(this.responseText);
+                let array = JSON.parse(this.responseText);
                 //console.log(array);
                 //cardAjax([...new Set(array)]);
                 cardAjax(array);
