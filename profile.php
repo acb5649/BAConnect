@@ -45,14 +45,16 @@ if (isset($_REQUEST["action"])) {
     }
 }
 
-$currentMentorships = getCurrentMentorships($profile_account_id);
-$approvedUserArr = array();
-foreach($currentMentorships as $mentorship) {
-    array_push($approvedUserArr, $mentorship['mentor_ID'], $mentorship['mentee_ID']);
-}
-$approvedUserArr = array_unique($approvedUserArr);
-if (in_array($_SESSION["account_ID"], $approvedUserArr)) {
-    $trustedUser = TRUE;
+if (isset($_SESSION["account_ID"])) {
+    $currentMentorships = getCurrentMentorships($profile_account_id);
+    $approvedUserArr = array();
+    foreach($currentMentorships as $mentorship) {
+        array_push($approvedUserArr, $mentorship['mentor_ID'], $mentorship['mentee_ID']);
+    }
+    $approvedUserArr = array_unique($approvedUserArr);
+    if (in_array($_SESSION["account_ID"], $approvedUserArr)) {
+        $trustedUser = TRUE;
+    }
 }
 
 if (isset($_POST['submit']) && isset($_FILES['profile'])) {
