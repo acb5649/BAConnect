@@ -453,7 +453,9 @@ function formatPendingMentorships($profile_account_id) {
             $disabled = 'disabled=""';
         } elseif($profile_account_id == $cur['mentee_ID'] && $cur['mentee_status'] == 1) {
             $disabled = 'disabled=""';
-        }
+        }elseif($type > 1){
+			$disabled = '';
+		}
 
         $accept = '<button ' . $disabled . ' name="accept" class="w3-button w3-lime" onclick="handlePendingMentorship(\'' . $id . '\', 1);">Accept</button>';
         $decline = '<button name="decline" class="w3-button w3-red" onclick="handlePendingMentorship(\'' . $id . '\', 0);">Decline</button>';
@@ -465,7 +467,6 @@ function formatPendingMentorships($profile_account_id) {
             $mentorLink = '<a href="profile.php?user=' . $cur['mentor_ID'] . '">' . getName($cur['mentor_ID']) . '</a>';
             $menteeLink = getName($cur['mentee_ID']);
         }
-
         $result .= "<tr>";
         $result .= "<th><h6>" . $mentorLink . "</h6></th>";
         $result .= "<th><h6>" . $menteeLink . "</h6></th>";
