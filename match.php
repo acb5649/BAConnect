@@ -25,7 +25,7 @@ require_once "database.php";
         xmlhttp.send();
     }
 </script>
-<div id="matchModal" action="index.php" class="w3-modal">
+<div id="matchModal" class="w3-modal">
    <div class="w3-modal-content w3-animate-top w3-card-4">
       <header class="w3-container w3-lime w3-center w3-padding-32">
          <span onclick="document.getElementById('matchModal').style.display='none'" class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
