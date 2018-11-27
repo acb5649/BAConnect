@@ -101,19 +101,19 @@ require_once "dbhelper.php";
                 <label>Status<span class="w3-text-red">*</span></label>
             </p>
             <label>Student</label>
-            <input class="w3-check w3-border" type="checkbox" name="status" value=0/>
+            <input class="w3-check w3-border" type="checkbox" name="status" value="0"/>
             <label>Working Professional</label>
-            <input class="w3-check w3-border" type="checkbox" name="status" value=1/>
+            <input class="w3-check w3-border" type="checkbox" name="status" value="1"/>
 
             <p>
                 <label>Preference</label>
             </p>
             <label>Mentor</label>
-            <input class="w3-check w3-border" type="checkbox" name="preference" value=0/>
+            <input class="w3-check w3-border" type="checkbox" name="preference" value="0"/>
             <label>Mentee</label>
-            <input class="w3-check w3-border" type="checkbox" name="preference" value=1/>
+            <input class="w3-check w3-border" type="checkbox" name="preference" value="1"/>
             <label>Not Interested</label>
-            <input class="w3-check w3-border" type="checkbox" name="preference" value=2/>
+            <input class="w3-check w3-border" type="checkbox" name="preference" value="2"/>
 
             <p>
                 <h2>Education History</h2>

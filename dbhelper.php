@@ -19,10 +19,11 @@ class User extends Account {
     public $gender;
     public $phoneNumber;
     public $status;
+    public $preference;
 
     public $address;
 
-    function __construct($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phoneNumber, $status, $address = null) {
+    function __construct($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phoneNumber, $status, $preference, $address = null) {
         parent::__construct($username, $password);
 
         $this->firstName = $firstName;
@@ -32,6 +33,7 @@ class User extends Account {
         $this->gender = $gender;
         $this->phoneNumber = $phoneNumber;
         $this->status = $status;
+        $this->preference = $preference;
 
         $this->address = $address;
     }

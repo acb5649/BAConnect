@@ -77,7 +77,7 @@ function registerNewAccount($user) {
 
 function applyUserInformation($account_id, $user) {
     $con = Connection::connect();
-    $stmt = $con->prepare("insert into Information (account_ID, first_name, middle_name, last_name, gender, email_address, status) values (?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $con->prepare("insert into Information (account_ID, first_name, middle_name, last_name, gender, email_address, status, mentorship_preference) values (?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->bindValue(2, $user->firstName, PDO::PARAM_STR);
     $stmt->bindValue(3, $user->middleName, PDO::PARAM_STR);
@@ -85,6 +85,7 @@ function applyUserInformation($account_id, $user) {
     $stmt->bindValue(5, $user->gender, PDO::PARAM_INT);
     $stmt->bindValue(6, $user->email, PDO::PARAM_STR);
     $stmt->bindValue(7, $user->status, PDO::PARAM_INT);
+    $stmt->bindValue(8, $user->preference, PDO::PARAM_INT);
     $stmt->execute();
     $con = null;
 }

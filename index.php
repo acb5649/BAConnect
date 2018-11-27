@@ -183,7 +183,7 @@ if (isset($_POST['register'])) {
         $msg .= "\nInvalid state.";
     }
     $con = Connection::connect();
-    $stmt = $con->prepare("select state from States where state_ID = ? and country_ID = ?");
+    $stmt = $con->prepare("select state_name from States where state_ID = ? and country_ID = ?");
     $stmt->bindValue(1, $_SESSION['state'], PDO::PARAM_INT);
     $stmt->bindValue(2, $_SESSION['country'], PDO::PARAM_INT);
     $stmt->execute();
@@ -195,7 +195,7 @@ if (isset($_POST['register'])) {
     $con = null;
 
     if ($error == false) {
-        $user = new User($_SESSION['username'], $_SESSION['password'], $_SESSION['firstName'], $_SESSION['middleName'], $_SESSION['lastName'], $_SESSION['email'], $_SESSION['gender'], $_SESSION['phoneNumber'], $_SESSION['$status']);
+        $user = new User($_SESSION['username'], $_SESSION['password'], $_SESSION['firstName'], $_SESSION['middleName'], $_SESSION['lastName'], $_SESSION['email'], $_SESSION['gender'], $_SESSION['phoneNumber'], $_SESSION['status'], $_SESSION['preference']);
         $address = new Address($_SESSION['street'], $_SESSION['street2'], $_SESSION['city'], $_SESSION['postcode'], $_SESSION['state'], $_SESSION['country']);
         registerUser($user, $address, $degree, $work, $picturePath, $resumePath);
         header("Location: created.php");
