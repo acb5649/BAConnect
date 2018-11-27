@@ -15,26 +15,28 @@ require_once "session.php";
 
 <?php
 
-include "register.php";
-
 if ($type == 0) {
     include "login.php";
     include "forgot.php";
+}
+
+if ($type > 2) {
+    include "addCountry.php";
+    include "addDegreeType.php";
+    include "addState.php";
 }
 
 if ($type > 1) {
     include "match.php";
     include "edit.php";
     include "upgrade.php";
-    include "addCountry.php";
-    include "addDegreeType.php";
-    include "addState.php";
-
 }
+
+include "register.php";
 
 require_once "dialog.php";
 
-if (isset($_SESSION['title']) && isset($_SESSION['msg']) /* && isset($_SESSION['nextModal']) */) {
+if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
     echo "<script>document.getElementById('dialogModal').style.display='block'</script>";
     unset($_SESSION['title']);
     unset($_SESSION['msg']);
@@ -42,18 +44,7 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg']) /* && isset($_SESSION['
     if(isset($_SESSION['success'])){
         unset($_SESSION['success']);
     }
-    //if(isset($_SESSION['inputs'])){
-    //    unset($_SESSION['success']);
-    //}
 }
-/*
-if(isset($_SESSION['report'])){
-    echo "<script>document.getElementById('dialogModal').style.display='block'</script>";
-    if($_SESSION['report']->inputs == null){
-        //unset($_SESSION['report']);
-    }
-}
-*/
 ?>
 
 <div style="position: sticky; position: -webkit-sticky; padding-bottom: 16px;" class="w3-top">
@@ -81,15 +72,20 @@ if(isset($_SESSION['report'])){
         if($type > 1){
 
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'editModal'".').style.display='."'block'".'">EDIT USER</a>';
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'upgradeModal'".').style.display='."'block'".'">PROMOTE USER</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'matchModal'".').style.display='."'block'".'">MATCH USERS</a>';
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'editModal'".').style.display='."'block'".'">EDIT ACCOUNTS </a>';
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'upgradeModal'".').style.display='."'block'".'">UPGRADE ACCOUNTS</a>';
+
+			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="pendingmentorships.php">VIEW PENDING PAIRS</a>';
+			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="mentorships.php">VIEW PAIRS</a>';
+        }
+
+        if($type > 2){
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addCountryModal'".').style.display='."'block'".'">ADD COUNTRY</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addDegreeModal'".').style.display='."'block'".'">ADD DEGREE TYPE</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addStateModal'".').style.display='."'block'".'">ADD STATE</a>';
-			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="pendingmentorships.php">VIEW ALL PENDING MENTORSHIPS</a>';
-			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="mentorships.php">VIEW ALL MENTORSHIPS</a>';
         }
+
         ?>
     </div>
     <?php
@@ -117,9 +113,15 @@ if(isset($_SESSION['report'])){
 
     if($type > 1){
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'editModal'".').style.display='."'block'".'">EDIT USER</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'upgradeModal'".').style.display='."'block'".'">PROMOTE USER</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'matchModal'".').style.display='."'block'".'">MATCH USERS</a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'editModal'".').style.display='."'block'".'">EDIT ACCOUNTS </a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'upgradeModal'".').style.display='."'block'".'">UPGRADE ACCOUNTS</a>';
+
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="pendingmentorships.php">VIEW PENDING PAIRS</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="mentorships.php">VIEW PAIRS</a>';
+    }
+
+    if($type > 2){
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addCountryModal'".').style.display='."'block'".'">ADD COUNTRY</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addDegreeModal'".').style.display='."'block'".'">ADD DEGREE TYPE</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addStateModal'".').style.display='."'block'".'">ADD STATE</a>';
