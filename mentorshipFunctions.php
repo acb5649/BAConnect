@@ -238,8 +238,9 @@ function endMentorship($account_id,$targetMentorshipID){
 
     $con = Connection::connect();
 
-    $date = new Datetime('NOW');
-    $dateStr = $date->format('Y-m-d');//end date
+    //$date = new Datetime('NOW');
+    //$dateStr = $date->format('Y-m-d');//end date
+    $dateStr = date('Y-m-d');
 
     $menteeID=fetchMenteeID($targetMentorshipID);
     $mentorID=fetchMentorID($targetMentorshipID);
@@ -257,10 +258,10 @@ function endMentorship($account_id,$targetMentorshipID){
         $message = "You have ended your mentorship with " . $mentorName . ".";
         mail($menteeEmail, "BAConnect: Mentorship", $message);
 
-        $stmt = $con->prepare("UPDATE `Mentorship` SET (end = ?, terminator_ID = ?)  WHERE mentorship_ID = ?");
-        $stmt->bindValue(1, $dateStr, PDO::PARAM_STR);
-        $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-        $stmt->bindValue(3, $targetMentorshipID, PDO::PARAM_INT);
+        $stmt = $con->prepare("UPDATE `Mentorship` SET `end` = CURDATE(), `terminator_ID` = ?  WHERE mentorship_ID = ?");
+        //$stmt->bindValue(1, $dateStr, PDO::PARAM_STR);
+        $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+        $stmt->bindValue(2, $targetMentorshipID, PDO::PARAM_INT);
         $stmt->execute();
     }
     else if($account_id == $mentorID){
@@ -270,19 +271,19 @@ function endMentorship($account_id,$targetMentorshipID){
         $message = "You have ended your mentorship with " . $menteeName . ".";
         mail($mentorEmail, "BAConnect: Mentorship", $message);
 
-        $stmt = $con->prepare("UPDATE `Mentorship` SET (end = ?, terminator_ID = ?)  WHERE mentorship_ID = ?");
-        $stmt->bindValue(1, $dateStr, PDO::PARAM_STR);
-        $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-        $stmt->bindValue(3, $targetMentorshipID, PDO::PARAM_INT);
+        $stmt = $con->prepare("UPDATE `Mentorship` SET `end` = CURDATE(), `terminator_ID` = ?  WHERE mentorship_ID = ?");
+        //$stmt->bindValue(1, $dateStr, PDO::PARAM_STR);
+        $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+        $stmt->bindValue(2, $targetMentorshipID, PDO::PARAM_INT);
         $stmt->execute();
     }
     else if($accountType >= 2){
         mail($menteeEmail, "BAConnect: Mentorship", "An admin has ended your mentorship with ".$mentorName.".");
         mail($mentorEmail, "BAConnect: Mentorship", "An admin has ended your mentorship with ".$menteeName.".");
-        $stmt = $con->prepare("UPDATE `Mentorship` SET (end = ?, terminator_ID = ?)  WHERE mentorship_ID = ?");
-        $stmt->bindValue(1, $dateStr, PDO::PARAM_STR);
-        $stmt->bindValue(2, $account_id, PDO::PARAM_INT);
-        $stmt->bindValue(3, $targetMentorshipID, PDO::PARAM_INT);
+        $stmt = $con->prepare("UPDATE `Mentorship` SET `end` = CURDATE(), `terminator_ID` = ?  WHERE mentorship_ID = ?");
+        //$stmt->bindValue(1, $dateStr, PDO::PARAM_STR);
+        $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+        $stmt->bindValue(2, $targetMentorshipID, PDO::PARAM_INT);
         $stmt->execute();
     }
     else{

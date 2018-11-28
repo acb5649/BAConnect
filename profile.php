@@ -423,7 +423,7 @@ function formatMentorships($profile_account_id) {
 
         if ($cur['end'] == null) {
             $end = "Ongoing";
-            $endMentorship = '<button name="end" class="w3-button w3-red" onclick="endMentorship(\'' . $cur['mentorship_ID'] . '\')">End</button>';
+            $endMentorship = '<button name="end" class="w3-button w3-red" onclick="endMentorship(\'' . $cur['mentorship_ID'] . '\', \'' . $_SESSION['account_ID'] . '\')">End</button>';
         } else {
             $end = $cur['end'];
             $endMentorship = "";
@@ -544,7 +544,7 @@ function formatPendingMentorships($profile_account_id) {
             }
         }
 
-        function endMentorship(mentorship_ID) {
+        function endMentorship(mentorship_ID, account_ID) {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){
@@ -559,7 +559,7 @@ function formatPendingMentorships($profile_account_id) {
                 }
             };
 
-            xmlhttp.open("POST", "profile.php?action=endMentorship&id=" + mentorship_ID, true);
+            xmlhttp.open("POST", "AJAX.php?action=endMentorship&id=" + mentorship_ID + "&account=" + account_ID , true);
             xmlhttp.send();
         }
 
