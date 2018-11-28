@@ -67,4 +67,43 @@ if($_GET["action"] == "getMentors" && $type > 1){
     }
 }
 
+if($_REQUEST["action"] == "endMentorship"){ //profile.php
+  $mentorship_ID = $_REQUEST['id'];
+  $account_ID = $_REQUEST['account'];
+  $report = endMentorship($account_ID, $mentorship_ID);
+
+  $_SESSION['title'] = $report->title;
+  $_SESSION['msg'] = $report->msg;
+  $_SESSION['nextModal'] = $report->nextModal;
+  $_SESSION['success'] = $report->success;
+  $_SESSION['inputs'] = $report->inputs;
+
+  if($report->success == TRUE){
+    echo "<?php formatMentorships(); ?>";
+  }
+  else{
+    echo "";
+  }
+}
+
+if($_REQUEST['action'] == "revokeMentorship"){
+  $account_ID = $_REQUEST['account'];
+  $mentorship_ID = $_REQUEST['id'];
+  $report = endMentorship($account_ID, $mentorship_ID);
+
+  $_SESSION['title'] = $report->title;
+  $_SESSION['msg'] = $report->msg;
+  $_SESSION['nextModal'] = $report->nextModal;
+  $_SESSION['success'] = $report->success;
+  $_SESSION['inputs'] = $report->inputs;
+
+  if ($report->success) {
+      //$report = new Report("Mentorship Has Been Revoked Successfully", "Emails have been sent to both parties notifying them of the change.", "", TRUE);
+      echo "formatMentorships()";
+  }
+  else{
+    echo "";
+  }
+}
+
 ?>

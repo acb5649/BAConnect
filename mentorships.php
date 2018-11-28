@@ -21,8 +21,8 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "revokeMentorship") {
     $_SESSION['inputs'] = $report->inputs;
 
     //echo formatMentorships();
-    //header("Location: mentorships.php");
-    //die();
+    header("Location: mentorships.php");
+    die();
 }
 
 function formatMentorships() {
@@ -32,7 +32,7 @@ function formatMentorships() {
 
         $id = $cur['mentorship_ID'];
 
-        $revoke = '<button name="revoke" class="w3-button w3-red" onclick="revokeMentorship(\'' . $id . '\');">Revoke</button>';
+        $revoke = '<button name="revoke" class="w3-button w3-red" onclick="revokeMentorship(\'' . $id . '\', \'' . $_SESSION['account_ID'] . '\');">Revoke</button>';
         $mentorLink = '<a href="profile.php?user=' . $cur['mentor_ID'] . '">' . getName($cur['mentor_ID']) . '</a>';
         $menteeLink = '<a href="profile.php?user=' . $cur['mentee_ID'] . '">' . getName($cur['mentee_ID']) . '</a>';
 
@@ -65,11 +65,11 @@ function formatMentorships() {
         <script src="js/registration.js"></script>
         <script src="js/closeModals.js"></script>
         <script>
-            function revokeMentorship(mentorship_ID) {
+            function revokeMentorship(mentorship_ID, account_ID) {
                 let xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("POST", "mentorships.php", true);
+                xmlhttp.open("POST", "AJAX.php", true);
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlhttp.send("action=revokeMentorship&id=" + mentorship_ID);
+                xmlhttp.send("action=revokeMentorship&id=" + mentorship_ID + "&account=" + account_ID);
             }
 
             $(document).ready(function () {
