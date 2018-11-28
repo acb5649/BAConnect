@@ -239,7 +239,7 @@ function endMentorship($account_id,$targetMentorshipID){
     $con = Connection::connect();
 
     $date = new Datetime('NOW');
-    $dateStr = $date->format('Y-m-d H:i:s');//end date
+    $dateStr = $date->format('Y-m-d');//end date
 
     $menteeID=fetchMenteeID($targetMentorshipID);
     $mentorID=fetchMentorID($targetMentorshipID);
