@@ -1,28 +1,27 @@
 <?php
-	class Connection {
-		public static function connect() {
-			try {
-				return new PDO("mysql:host=localhost;dbname=estrayer_db", "estrayer", "estrayer", array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
-			} catch (PDOException $e) {
-				echo $e->getMessage();
-			}
-			return null;
-		}
-	}
+require_once "database.php";
+
+require_once "session.php";
+
+	
 	function loadOnSecurity($accountID){
 		$con = Connection::connect();
-		$qestion = '';
-		$query = "SELECT account_ID FROM RecoveryQuestions WHERE account_ID = "'.$accountID.'" ORDER BY question_Number ASC";
+		$set=0;
+		$question = '<select name="security_question" id="security_question" required><option value="">Select Question</option>';
+		$query = "SELECT account_ID FROM RecoveryQuestions WHERE account_ID = '".$accountID."' ORDER BY question_Number ASC";
 		$statement = $con->prepare($query);
 		$statement->execute();
 		$result = $statement->fetchAll();
 		foreach($result as $row)
 		{
 			$question .= '<option value="'.$row['question_Number'].'">'.$row['question'].'</option>';
+			$set= 1;
 		}
-		if(!$question){
+		$question .= '</select>';
+		if($set != 0){
 			$con = null;
-			return header('Location: index.php');//skips security questions in none are set //*note change page
+			header('Location: forget.php');//skips questions
+			return true;
 		}
 		$con = null;
 		return $question;
@@ -33,7 +32,7 @@
 		$isFirst = 0;
 		$stmt = $con->prepare("SELECT question_Number FROM RecoveryQuestions WHERE account_ID = '" . $accountID . "' ORDER BY question_Number ASC");
 		$stmt->execute();
-		$search = $statement->fetchAll();
+		$search = $stmt->fetchAll();
 		foreach($search as $row)
 		{
 			if($isFirst < $row['question_Number']){
@@ -56,7 +55,58 @@
 			 $stmt->execute();
 			
 		}
-		$con = $null;
+		$con = null;
 		return true;
 	}//enableNewSecurity
+	function checkSecurityQ($accountID, $question_Num, $answer){
+		$con = Connection::connect();
+		$timeout= 1209600;// 2 weeks
+		$time= $_SERVER['REQUEST_TIME'];//current
+		$ct= 0;
+		$stmt = $con->prepare("SELECT request_date FROM `Password Recovery` WHERE account_ID = '" . $accountID . "' ORDER BY request_date ASC");
+		$stmt->execute();
+		$search = $stmt->fetchAll();
+		foreach($search as $row)
+		{
+			if($time - $row['request_date'] <= 1209600){
+				$ct= $ct + 1;
+			}
+		}
+		if(ct < 2){
+			$stmt = $con->prepare("SELECT * FROM RecoveryQuestions WHERE account_ID = '" . $accountID . "' AND question_Number = '" . $question_Num . "' ORDER BY question_Number ASC");
+			$stmt->execute();
+			$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			if(strcasecmp($answer,$row['answer'])==0){
+				$stmt = $con->prepare("insert into `Password Recovery` (account_ID, code) values (?, ?)");
+				$stmt->bindValue(1, $accountID, PDO::PARAM_INT);
+				$stmt->bindValue(2, $code, PDO::PARAM_STR);
+				$stmt->execute();
+				$con = null;
+				$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+				//$url = str_replace("forgot.php", "verify.php", $url);//fix
+				mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://" . $url . "?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
+				return new Report("Success!", "An email has been sent to the address registered with your account.", "", TRUE);
+			}else{
+				$stmt = $con->prepare("insert into `Password Recovery` (account_ID, code) values (?, ?)");
+				$stmt->bindValue(1, $accountID, PDO::PARAM_INT);
+				$stmt->bindValue(2, $code, PDO::PARAM_STR);
+				$stmt->execute();
+				$con = null;
+				return new Report("FAILURE", "There was an error validating your identity!", "", FALSE);
+			}
+		} else {
+			$con = null;
+			return false;
+		}
+	}
 ?>
+<html>
+ <head>
+  <title>Custom Search in jQuery Datatables using PHP Ajax</title>
+ </head>
+ <body>
+ <div>
+ <?php echo loadOnSecurity(1); ?>
+ </div>
+ </body>
+</html>
