@@ -461,7 +461,7 @@ function formatPendingMentorships($profile_account_id) {
             $disabled = 'disabled=""';
         } elseif($profile_account_id == $cur['mentee_ID'] && $cur['mentee_status'] == 1) {
             $disabled = 'disabled=""';
-        }elseif($type > 1){
+        }elseif(isset($_SESSION['type']) && $_SESSION['type'] > 1){
 			$disabled = '';
 		}
 

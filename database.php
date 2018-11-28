@@ -485,7 +485,7 @@ function getEmail($account_id) {
 function getMentorshipStatus($account_id) {
     $result = "";
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from Mentorship where mentor_ID = ?");
+    $stmt = $con->prepare("select * from Mentorship where mentor_ID = ? AND isnull(end)");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $mentees = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -493,7 +493,7 @@ function getMentorshipStatus($account_id) {
         $result .= "Currently a mentor.";
     }
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from Mentorship where mentee_ID = ?");
+    $stmt = $con->prepare("select * from Mentorship where mentee_ID = ? AND isnull(end)");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $mentors = $stmt->fetchAll(PDO::FETCH_ASSOC);
