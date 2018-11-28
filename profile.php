@@ -139,6 +139,13 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
         $stmt->execute();
     }
 
+    if (isset($_POST['profile_twitter'])) {
+        $stmt = $con->prepare("UPDATE Information set twitter = ? where account_ID = ?");
+        $stmt->bindValue(1, $_POST['profile_twitter'], PDO::PARAM_STR);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
     if (isset($_POST['preference'])) {
         $stmt = $con->prepare("UPDATE Information set mentorship_preference = ? where account_ID = ?");
         $stmt->bindValue(1, $_POST['preference'], PDO::PARAM_STR);
@@ -660,6 +667,8 @@ function formatPendingMentorships($profile_account_id) {
                 document.getElementById(id).innerHTML = `<i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($profile_account_id)) . makeEditable($allowEdit, "profile_facebook")?>`;
             } else if (id == "profile_linkedin") {
                 document.getElementById(id).innerHTML = `<i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($profile_account_id)) . makeEditable($allowEdit, "profile_linkedin")?>`;
+            } else if (id == "profile_twitter") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-twitter-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getTwitterLink($profile_account_id)) . makeEditable($allowEdit, "profile_twitter")?>`;
             } else if (id == "preference") {
                 document.getElementById(id).innerHTML = `<i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getUserMentorshipPreference($profile_account_id)) . makeEditable($allowEdit, "preference")?>`;
             }
@@ -760,6 +769,15 @@ function formatPendingMentorships($profile_account_id) {
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Linkedin</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_linkedin');">Cancel</button>
                     </form>`;
+            } else if (id == "profile_twitter") {
+                document.getElementById(id).innerHTML = `
+                    <p><i class="fa fa-twitter-square fa-fw w3-margin-right w3-large w3-text-lime"></i>Twitter:</p>
+                    <form method="post" action="profile.php">
+                    <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getTwitterLink($profile_account_id); ?>" name="profile_twitter" id="profile_twitter"/>
+                    <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Twitter</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_twitter');">Cancel</button>
+                    </form>`;
             } else if (id == "preference") {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i>Mentorship Preference:</p>
@@ -817,6 +835,7 @@ function formatPendingMentorships($profile_account_id) {
                     <hr>
                     <p class="w3-display-container" id="profile_facebook"><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($profile_account_id)) . makeEditable($allowEdit, "profile_facebook")?></p>
                     <p class="w3-display-container" id="profile_linkedin"><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($profile_account_id)) . makeEditable($allowEdit, "profile_linkedin")?></p>
+                    <p class="w3-display-container" id="profile_twitter"><i class="fa fa-twitter-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getTwitterLink($profile_account_id)) . makeEditable($allowEdit, "profile_twitter")?></p>
                     <hr>
 
                     <button id="request" <?php if (hasAlreadySentRequest($profile_account_id)) { echo "disabled=''"; } ?> class="w3-button w3-block w3-dark-grey" onclick="sendMentorshipRequest()">+ Connect</button>

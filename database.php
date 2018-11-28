@@ -620,3 +620,16 @@ function getLinkedinLink($account_id) {
     $con = null;
     return $row['linkedin'];
 }
+
+function getTwitterLink($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select twitter from `Information` where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row['twitter'] == ""){
+        return "Add Twitter";
+    }
+    $con = null;
+    return $row['twitter'];
+}
