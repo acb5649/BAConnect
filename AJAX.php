@@ -1,7 +1,8 @@
 <?php
 require_once "database.php";
 if(!isset($_GET["action"])){
-    header("Location:index.php");
+    echo "";
+    die();
 }
 
 if($_GET["action"] == "refreshState"){
