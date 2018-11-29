@@ -63,7 +63,7 @@ function generateFakes($number) {
         $state_id = $state['state_ID'];
         $country_id = $state['country_ID'];
 
-        $user = new User($results->login->username, $results->login->password, ucfirst($results->name->first), ucfirst($results->location->state), ucfirst($results->name->last), $results->email, $gender, preg_replace("/[^0-9]/", "", $results->phone), rand(0,1), rand(0, 2));
+        $user = new User($results->login->username, $results->login->password, ucfirst($results->name->first), "", ucfirst($results->name->last), $results->email, $gender, preg_replace("/[^0-9]/", "", $results->phone), rand(0,1), rand(0, 2));
         $address = new Address(ucwords($results->location->street), "", ucfirst($results->location->city), $results->location->postcode, $state_id, $country_id);
         $numDegrees = rand(1, 3);
         for ($degreeNum = 0; $degreeNum < $numDegrees; $degreeNum++) {

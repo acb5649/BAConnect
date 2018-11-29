@@ -325,7 +325,6 @@ function registerNewWork($account_id, $workHistory) {
     $stmt->bindValue(5, $workHistory->endYear, PDO::PARAM_INT);
     $stmt->execute();
 
-    $stmt->execute();
     $con = null;
 }
 
