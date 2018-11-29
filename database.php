@@ -18,7 +18,11 @@ class Report{
         if((strpos($next, 'Modal') === false) && $next != ""){
             $next = $next . "Modal";
         }
-        $this->nextModal = $next;
+        if ($next == null) {
+            $this->nextModal = "";
+        } else {
+            $this->nextModal = $next;
+        }
         $this->success = $worked;
         $this->inputs = null;
     }
