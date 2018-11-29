@@ -559,6 +559,45 @@ function formatPendingMentorships($profile_account_id) {
             }
         }
 
+        function adminStartPair() {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    location.reload();
+                }
+            };
+
+            xmlhttp.open("POST", "AJAX.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("action=adminStartPair");
+        }
+
+        function adminFinishPair() {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    location.reload();
+                }
+            };
+
+            xmlhttp.open("POST", "AJAX.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("action=adminFinishPair");
+        }
+
+        function adminClearPair() {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    location.reload();
+                }
+            };
+
+            xmlhttp.open("POST", "AJAX.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("action=adminClearPair");
+        }
+
         function endMentorship(mentorship_ID, account_ID) {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
@@ -574,8 +613,9 @@ function formatPendingMentorships($profile_account_id) {
                 }
             };
 
-            xmlhttp.open("POST", "AJAX.php?action=endMentorship&id=" + mentorship_ID + "&account=" + account_ID , true);
-            xmlhttp.send();
+            xmlhttp.open("POST", "AJAX.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("action=endMentorship&id=" + mentorship_ID + "&account=" + account_ID);
         }
 
         function handlePendingMentorship(pending_id, accept = 0) {
@@ -593,8 +633,9 @@ function formatPendingMentorships($profile_account_id) {
                 }
             };
 
-            xmlhttp.open("POST", "profile.php?action=handlePendingRequest&user=<?php echo $profile_account_id?>&pending=" + pending_id+ "&response=" +  accept, true);
-            xmlhttp.send();
+            xmlhttp.open("POST", "profile.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("action=handlePendingRequest&user=<?php echo $profile_account_id?>&pending=" + pending_id+ "&response=" +  accept);
         }
 
         function sendMentorshipRequest() {
@@ -862,6 +903,16 @@ function formatPendingMentorships($profile_account_id) {
                     <?php if ($allowEdit) {
                         // show resume
                         echo '<hr><p class="w3-display-container" id="profile_resume"><button class="w3-button w3-half w3-lime w3-cell" type="button" name="upload" onclick="document.getElementById(\'uploadResumeModal\').style.display=\'block\'">Upload Resume</button><button class="w3-button w3-half w3-lime w3-cell" type="button" name="download" onclick="downloadResume();">Download Resume</button><br>';
+                    } ?>
+
+                    <?php if (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
+                        echo '<hr>';
+                        if (isset($_SESSION['pair_user'])) {
+                            echo '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-lime w3-cell" type="button" name="select" onclick="adminFinishPair()">Pair This User with ' . getName($_SESSION['pair_user']) . '</button>';
+                            echo '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-red w3-cell" type="button" name="select" onclick="adminClearPair()">Stop Pairing for ' . getName($_SESSION['pair_user']) . '</button>';
+                        } else {
+                            echo '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-lime w3-cell" type="button" name="select" onclick="adminStartPair();">Select User for Pairing</button>';
+                        }
                     } ?>
 
                     <br>

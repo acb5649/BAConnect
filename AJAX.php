@@ -1,5 +1,7 @@
 <?php
 require_once "database.php";
+require_once "session.php";
+
 if(!isset($_GET["action"])){
     echo "";
     die();
@@ -106,5 +108,23 @@ if($_REQUEST['action'] == "revokeMentorship"){
     echo "";
   }
 }
+
+if($_REQUEST['action'] == "adminStartPair"){
+    $_SESSION['pair_user'] = $_SESSION["profile_ID"];
+    die();
+}
+
+if($_REQUEST['action'] == "adminFinishPair"){
+    $user1 = $_SESSION['pair_user'];
+    $user2 = $_SESSION["profile_ID"];
+    header("Location: index.php?mentor=" . $user1 . "&mentee=" . $user2 . "&match=");
+    die();
+}
+
+if($_REQUEST['action'] == "adminClearPair"){
+    unset($_SESSION['pair_user']);
+    die();
+}
+
 
 ?>
