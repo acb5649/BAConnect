@@ -86,16 +86,19 @@
                 <label>Enter New Degree Type Name</label>
             </p>
             <input class="w3-input w3-border" type="text" maxlength="50" value="" name="editDegreeType" id="editDegreeType" />
-            <p>
-                <label>Or Delete Selected Degree Type</label>
-            </p>
-            <button class="w3-button w3-red w3-section" type = "submit" name = "delete">Delete
-                <i class="fa fa-remove"></i>
-            </button>
 
             <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="edit">Edit
                 <i class="fa fa-check"></i>
             </button>
+
+            <p>
+                <label>Or Delete Selected Degree Type</label>
+            </p>
+            <button class="w3-button w3-red w3-section" type = "submit" name = "delete">Disable
+                <i class="fa fa-remove"></i>
+            </button>
+
+
 
         </form>
     </div>

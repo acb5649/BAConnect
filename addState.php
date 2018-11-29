@@ -126,7 +126,7 @@
             <p>
                 <label>Or Delete Selected State</label>
             </p>
-            <button class="w3-button w3-red w3-section" type="submit" name = "delete">Delete
+            <button class="w3-button w3-red w3-section" type="submit" name = "delete">Disable
                 <i class="fa fa-remove"></i>
             </button>
 

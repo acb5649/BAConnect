@@ -238,6 +238,16 @@ function addCountry($countryName){
         return $report;
     }
 
+    if($countryName == ""){
+        $report = new Report("Invalid Country Name", "Please enter a country name", "addCountry", FALSE);
+        return $report;
+    }
+
+    if(!ctype_alpha ($countryName)){
+        $report = new Report("Invalid Country Name", "Please enter a valid country name", "addCountry", FALSE);
+        return $report;
+    }
+
     $stmt = $con->prepare("SELECT * FROM `Countries` WHERE country = ?");
     $stmt->bindValue(1, $countryName, PDO::PARAM_STR);
     $stmt->execute();
@@ -287,6 +297,16 @@ function editCountry($id, $newName){
 
 	if($con == null){
         $report = new Report("Error connecting to database", "We were unable to connect to the database at this time", "addCountry", FALSE);
+        return $report;
+    }
+
+    if($newName == ""){
+        $report = new Report("Invalid Country Name", "Please enter a name", "addCountry", FALSE);
+        return $report;
+    }
+
+    if(!ctype_alpha ($newName)){
+        $report = new Report("Invalid Country Name", "Please enter a valid country name", "addCountry", FALSE);
         return $report;
     }
 
@@ -385,6 +405,16 @@ function addState($countryID, $stateName){
         return $report;
     }
 
+    if($stateName == ""){
+        $report = new Report("Invalid State Name", "Please enter a state name", "addState", FALSE);
+        return $report;
+    }
+
+    if(!ctype_alpha ($stateName)){
+        $report = new Report("Invalid State Name", "Please enter a valid state name", "addState", FALSE);
+        return $report;
+    }
+
     $stmt = $con->prepare("SELECT * FROM States WHERE state_name = ? AND country_ID = ?");
     $stmt->bindValue(1, $stateName, PDO::PARAM_STR);
     $stmt->bindValue(2, $countryID, PDO::PARAM_INT);
@@ -435,6 +465,16 @@ function editState($newName, $ID){
 
 	if($con == null){
         $report = new Report("Error connecting to database", "We were unable to connect to the database at this time", "addState", FALSE);
+        return $report;
+    }
+
+    if($stateName == ""){
+        $report = new Report("Invalid State Name", "Please enter a state name", "addState", FALSE);
+        return $report;
+    }
+
+    if(!ctype_alpha ($newName)){
+        $report = new Report("Invalid State Name", "Please enter a valid state name", "addState", FALSE);
         return $report;
     }
 
