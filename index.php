@@ -250,8 +250,8 @@ if(isset($_REQUEST['match']) && isset($_REQUEST['mentor']) && isset($_REQUEST['m
 		}
 		$menteeID = $row['account_ID'];
 
-		proposeMentorship($mentorID, $menteeID, $_SESSION['account_ID']);
-        $report = new Report("Manual Match Completed", "Users were matched.", "matchModal", TRUE);
+		$report = proposeMentorship($mentorID, $menteeID, $_SESSION['account_ID']);
+        //$report = new Report("Manual Match Completed", "Users were matched.", "matchModal", TRUE);
         $_SESSION['title'] = $report->title;
         $_SESSION['msg'] = $report->msg;
         $_SESSION['nextModal'] = $report->nextModal;

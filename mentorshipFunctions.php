@@ -346,7 +346,8 @@ function getEndedMentorships($account_id){
 
 function proposeMentorship($mentorID, $menteeID, $proposerID){
     if($mentorID == $menteeID){
-        return "mentor and mentee are the same";
+        $report = new Report("Error", "The proposed mentor and mentee are the same user.", NULL, FALSE);
+        return $report;
     }
     $mentorPreference = getUserMentorshipPreference($mentorID);
     $menteePreference = getUserMentorshipPreference($menteeID);
