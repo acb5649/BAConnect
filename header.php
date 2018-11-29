@@ -99,7 +99,7 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
 </div>
 
 <?php if ($type > 1) {
-            $alert = "<div id='admin_status' style='position: sticky; position: -webkit-sticky;' class='w3-top w3-container w3-card w3-red w3-right w3-padding-16' style='z-index: -1;'>";
+            $alert = "<div id='admin_status' style='position: sticky; position: -webkit-sticky;' class='w3-bottom w3-container w3-card w3-red w3-right w3-padding-16' style='z-index: -1;'>";
             if ($type == 2) {
                 $alert .= "COORDINATOR";
             } elseif ($type == 3) {
