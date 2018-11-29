@@ -346,7 +346,7 @@ function getEndedMentorships($account_id){
 
 function proposeMentorship($mentorID, $menteeID, $proposerID){
     if($mentorID == $menteeID){
-        $report = new Report("Error", "The proposed mentor and mentee are the same user.", NULL, FALSE);
+        $report = new Report("Error", "The proposed mentor and mentee are the same user.", "", FALSE);
         return $report;
     }
     $mentorPreference = getUserMentorshipPreference($mentorID);
@@ -358,7 +358,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
             $menteeID = $temp;
         }
         else{
-            $report = new Report("Error", "The proposed mentor and mentee have incompatible preferences", NULL, FALSE);
+            $report = new Report("Error", "The proposed mentor and mentee have incompatible preferences", "", FALSE);
             return $report;
         }
     }
@@ -373,7 +373,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
 
     if($result != null){
         $con = null;
-        $report = new Report("Duplicate detected", "Duplicate mentorships are not allowed", NULL, FALSE);
+        $report = new Report("Duplicate detected", "Duplicate mentorships are not allowed", "", FALSE);
         return $report;
     }
 
@@ -385,7 +385,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
 
     if($result != null){
         $con = null;
-        $report = new Report("Duplicate detected", "Duplicate mentorships are not allowed", NULL, FALSE);
+        $report = new Report("Duplicate detected", "Duplicate mentorships are not allowed", "", FALSE);
         return $report;
     }
 
