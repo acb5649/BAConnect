@@ -836,9 +836,19 @@ function formatPendingMentorships($profile_account_id) {
                     <p class="w3-display-container" id="profile_facebook"><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($profile_account_id)) . makeEditable($allowEdit, "profile_facebook")?></p>
                     <p class="w3-display-container" id="profile_linkedin"><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($profile_account_id)) . makeEditable($allowEdit, "profile_linkedin")?></p>
                     <p class="w3-display-container" id="profile_twitter"><i class="fa fa-twitter-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getTwitterLink($profile_account_id)) . makeEditable($allowEdit, "profile_twitter")?></p>
-                    <hr>
 
-                    <button id="request" <?php if (hasAlreadySentRequest($profile_account_id)) { echo "disabled=''"; } ?> class="w3-button w3-block w3-dark-grey" onclick="sendMentorshipRequest()">+ Connect</button>
+                    <?php if (isset($_SESSION["account_ID"]) && $_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
+                        $disabled = "";
+                        if (hasAlreadySentRequest($profile_account_id)) { $disabled = "disabled=''"; }
+                        echo "<hr><button id='request' " . $disabled . " class='w3-button w3-block w3-dark-grey' onclick='sendMentorshipRequest()'>+ Connect</button>";
+                    }
+                    ?>
+
+                    <?php if ($allowEdit) {
+                        // show resume
+                        echo '<hr><p class="w3-display-container" id="profile_resume"><button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="button" name="upload" onclick="document.getElementById(\'uploadResumeModal\').style.display=\'block\'">Upload Resume</button><button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="button" name="download" onclick="downloadResume();">Download Resume</button><br><br>';
+                    } ?>
+
                     <br>
                 </div>
             </div><br>
@@ -904,7 +914,35 @@ function formatPendingMentorships($profile_account_id) {
                 </button>
             </form>
         </div>
-    </div>";} ?>
+    </div>
+    
+    <div id=\"uploadResumeModal\" class=\"w3-modal\">
+        <div class=\"w3-modal-content w3-animate-top w3-card-4\">
+            <header class=\"w3-container w3-lime w3-center w3-padding-32\">
+            <span onclick=\"document.getElementById('uploadResumeModal').style.display='none'\"
+                  class=\"w3-button w3-lime w3-xlarge w3-display-topright\">×</span>
+                <h2 class=\"w3-wide\"><i class=\"w3-margin-right\"></i>Change Profile Resume </h2>
+            </header>
+            <form method=\"post\" action=\"profile.php\" enctype='multipart/form-data' class=\"w3-container\">
+                <p>
+                    <label>
+                        <i class=\"fa fa-user\"></i> New resume:
+                    </label>
+                </p>
+                <input class=\"w3-input w3-border\" type=\"file\" placeholder=\"\" name=\"profile\" id=\"profile\">
+                <button class=\"w3-button w3-block w3-lime w3-padding-16 w3-section w3-right\" type=\"submit\" name=\"submit\">
+                    Submit New Resume
+                    <i class=\"fa fa-check\"></i>
+                </button>
+                <button type=\"button\" class=\"w3-button w3-red w3-section\"
+                        onclick=\"document.getElementById('uploadResumeModal').style.display='none'\">Close
+                    <i class=\"fa fa-remove\"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    ";} ?>
 
     <!-- End Page Container -->
 </div>
