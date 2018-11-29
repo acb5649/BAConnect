@@ -150,7 +150,12 @@ function finalizeRegistration($account_id, $email) {
     $con = null;
 
     //Email a verification code to the email provided.
-    mail($email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://corsair.cs.iupui.edu:22891/courseproject/verify.php?code=" . $code . "&email=" . urlencode($email) . "&type=reg");
+
+    $url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+    $url = str_replace("index.php", "verify.php", $url);
+    
+    mail($email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://" . $url . "?code=" . $code . "&email=" . urlencode($email) . "&type=reg");
 }
 
 function resetPassword($email) {
