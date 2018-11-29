@@ -4,10 +4,10 @@ require_once "session.php";
 
 $code = filter_input(INPUT_GET, "code");
 $email = filter_input(INPUT_GET, "email", FILTER_VALIDATE_EMAIL);
-$type = filter_input(INPUT_GET, "type");
+$verifyType = filter_input(INPUT_GET, "type");
 
 if ($code && $email) {
-    if ($type == "reg") {
+    if ($verifyType == "reg") {
         if (verifyCode($code, $email)) {
             echo "<script> console.log(" . $email . ") </script>";
             $con = Connection::connect();
@@ -21,11 +21,11 @@ if ($code && $email) {
             $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
             $stmt->execute();
 
-            header("Location: success.php");
+            $report = new Report("Success", "Your account was successfully activated.", "", TRUE);
         } else {
-            header("Location: failure.php");
+            $report = new Report("Error", "Your activation code isn't valid. Your account may have already been activated.", "", FALSE);
         }
-    } elseif ($type == "reset") {
+    } elseif ($verifyType == "reset") {
         $_SESSION['email'] = $email;
         $_SESSION['code'] = $code;
         header("Location: changePassword.php");
