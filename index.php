@@ -3,8 +3,8 @@ require_once "session.php";
 require_once "database.php";
 require_once "card.php";
 
-//require_once "extras/zipUploader.php";
-//uploadZips();
+require_once "extras/fakegen.php";
+generateFakes(1);
 
 if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
     if(!isset($_POST["offset"])){

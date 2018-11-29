@@ -40,6 +40,13 @@ function generateFakes($number) {
     });
     array_shift($employerCsv);
 
+    $states = getStatesArray();
+
+    $num = count($states);
+
+
+
+
     for ($i = 0; $i < $number; $i++) {
         $json = file_get_contents("https://randomuser.me/api/");
         $data = json_decode($json);
@@ -51,8 +58,13 @@ function generateFakes($number) {
             $gender = 1;
         }
 
-        $user = new User($results->login->username, $results->login->password, ucfirst($results->name->first), ucfirst($results->location->state), ucfirst($results->name->last), $results->email, $gender, $results->phone, rand(0,1));
-        $address = new Address(ucwords($results->location->street), ucfirst($results->location->city), $results->location->postcode, 1, 1);
+        $state = $states[rand(0, $num - 1)];
+
+        $state_id = $state['state_ID'];
+        $country_id = $state['country_ID'];
+
+        $user = new User($results->login->username, $results->login->password, ucfirst($results->name->first), ucfirst($results->location->state), ucfirst($results->name->last), $results->email, $gender, preg_replace("/[^0-9]/", "", $results->phone), rand(0,1), rand(0, 2));
+        $address = new Address(ucwords($results->location->street), "", ucfirst($results->location->city), $results->location->postcode, $state_id, $country_id);
         $numDegrees = rand(1, 3);
         for ($degreeNum = 0; $degreeNum < $numDegrees; $degreeNum++) {
             $college = $collegeCsv[array_rand($collegeCsv)];
@@ -70,6 +82,19 @@ function generateFakes($number) {
 
         $picture = $results->picture->large;
 
-        registerUser($user, $address, $degree, $work, $picture, "");
+        $day = rand(1, 28);
+        $month = rand(1, 12);
+        $year = rand(1950, 2018);
+
+        if($day < 10){
+            $day = "0" . $day;
+        }
+        if($month < 10){
+            $month = "0" . $month;
+        }
+
+        $dob = $year . "-" . $month . "-" . $day;
+
+        registerUser($user, $address, $degree, $work, $picture, "", $dob);
     }
 }

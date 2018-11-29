@@ -321,8 +321,8 @@ function registerNewWork($account_id, $workHistory) {
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->bindValue(2, $workHistory->companyName, PDO::PARAM_STR);
     $stmt->bindValue(3, $workHistory->jobTitle, PDO::PARAM_STR);
-    $stmt->bindValue(3, $workHistory->startYear, PDO::PARAM_INT);
-    $stmt->bindValue(4, $workHistory->endYear, PDO::PARAM_INT);
+    $stmt->bindValue(4, $workHistory->startYear, PDO::PARAM_INT);
+    $stmt->bindValue(5, $workHistory->endYear, PDO::PARAM_INT);
     $stmt->execute();
 
     $stmt->execute();

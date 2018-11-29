@@ -346,6 +346,9 @@ function deleteCountry($country_ID){
         $report = new Report("Failed to disable country", "There was an error while trying to disable the country", "addCountry", FALSE);
     }
 
+    $stmt = $con->prepare("UPDATE `States` SET enabled = 0 WHERE country_ID = ?");
+    $stmt->bindValue(1, $country_ID, PDO::PARAM_INT);
+
     $con = null;
     $stmt = null;
     return $report;
