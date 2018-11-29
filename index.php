@@ -211,7 +211,7 @@ if (isset($_POST['register'])) {
         die();
     }
 }
-if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee'])) {
+if(isset($_REQUEST['match']) && isset($_REQUEST['mentor']) && isset($_REQUEST['mentee'])) {
 	if ($type <= 2) {
 		header("Location: index.php");
 		die;
@@ -219,7 +219,7 @@ if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee']))
 
 		$con = Connection::connect();
 		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-		$stmt->bindValue(1, $_POST['mentor'], PDO::PARAM_STR);
+		$stmt->bindValue(1, $_REQUEST['mentor'], PDO::PARAM_STR);
 		$stmt->execute();
 		$row = $stmt->fetch();
 		if ($row == null) {
@@ -235,7 +235,7 @@ if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee']))
 		$mentorID = $row['account_ID'];
 
 		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-		$stmt->bindValue(1, $_POST['mentee'], PDO::PARAM_STR);
+		$stmt->bindValue(1, $_REQUEST['mentee'], PDO::PARAM_STR);
 		$stmt->execute();
 		$row = $stmt->fetch();
 		if ($row == null) {

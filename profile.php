@@ -327,6 +327,10 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == "sendMentorshipRequest")
     die();
 }
 
+if(isset($_REQUEST['action']) && $_REQUEST['action'] == "formatAdminPairingBox"){
+    print formatAdminPairingBox();
+    die();
+}
 
 function makeEditable($allowEdit, $id) {
     if ($allowEdit) {
@@ -563,7 +567,7 @@ function formatPendingMentorships($profile_account_id) {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){
-                    location.reload();
+                    document.getElementById("adminActionBox").innerHTML = this.responseText;
                 }
             };
 
@@ -576,7 +580,7 @@ function formatPendingMentorships($profile_account_id) {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){
-                    location.reload();
+                    window.location = "index.php?" + this.responseText;
                 }
             };
 
@@ -589,7 +593,7 @@ function formatPendingMentorships($profile_account_id) {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){
-                    location.reload();
+                    document.getElementById("adminActionBox").innerHTML = this.responseText;
                 }
             };
 
@@ -856,7 +860,6 @@ function formatPendingMentorships($profile_account_id) {
 <!-- Navbar -->
 <?php include "header.php"; ?>
 <!-- Page content -->
-
 <div class="w3-content" style="max-width:1400px;">
 
     <!-- The Grid -->
@@ -906,13 +909,9 @@ function formatPendingMentorships($profile_account_id) {
                     } ?>
 
                     <?php if (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
-                        echo '<hr>';
-                        if (isset($_SESSION['pair_user'])) {
-                            echo '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-lime w3-cell" type="button" name="select" onclick="adminFinishPair()">Pair This User with ' . getName($_SESSION['pair_user']) . '</button>';
-                            echo '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-red w3-cell" type="button" name="select" onclick="adminClearPair()">Stop Pairing for ' . getName($_SESSION['pair_user']) . '</button>';
-                        } else {
-                            echo '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-lime w3-cell" type="button" name="select" onclick="adminStartPair();">Select User for Pairing</button>';
-                        }
+                        echo "<div id='adminActionBox'>";
+                        echo formatAdminPairingBox();
+                        echo "</div>";
                     } ?>
 
                     <br>

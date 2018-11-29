@@ -494,6 +494,16 @@ function getAccountIDFromEmail($email) {
     return $row['account_ID'];
 }
 
+function getUsernameFromAccountID($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select username from Account where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $con = null;
+    return $row['username'];
+}
+
 function getName($account_id) {
     $con = Connection::connect();
     $stmt = $con->prepare("select * from Information where account_ID = ?");
@@ -670,4 +680,15 @@ function getTwitterLink($account_id) {
     }
     $con = null;
     return $row['twitter'];
+}
+
+function formatAdminPairingBox() {
+    $result = "";
+    if (isset($_SESSION['pair_user'])) {
+        $result .= '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-lime w3-cell w3-margin-top" type="button" name="select" onclick="adminFinishPair()">Pair This User with ' . getName($_SESSION['pair_user']) . '</button>';
+        $result .= '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-red w3-cell" type="button" name="select" onclick="adminClearPair()">Stop Pairing for ' . getName($_SESSION['pair_user']) . '</button>';
+    } else {
+        $result .= '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-lime w3-cell w3-margin-top" type="button" name="select" onclick="adminStartPair();">Select User for Pairing</button>';
+    }
+    return $result;
 }

@@ -1,9 +1,6 @@
 <?php
 
-
-if(session_id() == '') {
-    session_start();
-}
+session_start();
 
 if (isset($_SESSION['type'])) {
     $type = $_SESSION['type'];

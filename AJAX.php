@@ -2,29 +2,29 @@
 require_once "database.php";
 require_once "session.php";
 
-if(!isset($_GET["action"])){
+if(!isset($_REQUEST["action"])){
     echo "";
     die();
 }
 
-if($_GET["action"] == "refreshState"){
-    if(!isset($_GET["country"])){
+if($_REQUEST["action"] == "refreshState"){
+    if(!isset($_REQUEST["country"])){
         header("Location:index.php");
     }
-    $countryID = $_GET["country"];
+    $countryID = $_REQUEST["country"];
     $options = getStatesList($countryID);
 
     echo $options;
 }
 
-if($_GET["action"] == "getDegrees"){
+if($_REQUEST["action"] == "getDegrees"){
     echo listDegreeTypes();
 }
 
-if($_GET["action"] == "getUsernames" && $type > 1){
-    if (isset($_GET["matching"])) {
+if($_REQUEST["action"] == "getUsernames" && $type > 1){
+    if (isset($_REQUEST["matching"])) {
         $con = Connection::connect();
-        $stmt = $con->prepare("select username from `Account` where username LIKE '%".$_GET["matching"]."%'");
+        $stmt = $con->prepare("select username from `Account` where username LIKE '%".$_REQUEST["matching"]."%'");
         $stmt->execute();
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -37,10 +37,10 @@ if($_GET["action"] == "getUsernames" && $type > 1){
         echo "";
     }
 }
-if($_GET["action"] == "getMentees" && $type > 1){
-    if (isset($_GET["matching"])) {
+if($_REQUEST["action"] == "getMentees" && $type > 1){
+    if (isset($_REQUEST["matching"])) {
         $con = Connection::connect();
-        $stmt = $con->prepare("select username from `MenteeOptions` where username LIKE '%".$_GET["matching"]."%'");
+        $stmt = $con->prepare("select username from `MenteeOptions` where username LIKE '%".$_REQUEST["matching"]."%'");
         $stmt->execute();
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -53,10 +53,10 @@ if($_GET["action"] == "getMentees" && $type > 1){
         echo "";
     }
 }
-if($_GET["action"] == "getMentors" && $type > 1){
-    if (isset($_GET["matching"])) {
+if($_REQUEST["action"] == "getMentors" && $type > 1){
+    if (isset($_REQUEST["matching"])) {
         $con = Connection::connect();
-        $stmt = $con->prepare("select username from `MentorOptions` where username LIKE '%".$_GET["matching"]."%'");
+        $stmt = $con->prepare("select username from `MentorOptions` where username LIKE '%".$_REQUEST["matching"]."%'");
         $stmt->execute();
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -111,20 +111,20 @@ if($_REQUEST['action'] == "revokeMentorship"){
 
 if($_REQUEST['action'] == "adminStartPair"){
     $_SESSION['pair_user'] = $_SESSION["profile_ID"];
+    echo formatAdminPairingBox();
     die();
 }
 
 if($_REQUEST['action'] == "adminFinishPair"){
     $user1 = $_SESSION['pair_user'];
     $user2 = $_SESSION["profile_ID"];
-    header("Location: index.php?mentor=" . $user1 . "&mentee=" . $user2 . "&match=");
+    echo "mentor=" . getUsernameFromAccountID($user1) . "&mentee=" . getUsernameFromAccountID($user2) . "&match=";
     die();
 }
 
 if($_REQUEST['action'] == "adminClearPair"){
     unset($_SESSION['pair_user']);
+    echo formatAdminPairingBox();
     die();
 }
-
-
 ?>
