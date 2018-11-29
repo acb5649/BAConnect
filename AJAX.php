@@ -118,6 +118,7 @@ if($_REQUEST['action'] == "adminStartPair"){
 if($_REQUEST['action'] == "adminFinishPair"){
     $user1 = $_SESSION['pair_user'];
     $user2 = $_SESSION["profile_ID"];
+    unset($_SESSION['pair_user']);
     echo "mentor=" . getUsernameFromAccountID($user1) . "&mentee=" . getUsernameFromAccountID($user2) . "&match=";
     die();
 }
