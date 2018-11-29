@@ -471,7 +471,11 @@ function getAccountTypeFromAccountID($account_id) {
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $con = null;
-    return $row['type'];
+    if ($row['type'] == null) {
+        return 0;
+    } else {
+        return $row['type'];
+    }
 }
 
 function getAccountIDFromUsername($username) {

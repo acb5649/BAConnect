@@ -212,10 +212,10 @@ if (isset($_POST['register'])) {
     }
 }
 if(isset($_REQUEST['match']) && isset($_REQUEST['mentor']) && isset($_REQUEST['mentee'])) {
-	if ($type <= 2) {
+	if (getAccountTypeFromAccountID($_SESSION["account_ID"]) < 2) {
 		header("Location: index.php");
 		die;
-	} elseif ($type >2) {
+	} elseif (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
 
 		$con = Connection::connect();
 		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");

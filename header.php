@@ -38,12 +38,13 @@ require_once "dialog.php";
 
 if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
     echo "<script>document.getElementById('dialogModal').style.display='block'</script>";
+    /*
     unset($_SESSION['title']);
     unset($_SESSION['msg']);
     unset($_SESSION['nextModal']);
-    if(isset($_SESSION['success'])){
+    if(isset($_SESSION['success'])) {
         unset($_SESSION['success']);
-    }
+    }*/
 }
 ?>
 
