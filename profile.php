@@ -72,6 +72,21 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
 
     registerNewPicture($profile_account_id, $target);
     header("location: profile.php?user=" . $profile_account_id);
+} elseif (isset($_POST['submit']) && isset($_FILES['resume'])) {
+    $image_dir = 'documents';
+    $image_dir_path = getcwd() . DIRECTORY_SEPARATOR . $image_dir;
+
+    $file_name = $_FILES['profile']['name'];
+    $file_size = $_FILES['profile']['size'];
+    $file_tmp = $_FILES['profile']['tmp_name'];
+    $file_type = $_FILES['profile']['type'];
+    $file_ext = strtolower(end(explode('.',$_FILES['profile']['name'])));
+
+    $target = $image_dir_path . DIRECTORY_SEPARATOR . $file_name;
+    move_uploaded_file($file_tmp, $target);
+
+    registerNewResume($profile_account_id, $target);
+    header("location: profile.php?user=" . $profile_account_id);
 } elseif (isset($_POST['submit'])) {
     $con = Connection::connect();
 
@@ -929,7 +944,7 @@ function formatPendingMentorships($profile_account_id) {
                         <i class=\"fa fa-user\"></i> New resume:
                     </label>
                 </p>
-                <input class=\"w3-input w3-border\" type=\"file\" placeholder=\"\" name=\"profile\" id=\"profile\">
+                <input class=\"w3-input w3-border\" type=\"file\" placeholder=\"\" name=\"resume\" id=\"resume\">
                 <button class=\"w3-button w3-block w3-lime w3-padding-16 w3-section w3-right\" type=\"submit\" name=\"submit\">
                     Submit New Resume
                     <i class=\"fa fa-check\"></i>
