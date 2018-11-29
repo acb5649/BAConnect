@@ -154,7 +154,7 @@ function finalizeRegistration($account_id, $email) {
     $url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
     $url = str_replace("index.php", "verify.php", $url);
-    
+
     mail($email, "BAConnect: Verify Your Account", "Click this link to verify your account: http://" . $url . "?code=" . $code . "&email=" . urlencode($email) . "&type=reg");
 }
 
@@ -264,7 +264,8 @@ function login($username, $password) {
         return $report;
     }
 
-    $stmt = $con->prepare("select password from Account where account_ID = '" . $account_id . "'");
+    $stmt = $con->prepare("select password from Account where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $con = null;
