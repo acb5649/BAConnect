@@ -784,7 +784,7 @@ function formatPendingMentorships($profile_account_id) {
                     <form method="post" action="profile.php">
 
                     <p><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i>Country:</p>
-                    <select class="w3-select w3-border w3-cell" name="country" id="country" onchange="showStates(this.value);">
+                    <select class="w3-select w3-border w3-cell" name="country" id="country" onchange='showStates(this.value, "profile_state");'>
                         <?php echo listCountries($profile_account_id) ?>
                     </select>
 
@@ -798,7 +798,7 @@ function formatPendingMentorships($profile_account_id) {
                     <input class="w3-input w3-border" type="text" value="<?php echo getCity($profile_account_id); ?>" name="city"/>
 
                     <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i>State:</p>
-                    <select class="w3-select w3-border" name="state" id="state">
+                    <select class="w3-select w3-border" name="profile_state" id="profile_state">
                         <?php echo getStatesList(getCountryID($profile_account_id), $profile_account_id); ?>
                     </select>
 

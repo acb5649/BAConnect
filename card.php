@@ -31,6 +31,10 @@ function createCard($account_id) {
     // final product looks like this: https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_cards_buttons2
 
     $user = User::fromID($account_id);
+    $location = $user->formatCityAndState();
+    if ($location == "") {
+        $location = getApproximateLocation($account_id);
+    }
     //$imageSrc = file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id);
     //$imageSrc = "http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id;
 
@@ -50,7 +54,7 @@ function createCard($account_id) {
     <div class="w3-twothird w3-small" style="text-align: left;">' . formatDegreesAndJobs(getDegrees($account_id), getJobs($account_id)) . '</div>
   </div>
   <hr>
-  <p>' . $user->formatCityAndState() . '</p>
+  <p>' . $location . '</p>
   </div>
   <a class="w3-button w3-block w3-dark-grey" href="profile.php?user=' . $account_id . '">+ Connect</a>
   </div></div>';
