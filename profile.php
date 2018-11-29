@@ -76,11 +76,11 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     $image_dir = 'documents';
     $image_dir_path = getcwd() . DIRECTORY_SEPARATOR . $image_dir;
 
-    $file_name = $_FILES['profile']['name'];
-    $file_size = $_FILES['profile']['size'];
-    $file_tmp = $_FILES['profile']['tmp_name'];
-    $file_type = $_FILES['profile']['type'];
-    $file_ext = strtolower(end(explode('.',$_FILES['profile']['name'])));
+    $file_name = $_FILES['resume']['name'];
+    $file_size = $_FILES['resume']['size'];
+    $file_tmp = $_FILES['resume']['tmp_name'];
+    $file_type = $_FILES['resume']['type'];
+    $file_ext = strtolower(end(explode('.',$_FILES['resume']['name'])));
 
     $target = $image_dir_path . DIRECTORY_SEPARATOR . $file_name;
     move_uploaded_file($file_tmp, $target);
