@@ -98,6 +98,19 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
     ?>
 </div>
 
+<?php if ($type > 1) {
+            $alert = "<div id='admin_status' style='position: sticky; position: -webkit-sticky;' class='w3-top w3-container w3-card w3-red w3-right w3-padding-16' style='z-index: -1;'>";
+            if ($type == 2) {
+                $alert .= "COORDINATOR";
+            } elseif ($type == 3) {
+                $alert .= "ADMIN";
+            } else {
+                $alert .= "SUPER ADMIN";
+            }
+            $alert .= "</div>";
+            echo $alert;
+        } ?>
+
 <div id="navMobile" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
     <?php
     if($type == 0){
