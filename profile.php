@@ -69,7 +69,7 @@ if (isset($_POST['delete'])) {
             $_SESSION['inputs'] = null;
             header("Location: logout.php");
             die;
-        } elseif ($type > 2) {
+        } else {
             //Code to delete accounts here
 
             $_SESSION['title'] = "Account Deleted";

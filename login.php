@@ -9,20 +9,24 @@ if (isset($_POST['login'])) {
 
     $report = login($username, $password);
 
-    if ($report->title != 'Success') {
+    if ($report->success) {
+        $account_id = getAccountIDFromUsername($username);
+        $_SESSION['account_ID'] = $account_id;
+        $_SESSION['type'] = getAccountTypeFromAccountID($account_id);
+
+        unset($_SESSION['title']);
+        unset($_SESSION['msg']);
+        unset($_SESSION['nextModal']);
+        unset($_SESSION['success']);
+        unset($_SESSION['inputs']);
+    }
+    else{
         $_SESSION['title'] = $report->title;
         $_SESSION['msg'] = $report->msg;
         $_SESSION['nextModal'] = $report->nextModal;
         $_SESSION['success'] = $report->success;
         $_SESSION['inputs'] = $report->inputs;
     }
-
-    if ($report->success) {
-        $account_id = getAccountIDFromUsername($username);
-        $_SESSION['account_ID'] = $account_id;
-        $_SESSION['type'] = getAccountTypeFromAccountID($account_id);
-    }
-
     header('Location: index.php');
     die;
 }
