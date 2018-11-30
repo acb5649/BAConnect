@@ -257,7 +257,7 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     if (isset($_POST['privilege'])) {
         if ($_POST['privilege'] < $type) {
             $stmt = $con->prepare("UPDATE Account set type = ? where account_ID = ?");
-            $stmt->bindValue(1, $_POST['privilege'], PDO::PARAM_INT);
+            $stmt->bindValue(1, Input::int($_POST['privilege']), PDO::PARAM_INT);
             $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
             $stmt->execute();
         } else {
@@ -267,6 +267,27 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
             $_SESSION['success'] = FALSE;
             $_SESSION['inputs'] = null;
         }
+    }
+
+    if (isset($_POST['firstName'])) {
+        $stmt = $con->prepare("UPDATE Information set first_name = ? where account_ID = ?");
+        $stmt->bindValue(1, Input::str($_POST['firstName']), PDO::PARAM_STR);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    if (isset($_POST['middleName'])) {
+        $stmt = $con->prepare("UPDATE Information set middle_name = ? where account_ID = ?");
+        $stmt->bindValue(1, Input::str($_POST['middleName']), PDO::PARAM_STR);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    if (isset($_POST['lastName'])) {
+        $stmt = $con->prepare("UPDATE Information set last_name = ? where account_ID = ?");
+        $stmt->bindValue(1, Input::str($_POST['lastName']), PDO::PARAM_STR);
+        $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     $con = null;
@@ -927,8 +948,12 @@ function formatPendingMentorships($profile_account_id) {
                     <div class="w3-display-middle w3-display-hover w3-xlarge">
                         <?php if ($allowEdit) { echo "<button class=\"w3-button w3-black\" onclick=\"document.getElementById('uploadPicModal').style.display='block'\">Change Picture...</button>";} ?>
                     </div>
-                    <div class="w3-display-bottomleft w3-container w3-text-black">
-                        <h2 class="w3-text-white" style="text-shadow:1px 1px 0 #444"><?php echo getName($profile_account_id) ?></h2>
+                    <div class="w3-display-bottomleft w3-container w3-text-black" style="width: 100%;">
+                        <h2 id="name" class="w3-text-white w3-display-container" style="text-shadow:1px 1px 0 #444; width: 100%;"><span><?php
+                            echo getName($profile_account_id);
+                            if ($allowEdit) {
+                                echo '<a class="w3-button w3-display-right" onclick="document.getElementById(\'changeNameModal\').style.display=\'block\'"><i class="fa fa-pencil fa-fw w3-large w3-text-lime w3-opacity"></i></a>';
+                            } ?></span></h2>
                     </div>
                 </div>
                 <div class="w3-container">
@@ -1014,7 +1039,11 @@ function formatPendingMentorships($profile_account_id) {
         <!-- End Grid -->
     </div>
 
-<?php if ($allowEdit) { echo "
+<?php
+
+$name = getNameArray($profile_account_id);
+
+if ($allowEdit) { echo "
 <div id=\"uploadPicModal\" class=\"w3-modal\">
         <div class=\"w3-modal-content w3-animate-top w3-card-4\">
             <header class=\"w3-container w3-lime w3-center w3-padding-32\">
@@ -1082,6 +1111,30 @@ function formatPendingMentorships($profile_account_id) {
                 </button>
                 <button type=\"button\" class=\"w3-button w3-red w3-section\"
                         onclick=\"document.getElementById('deleteAccountModal').style.display='none'\">Close
+                    <i class=\"fa fa-remove\"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div id=\"changeNameModal\" class=\"w3-modal\">
+        <div class=\"w3-modal-content w3-animate-top w3-card-4\">
+            <header class=\"w3-container w3-lime w3-center w3-padding-32\">
+            <span onclick=\"document.getElementById('changeNameModal').style.display='none'\"
+                  class=\"w3-button w3-lime w3-xlarge w3-display-topright\">×</span>
+                <h2 class=\"w3-wide\"><i class=\"w3-margin-right\"></i>Change Name</h2>
+            </header>
+            <form method=\"post\" action=\"profile.php\" enctype='multipart/form-data' class=\"w3-container\">
+                <p><label><i class=\"fa fa-user\"></i>First Name: </label></p>
+                <input class=\"w3-input w3-border\" type=\"text\" maxlength=\"50\" value=\"" . $name[0] . "\" name=\"firstName\" id=\"firstName\" required/>
+                <p><label><i class=\"fa fa-user\"></i>Middle Name: </label></p>
+                <input class=\"w3-input w3-border\" type=\"text\" maxlength=\"50\" value=\"" . $name[1] . "\" name=\"middleName\" id=\"middleName\"/>
+                <p><label><i class=\"fa fa-user\"></i>Last Name: </label></p>
+                <input class=\"w3-input w3-border\" type=\"text\" maxlength=\"50\" value=\"" . $name[2] . "\" name=\"lastName\" id=\"lastName\"/>
+                
+                <button class=\"w3-button w3-block w3-lime w3-padding-16 w3-section w3-right\" type=\"submit\" name=\"submit\">Change Name <i class=\"fa fa-check\"></i></button>
+                <button type=\"button\" class=\"w3-button w3-red w3-section\"
+                        onclick=\"document.getElementById('changeNameModal').style.display='none'\">Close
                     <i class=\"fa fa-remove\"></i>
                 </button>
             </form>

@@ -551,6 +551,16 @@ function getName($account_id) {
     }
 }
 
+function getNameArray($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select first_name, middle_name, last_name from Information where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $con = null;
+    return array($row['first_name'], $row['middle_name'], $row['last_name']);
+}
+
 function getEmail($account_id) {
     $con = Connection::connect();
     $stmt = $con->prepare("select email_address from Information where account_ID = ?");
