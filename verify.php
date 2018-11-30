@@ -31,5 +31,14 @@ if ($code && $email) {
         header("Location: changePassword.php");
     }
 } else {
-    header("Location: failed.php");
+
+    $report = new Report("Verification Failed", "Invalid code.", NULL, FALSE);
+
+    $_SESSION['title'] = $report->title;
+    $_SESSION['msg'] = $report->msg;
+    $_SESSION['nextModal'] = $report->nextModal;
+    $_SESSION['success'] = $report->success;
+    $_SESSION['inputs'] = $report->inputs;
+
+    header("Location: index.php");
 }
