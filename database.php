@@ -257,31 +257,34 @@ function editAccountType($account_id, $newType){
 
 function login($username, $password) {
     $con = Connection::connect();
-    if($con == null){
-        $report = new Report("Error", "Could not connect to database.", "login", FALSE);
-        return $report;
+    if ($con == null) {
+        return new Report("Error", "Could not connect to database.", "login", FALSE);
     }
     $account_id = getAccountIDFromUsername($username);
 
-    if($account_id == null){
-        $report = new Report("Error", "Invalid username or password", "login", FALSE);
-        return $report;
+    if ($account_id == null) {
+        return new Report("Error", "Invalid username or password", "login", FALSE);
     }
 
-    $stmt = $con->prepare("select password from Account where account_ID = ?");
+    $stmt = $con->prepare("select password, active, frozen from Account where account_ID = ?");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $con = null;
 
-    if($password == $row['password']){
-        $report = new Report("Success", "Login Successful", "login", TRUE);
-    }
-    else{
-        $report = new Report("Error", "Invalid username or password", "login", FALSE);
+    if ($row['active'] == 0) {
+        return new Report("Error", "Account has not been activated yet. Please check your email for the activation link.", "login", FALSE);
     }
 
-    return $report;
+    if ($row['frozen'] != null && $password == $row['password']) {
+        return new Report("Account Frozen", "An admin has frozen your account. You will not be allowed to make edits to your account.", "", TRUE);
+    }
+
+    if ($password == $row['password']) {
+        return new Report("Success", "Login Successful", "", TRUE);
+    } else {
+        return new Report("Error", "Invalid username or password", "login", FALSE);
+    }
 }
 
 function makeCode($email) {
