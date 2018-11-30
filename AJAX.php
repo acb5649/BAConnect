@@ -21,23 +21,6 @@ if($_REQUEST["action"] == "getDegrees"){
     echo listDegreeTypes();
 }
 
-if($_REQUEST["action"] == "getUsernames" && $type > 1){
-    if (isset($_REQUEST["matching"])) {
-        $con = Connection::connect();
-        $stmt = $con->prepare("select username from `Account` where username LIKE '%".$_REQUEST["matching"]."%'");
-        $stmt->execute();
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $result = "";
-        foreach($row as $rw) {
-            $result .= '<option> ' . $rw["username"] . ' </option> ';
-        }
-        echo $result;
-    } else {
-        echo "";
-    }
-}
-
 if($_REQUEST['action'] == "adminStartPair"){
     $_SESSION['pair_user'] = $_SESSION["profile_ID"];
     echo formatAdminPairingBox();

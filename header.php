@@ -26,10 +26,6 @@ if ($type > 2) {
     include "addState.php";
 }
 
-if ($type > 1) {
-    include "upgrade.php";
-}
-
 include "register.php";
 
 require_once "dialog.php";
@@ -70,7 +66,6 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
         if($type > 1){
 
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'upgradeModal'".').style.display='."'block'".'">PROMOTE USER</a>';
 
 			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="pendingmentorships.php">VIEW PENDING PAIRS</a>';
 			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="mentorships.php">VIEW PAIRS</a>';
@@ -122,7 +117,6 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
 
     if($type > 1){
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'upgradeModal'".').style.display='."'block'".'">PROMOTE USER</a>';
 
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="pendingmentorships.php">VIEW PENDING PAIRS</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="mentorships.php">VIEW PAIRS</a>';

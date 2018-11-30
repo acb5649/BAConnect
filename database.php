@@ -689,6 +689,38 @@ function getTwitterLink($account_id) {
     return $row['twitter'];
 }
 
+function getPrivilege($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select type from `Account` where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $con = null;
+    if($row['type'] == "0"){
+        return "Unregistered";
+    } elseif($row['type'] == "1"){
+        return "User";
+    } elseif($row['type'] == "2"){
+        return "Coordinator";
+    } elseif($row['type'] == "3"){
+        return "Admin";
+    } elseif($row['type'] == "4"){
+        return "Super Admin";
+    }
+    return "";
+}
+
+function getUpgradeTiers($account_id) {
+    $list = "";
+    $rank = getAccountTypeFromAccountID($account_id);
+    $types = array(1 => "User", 2 => "Coordinator", 3 => "Admin");
+
+    for ($x = 1; $x < 4 && $x < $rank; $x++) {
+        $list = $list . '<option value = "' . $x . '">' . $types[$x] . '</option>';
+    }
+    return $list;
+}
+
 function formatAdminPairingBox() {
     $result = "";
     if (isset($_SESSION['pair_user'])) {

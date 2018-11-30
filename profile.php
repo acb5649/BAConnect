@@ -228,6 +228,21 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
         }
     }
 
+    if (isset($_POST['privilege'])) {
+        if ($_POST['privilege'] < $type) {
+            $stmt = $con->prepare("UPDATE Account set type = ? where account_ID = ?");
+            $stmt->bindValue(1, $_POST['privilege'], PDO::PARAM_INT);
+            $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
+            $stmt->execute();
+        } else {
+            $_SESSION['title'] = "Error Upgrading User";
+            $_SESSION['msg'] = "Privilege levels mismatch.";
+            $_SESSION['nextModal'] = "";
+            $_SESSION['success'] = FALSE;
+            $_SESSION['inputs'] = null;
+        }
+    }
+
     $con = null;
     header("location: profile.php?user=" . $profile_account_id);
     die();
@@ -730,6 +745,8 @@ function formatPendingMentorships($profile_account_id) {
                 document.getElementById(id).innerHTML = `<i class="fa fa-twitter-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getTwitterLink($profile_account_id)) . makeEditable($allowEdit, "profile_twitter")?>`;
             } else if (id == "preference") {
                 document.getElementById(id).innerHTML = `<i class="fa fa-users fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getUserMentorshipPreference($profile_account_id)) . makeEditable($allowEdit, "preference")?>`;
+            } else if (id == "profile_privilege") {
+                document.getElementById(id).innerHTML = `<i class="fa fa-lock fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPrivilege($profile_account_id)) . makeEditable($allowEdit, "profile_privilege")?>`;
             }
         }
 
@@ -850,6 +867,17 @@ function formatPendingMentorships($profile_account_id) {
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Preference</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('preference');">Cancel</button>
                     </form>`;
+            } else if (id == "profile_privilege") {
+                document.getElementById(id).innerHTML = `
+                    <p><i class="fa fa-lock fa-fw w3-margin-right w3-large w3-text-lime"></i>Privilege Level:</p>
+                    <form method="post" action="profile.php">
+                    <select class="w3-select w3-border w3-cell" name="privilege" id="privilege">
+                        <?php if(isset($_SESSION["account_ID"])) { echo getUpgradeTiers($_SESSION["account_ID"]); } ?>
+                    </select>
+                    <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
+                    <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Privilege</button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_privilege');">Cancel</button>
+                    </form>`;
             }
         }
     </script>
@@ -895,12 +923,16 @@ function formatPendingMentorships($profile_account_id) {
                     <p class="w3-display-container" id="profile_linkedin"><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($profile_account_id)) . makeEditable($allowEdit, "profile_linkedin")?></p>
                     <p class="w3-display-container" id="profile_twitter"><i class="fa fa-twitter-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getTwitterLink($profile_account_id)) . makeEditable($allowEdit, "profile_twitter")?></p>
 
+                    <?php if (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
+                        echo '<hr>';
+                        echo '<p class="w3-display-container" id="profile_privilege"><i class="fa fa-lock fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getPrivilege($profile_account_id)) . makeEditable($allowEdit, "profile_privilege") . '</p>';
+                    } ?>
+
                     <?php if (isset($_SESSION["account_ID"]) && $_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
                         $disabled = "";
                         if (hasAlreadySentRequest($profile_account_id)) { $disabled = "disabled=''"; }
                         echo "<hr><button id='request' " . $disabled . " class='w3-button w3-block w3-dark-grey' onclick='sendMentorshipRequest()'>+ Connect</button>";
-                    }
-                    ?>
+                    } ?>
 
                     <?php if ($allowEdit) {
                         // show resume
