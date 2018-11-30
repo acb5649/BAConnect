@@ -64,12 +64,13 @@ function formatPendingMentorships() {
         <script src="js/registration.js"></script>
         <script src="js/closeModals.js"></script>
         <script>
-            function handePendingMentorship(mentorship_ID, accept) {
+            function handlePendingMentorship(mentorship_ID, accept) {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
                         document.getElementById("table_container").innerHTML = this.responseText;
                         $('#pending_mentorship_history_table').DataTable();
+                        location.reload();
                     }
                 };
                 xmlhttp.open("POST", "pendingmentorships.php", true);

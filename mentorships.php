@@ -68,6 +68,7 @@ function formatMentorships() {
                     if(this.readyState == 4 && this.status == 200){
                         document.getElementById("table_container").innerHTML = this.responseText;
                         $('#current_mentorships').DataTable();
+                        location.reload();
                     }
                 };
                 xmlhttp.open("POST", "mentorships.php", true);
