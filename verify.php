@@ -9,7 +9,6 @@ $verifyType = filter_input(INPUT_GET, "type");
 if ($code && $email) {
     if ($verifyType == "reg") {
         if (verifyCode($code, $email)) {
-            echo "<script> console.log(" . $email . ") </script>";
             $con = Connection::connect();
             $stmt = $con->prepare("select account_ID from Information where email_address = ?");
             $stmt->bindValue(1, $email, PDO::PARAM_STR);
@@ -21,14 +20,35 @@ if ($code && $email) {
             $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
             $stmt->execute();
 
+            $stmt = $con->prepare("DELETE FROM Registration WHERE account_ID = ?");
+            $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+            $stmt->execute();
+
             $report = new Report("Success", "Your account was successfully activated.", "", TRUE);
+
+            $_SESSION['title'] = $report->title;
+            $_SESSION['msg'] = $report->msg;
+            $_SESSION['nextModal'] = $report->nextModal;
+            $_SESSION['success'] = $report->success;
+            $_SESSION['inputs'] = $report->inputs;
+            header("Location: index.php");
+            die;
         } else {
             $report = new Report("Error", "Your activation code isn't valid. Your account may have already been activated.", "", FALSE);
+
+            $_SESSION['title'] = $report->title;
+            $_SESSION['msg'] = $report->msg;
+            $_SESSION['nextModal'] = $report->nextModal;
+            $_SESSION['success'] = $report->success;
+            $_SESSION['inputs'] = $report->inputs;
+            header("Location: index.php");
+            die;
         }
     } elseif ($verifyType == "reset") {
         $_SESSION['email'] = $email;
         $_SESSION['code'] = $code;
         header("Location: changePassword.php");
+        die();
     }
 } else {
 
@@ -41,4 +61,5 @@ if ($code && $email) {
     $_SESSION['inputs'] = $report->inputs;
 
     header("Location: index.php");
+    die();
 }
