@@ -923,7 +923,7 @@ function formatPendingMentorships($profile_account_id) {
                     <p class="w3-display-container" id="profile_linkedin"><i class="fa fa-linkedin-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getLinkedinLink($profile_account_id)) . makeEditable($allowEdit, "profile_linkedin")?></p>
                     <p class="w3-display-container" id="profile_twitter"><i class="fa fa-twitter-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getTwitterLink($profile_account_id)) . makeEditable($allowEdit, "profile_twitter")?></p>
 
-                    <?php if (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
+                    <?php if (isset($_SESSION["account_ID"]) && getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
                         echo '<hr>';
                         echo '<p class="w3-display-container" id="profile_privilege"><i class="fa fa-lock fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getPrivilege($profile_account_id)) . makeEditable($allowEdit, "profile_privilege") . '</p>';
                     } ?>
