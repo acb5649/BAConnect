@@ -138,30 +138,29 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     }
 
     if (isset($_POST['phone'])) {
-        if(is_numeric($_POST['phone'])){
+        $stmt = $con->prepare("select phone_number from `Phone Numbers` where account_ID = ?");
+        $stmt->bindValue(1, $profile_account_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($row) == 0) {
+            registerNewPhoneNumber($profile_account_id, preg_replace("/[^0-9]/", "", Input::str($_POST['phone'])));
+        } else {
             $stmt = $con->prepare("UPDATE `Phone Numbers` set phone_number = ? where account_ID = ?");
-            $stmt->bindValue(1, $_POST['phone'], PDO::PARAM_INT);
+            $stmt->bindValue(1, preg_replace("/[^0-9]/", "", Input::str($_POST['phone'])), PDO::PARAM_INT);
             $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
             $stmt->execute();
-        }
-        else{
-            $_SESSION['title'] = "Invalid Phone Number";
-            $_SESSION['msg'] = "Please enter a valid phone number (digits only)";
-            $_SESSION['nextModal'] = "";
-            $_SESSION['success'] = FALSE;
-            $_SESSION['inputs'] = null;
-            header("Location: profile.php?user=" . $_REQUEST['user']);
-            die();
         }
     }
 
     if (isset($_POST['addr1']) && isset($_POST['addr2']) && isset($_POST['city']) && isset($_POST['state']) && isset($_POST['postcode']) && isset($_POST['country'])) {
-        $address = new Address($_POST['addr1'], $_POST['addr2'], $_POST['city'], $_POST['postcode'], $_POST['state'], $_POST['country']);
+        $address = new Address(Input::str($_POST['addr1']), Input::str($_POST['addr2']), Input::str($_POST['city']), Input::str($_POST['postcode']), Input::int($_POST['state']), Input::int($_POST['country']));
 
         $old_address_id = getAddressIDFromAccount($profile_account_id);
-        $stmt = $con->prepare("UPDATE `Address History` set end = CURRENT_TIMESTAMP where address_id = ?");
-        $stmt->bindValue(1, $old_address_id, PDO::PARAM_INT);
-        $stmt->execute();
+        if ($old_address_id != null) {
+            $stmt = $con->prepare("UPDATE `Address History` set end = CURRENT_TIMESTAMP where address_id = ?");
+            $stmt->bindValue(1, $old_address_id, PDO::PARAM_INT);
+            $stmt->execute();
+        }
 
         updateUserAddress($profile_account_id, $address);
     }
@@ -609,12 +608,12 @@ function formatPendingMentorships($profile_account_id) {
             });
         });
 
-        function showStates(countryID){
+        function showProfileStates(countryID){
             if(countryID != ""){
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
-                        document.getElementById("state").innerHTML = this.responseText;
+                        document.getElementById("profile_state").innerHTML = this.responseText;
                     }
                 };
                 xmlhttp.open("GET", "AJAX.php?action=refreshState&country=" + countryID, true);
@@ -847,7 +846,7 @@ function formatPendingMentorships($profile_account_id) {
                     <form method="post" action="profile.php">
 
                     <p><i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i>Country:</p>
-                    <select class="w3-select w3-border w3-cell" name="country" id="country" onchange='showStates(this.value, "profile_state");'>
+                    <select class="w3-select w3-border w3-cell" name="country" id="country" onchange="showProfileStates(this.value);">
                         <?php echo listCountries($profile_account_id) ?>
                     </select>
 
