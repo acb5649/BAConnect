@@ -912,8 +912,6 @@ function formatPendingMentorships($profile_account_id) {
                         echo formatAdminPairingBox();
                         echo "</div>";
                     } ?>
-
-                    <br>
                 </div>
             </div><br>
 

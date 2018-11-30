@@ -37,38 +37,6 @@ if($_REQUEST["action"] == "getUsernames" && $type > 1){
         echo "";
     }
 }
-if($_REQUEST["action"] == "getMentees" && $type > 1){
-    if (isset($_REQUEST["matching"])) {
-        $con = Connection::connect();
-        $stmt = $con->prepare("select username from `MenteeOptions` where username LIKE '%".$_REQUEST["matching"]."%'");
-        $stmt->execute();
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $result = "";
-        foreach($row as $rw) {
-            $result .= '<option> ' . $rw["username"] . ' </option> ';
-        }
-        echo $result;
-    } else {
-        echo "";
-    }
-}
-if($_REQUEST["action"] == "getMentors" && $type > 1){
-    if (isset($_REQUEST["matching"])) {
-        $con = Connection::connect();
-        $stmt = $con->prepare("select username from `MentorOptions` where username LIKE '%".$_REQUEST["matching"]."%'");
-        $stmt->execute();
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $result = "";
-        foreach($row as $rw) {
-            $result .= '<option> ' . $rw["username"] . ' </option> ';
-        }
-        echo $result;
-    } else {
-        echo "";
-    }
-}
 
 if($_REQUEST['action'] == "adminStartPair"){
     $_SESSION['pair_user'] = $_SESSION["profile_ID"];
