@@ -268,7 +268,7 @@ function login($username, $password) {
         return $report;
     }
 
-    $stmt = $con->prepare("select password from Account where account_ID = ?");
+    $stmt = $con->prepare("select password from Account where account_ID = ? AND active = 1");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
