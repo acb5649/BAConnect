@@ -321,7 +321,7 @@ function getRejectedMentorships($account_id = null){
     return $list;
 }
 //a mentorship that was started but later ended will have NEITHER it's 'start' nor 'end' dates set to null
-function getEndedMentorships($account_id){
+function getEndedMentorships($account_id = null){
     $con = Connection::connect();
 
     if($account_id != null){

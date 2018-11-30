@@ -513,7 +513,7 @@ function getUsernameFromAccountID($account_id) {
 
 function getName($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from Information where account_ID = ?");
+    $stmt = $con->prepare("select first_name, middle_name, last_name from Information where account_ID = ?");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -521,12 +521,16 @@ function getName($account_id) {
         return "Missing Name";
     }
     $con = null;
-    return $row['first_name'] . " " . $row['middle_name'] . " " . $row['last_name'];
+    if ($row['middle_name'] == "") {
+        return $row['first_name'] . " " . $row['last_name'];
+    } else {
+        return $row['first_name'] . " " . $row['middle_name'] . " " . $row['last_name'];
+    }
 }
 
 function getEmail($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from Information where account_ID = ?");
+    $stmt = $con->prepare("select email_address from Information where account_ID = ?");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -730,4 +734,26 @@ function formatAdminPairingBox() {
         $result .= '<p class="w3-display-container" id="admin_start_selector"><button style="width: 100%" class="w3-button w3-lime w3-margin-top" type="button" name="select" onclick="adminStartPair();">Select User for Pairing</button>';
     }
     return $result;
+}
+
+function query_to_csv($result, $filename, $attachment = false, $headers = true) {
+
+    if($attachment) {
+        // send response headers to the browser
+        header( 'Content-Type: text/csv' );
+        header( 'Content-Disposition: attachment;filename='.$filename);
+        $fp = fopen('php://output', 'w');
+    } else {
+        $fp = fopen($filename, 'w');
+    }
+
+    if($headers) {
+        fputcsv($fp, array_keys($result[0]));
+    }
+
+    foreach($result as $row) {
+        fputcsv($fp, $row);
+    }
+
+    fclose($fp);
 }

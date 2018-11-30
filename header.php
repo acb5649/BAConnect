@@ -68,7 +68,8 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
 
 			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="pendingmentorships.php">VIEW PENDING PAIRS</a>';
-			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="mentorships.php">VIEW PAIRS</a>';
+			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="currentmentorships.php">VIEW CURRENT PAIRS</a>';
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="endedmentorships.php">VIEW ENDED PAIRS</a>';
         }
 
         if($type > 2){
@@ -119,7 +120,8 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
 
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="pendingmentorships.php">VIEW PENDING PAIRS</a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="mentorships.php">VIEW PAIRS</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="currentmentorships.php">VIEW CURRENT PAIRS</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="endedmentorships.php">VIEW ENDED PAIRS</a>';
     }
 
     if($type > 2){
