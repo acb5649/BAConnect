@@ -152,8 +152,8 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
         }
     }
 
-    if (isset($_POST['addr1']) && isset($_POST['addr2']) && isset($_POST['city']) && isset($_POST['state']) && isset($_POST['postcode']) && isset($_POST['country'])) {
-        $address = new Address(Input::str($_POST['addr1']), Input::str($_POST['addr2']), Input::str($_POST['city']), Input::str($_POST['postcode']), Input::int($_POST['state']), Input::int($_POST['country']));
+    if (isset($_POST['addr1']) && isset($_POST['addr2']) && isset($_POST['city']) && isset($_POST['profile_state']) && isset($_POST['postcode']) && isset($_POST['country'])) {
+        $address = new Address(Input::str($_POST['addr1']), Input::str($_POST['addr2']), Input::str($_POST['city']), Input::str($_POST['postcode']), Input::int($_POST['profile_state']), Input::int($_POST['country']));
 
         $old_address_id = getAddressIDFromAccount($profile_account_id);
         if ($old_address_id != null) {
