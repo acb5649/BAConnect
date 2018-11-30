@@ -24,11 +24,12 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest")
 
 function formatPendingMentorships() {
     $pendingMentorships = getPendingMentorships();
-    $result = '<table id="pending_mentorship_history_table" class="display"><thead><tr><th>Mentor</th><th>Mentee</th><th>Request Date</th><th>Remove Request Button</th></tr></thead><tbody>';
+    $result = '<table id="pending_mentorship_history_table" class="display"><thead><tr><th>Mentor</th><th>Mentee</th><th>Request Date</th><th>Approve Request</th><th>Remove Request</th></tr></thead><tbody>';
     foreach($pendingMentorships as $pen) {
 
         $id = $pen['pending_ID'];
 
+        $approve = '<button name="approve" class="w3-button w3-lime" onclick="handlePendingMentorship(\'' . $id . '\', 1);">Approve</button>';
 		$decline = '<button name="decline" class="w3-button w3-red" onclick="handlePendingMentorship(\'' . $id . '\', 0);">Decline</button>';
         $mentorLink = '<a href="profile.php?user=' . $pen['mentor_ID'] . '">' . getName($pen['mentor_ID']) . '</a>';
         $menteeLink = '<a href="profile.php?user=' . $pen['mentee_ID'] . '">' . getName($pen['mentee_ID']) . '</a>';
@@ -37,6 +38,7 @@ function formatPendingMentorships() {
         $result .= "<th><h6>" . $mentorLink . "</h6></th>";
         $result .= "<th><h6>" . $menteeLink . "</h6></th>";
         $result .= "<th><h6>" . $pen['request_date'] . "</h6></th>";
+        $result .= "<th><h6>" . $approve . "</h6></th>";
         $result .= "<th><h6>" . $decline . "</h6></th>";
         $result .= "</tr>";
     }
@@ -66,10 +68,8 @@ function formatPendingMentorships() {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
-                        let table = $('#pending_mentorship_history_table');
-                        table.DataTable().destroy();
                         document.getElementById("table_container").innerHTML = this.responseText;
-                        table.DataTable();
+                        $('#pending_mentorship_history_table').DataTable();
                     }
                 };
                 xmlhttp.open("POST", "pendingmentorships.php", true);

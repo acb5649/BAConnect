@@ -66,10 +66,8 @@ function formatMentorships() {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
-                        let table = $('#current_mentorships');
-                        table.DataTable().destroy();
                         document.getElementById("table_container").innerHTML = this.responseText;
-                        table.DataTable();
+                        $('#current_mentorships').DataTable();
                     }
                 };
                 xmlhttp.open("POST", "mentorships.php", true);
