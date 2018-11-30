@@ -4,70 +4,26 @@ require_once "database.php";
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest") {
     if ($type < 2) {
-        header("location: index.php");
+        //header("location: index.php");
         die();
     }
 
     $pendingMentorship_ID = $_REQUEST['pending_ID'];
 	$response = $_REQUEST['response'];
-    $success = pendingMentorshipResponse($_SESSION['account_ID'],$pendingMentorship_ID, $response );
-    if ($success) {
+    $report = pendingMentorshipResponse($_SESSION['account_ID'], $pendingMentorship_ID, $response);
+    if ($report->success) {
         echo formatPendingMentorships();
-        die();
-    } else {
-        die();
     }
+
+    $_SESSION['title'] = $report->title;
+    $_SESSION['msg'] = $report->msg;
+    $_SESSION['nextModal'] = $report->nextModal;
+    $_SESSION['success'] = $report->success;
+    $_SESSION['inputs'] = $report->inputs;
+
+    die();
 }
-if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee'])) {
-	if ($type <= 2) {
-		header("Location: index.php");
-		die;
-	} elseif ($type >2) {
 
-		$con = Connection::connect();
-		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-		$stmt->bindValue(1, $_POST['mentor'], PDO::PARAM_STR);
-		$stmt->execute();
-		$row = $stmt->fetch();
-		if ($row == null) {
-            $report = new Report("Manual Match Error!", "An invalid user was specified.", "matchModal", FALSE);
-            $_SESSION['title'] = $report->title;
-            $_SESSION['msg'] = $report->msg;
-            $_SESSION['nextModal'] = $report->nextModal;
-            $_SESSION['success'] = $report->success;
-            $_SESSION['inputs'] = $report->inputs;
-			header("Location: index.php");
-			die();
-		}
-		$mentorID = $row['account_ID'];
-
-		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-		$stmt->bindValue(1, $_POST['mentee'], PDO::PARAM_STR);
-		$stmt->execute();
-		$row = $stmt->fetch();
-		if ($row == null) {
-            $report = new Report("Manual Match Error!", "An invalid user was specified.", "matchModal", FALSE);
-            $_SESSION['title'] = $report->title;
-            $_SESSION['msg'] = $report->msg;
-            $_SESSION['nextModal'] = $report->nextModal;
-            $_SESSION['success'] = $report->success;
-            $_SESSION['inputs'] = $report->inputs;
-			header("Location: index.php");
-			die();
-		}
-		$menteeID = $row['account_ID'];
-
-		proposeMentorship($mentorID, $menteeID, $_SESSION['account_ID']);
-        $report = new Report("Manual Match Completed", "Users were matched.", "matchModal", TRUE);
-        $_SESSION['title'] = $report->title;
-        $_SESSION['msg'] = $report->msg;
-        $_SESSION['nextModal'] = $report->nextModal;
-        $_SESSION['success'] = $report->success;
-        $_SESSION['inputs'] = $report->inputs;
-        header("Location: index.php");
-		die;
-	}
-}
 function formatPendingMentorships() {
     $pendingMentorships = getPendingMentorships();
     $result = '<table id="pending_mentorship_history_table"  align = "center"><thead><tr><th>Mentor</th><th>|</th><th>Mentee</th><th>|</th><th>Request Date</th><th>|<th><th>Remove Request Button</th></tr></thead><tbody>';
@@ -108,7 +64,7 @@ function formatPendingMentorships() {
         <script src="js/registration.js"></script>
         <script src="js/closeModals.js"></script>
         <script>
-            function handePendingMentorship(mentorship_ID, accept = 0) {
+            function handePendingMentorship(mentorship_ID, accept) {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
@@ -119,8 +75,9 @@ function formatPendingMentorships() {
                     }
                 };
 
-                xmlhttp.open("POST", "pendingmentorships.php?action=handlePendingRequest&pending_ID=" + mentorship_ID + "&response=" +  accept, true);
-                xmlhttp.send();
+                xmlhttp.open("POST", "pendingmentorships.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("action=handlePendingRequest&pending_ID=" + mentorship_ID + "&response=" +  accept);
             }
 
             $(document).ready(function () {

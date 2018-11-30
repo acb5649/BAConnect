@@ -4,14 +4,13 @@ require_once "database.php";
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == "revokeMentorship") {
     if ($type < 2) {
-        header("location: index.php");
+        //header("location: index.php");
         die();
     }
-
     $mentorship_ID = $_REQUEST['id'];
     $report = endMentorship($_SESSION['account_ID'], $mentorship_ID);
     if ($report->success) {
-        $report = new Report("Mentorship Has Been Revoked Successfully", "Emails have been sent to both parties notifying them of the change.", "", TRUE);
+        echo formatMentorships();
     }
 
     $_SESSION['title'] = $report->title;
@@ -20,8 +19,6 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "revokeMentorship") {
     $_SESSION['success'] = $report->success;
     $_SESSION['inputs'] = $report->inputs;
 
-    //echo formatMentorships();
-    header("Location: mentorships.php");
     die();
 }
 
@@ -67,7 +64,15 @@ function formatMentorships() {
         <script>
             function revokeMentorship(mentorship_ID, account_ID) {
                 let xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("POST", "AJAX.php", true);
+                xmlhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        let table = $('#current_mentorships');
+                        table.DataTable().destroy();
+                        document.getElementById("current_mentorships").innerHTML = this.responseText;
+                        table.DataTable();
+                    }
+                };
+                xmlhttp.open("POST", "mentorships.php", true);
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xmlhttp.send("action=revokeMentorship&id=" + mentorship_ID + "&account=" + account_ID);
             }
