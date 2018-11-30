@@ -779,7 +779,7 @@ function formatPendingMentorships($profile_account_id) {
             } else if (id == "profile_email") {
                 document.getElementById(id).innerHTML = `<i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getEmail($profile_account_id)) . makeEditable($allowEdit, "profile_email")?>`;
             } else if (id == "phone") {
-                document.getElementById(id).innerHTML = `<i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getPhoneNumber($profile_account_id)) . makeEditable($allowEdit, "phone")?>`;
+                document.getElementById(id).innerHTML = `<i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFormattedPhoneNumber($profile_account_id)) . makeEditable($allowEdit, "phone")?>`;
             } else if (id == "location") {
                 document.getElementById(id).innerHTML = `<i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getApproximateLocation($profile_account_id)) . makeEditable($allowEdit, "location")?>`;
                 document.getElementById("countrySpan").innerHTML = `<i class="fa fa-globe fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getCountry($profile_account_id))?>`;
@@ -836,7 +836,7 @@ function formatPendingMentorships($profile_account_id) {
                 document.getElementById(id).innerHTML = `
                     <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i>Phone Number:</p>
                     <form method="post" action="profile.php">
-                    <input class="w3-input w3-border w3-cell" type="tel" value="<?php echo getPhoneNumber($profile_account_id); ?>" name="phone"/>
+                    <input class="w3-input w3-border w3-cell" type="tel" value="<?php echo getFormattedPhoneNumber($profile_account_id); ?>" name="phone"/>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Phone</button>
                     <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('phone');">Cancel</button>
@@ -966,7 +966,7 @@ function formatPendingMentorships($profile_account_id) {
                     <?php if ($allowEdit || $trustedUser) {
                         echo "<hr>";
                         echo '<p class="w3-display-container" id="profile_email"><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getEmail($profile_account_id)) . makeEditable($allowEdit, "profile_email") . '</p>';
-                        echo '<p class="w3-display-container" id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getPhoneNumber($profile_account_id)) . makeEditable($allowEdit, "phone") . '</p>';
+                        echo '<p class="w3-display-container" id="phone"><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getFormattedPhoneNumber($profile_account_id)) . makeEditable($allowEdit, "phone") . '</p>';
                     } ?>
                     <hr>
                     <p class="w3-display-container" id="profile_facebook"><i class="fa fa-facebook-square fa-fw w3-margin-right w3-large w3-text-lime"></i><?php echo putItInASpan(getFacebookLink($profile_account_id)) . makeEditable($allowEdit, "profile_facebook")?></p>
@@ -1130,7 +1130,7 @@ if ($allowEdit) { echo "
                 <input class=\"w3-input w3-border\" type=\"text\" maxlength=\"50\" value=\"" . $name[1] . "\" name=\"middleName\" id=\"middleName\"/>
                 <p><label><i class=\"fa fa-user\"></i>Last Name: </label></p>
                 <input class=\"w3-input w3-border\" type=\"text\" maxlength=\"50\" value=\"" . $name[2] . "\" name=\"lastName\" id=\"lastName\"/>
-                
+                <input type=\"hidden\" id=\"action\" name=\"action\" value=\"\">
                 <button class=\"w3-button w3-block w3-lime w3-padding-16 w3-section w3-right\" type=\"submit\" name=\"submit\">Change Name <i class=\"fa fa-check\"></i></button>
                 <button type=\"button\" class=\"w3-button w3-red w3-section\"
                         onclick=\"document.getElementById('changeNameModal').style.display='none'\">Close
