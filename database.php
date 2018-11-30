@@ -692,10 +692,10 @@ function getTwitterLink($account_id) {
 function formatAdminPairingBox() {
     $result = "";
     if (isset($_SESSION['pair_user'])) {
-        $result .= '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-lime w3-block w3-margin-top" type="button" name="select" onclick="adminFinishPair()">Pair This User with ' . getName($_SESSION['pair_user']) . '</button>';
-        $result .= '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-red w3-block" type="button" name="select" onclick="adminClearPair()">Stop Pairing for ' . getName($_SESSION['pair_user']) . '</button>';
+        $result .= '<p class="w3-display-container" id="admin_pair_selector"><button style="width: 100%" class="w3-button w3-lime w3-margin-top" type="button" name="select" onclick="adminFinishPair()">Pair This User with ' . getName($_SESSION['pair_user']) . '</button>';
+        $result .= '<p class="w3-display-container" id="admin_stop_selector"><button style="width: 100%" class="w3-button w3-red" type="button" name="select" onclick="adminClearPair()">Stop Pairing for ' . getName($_SESSION['pair_user']) . '</button>';
     } else {
-        $result .= '<p class="w3-display-container" id="admin_selector"><button class="w3-button w3-lime w3-block w3-margin-top" type="button" name="select" onclick="adminStartPair();">Select User for Pairing</button>';
+        $result .= '<p class="w3-display-container" id="admin_start_selector"><button style="width: 100%" class="w3-button w3-lime w3-margin-top" type="button" name="select" onclick="adminStartPair();">Select User for Pairing</button>';
     }
     return $result;
 }
