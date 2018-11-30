@@ -908,7 +908,7 @@ function formatPendingMentorships($profile_account_id) {
                         echo '<hr><p class="w3-display-container" id="profile_resume"><button class="w3-button w3-half w3-lime w3-cell" type="button" name="upload" onclick="document.getElementById(\'uploadResumeModal\').style.display=\'block\'">Upload Resume</button><button class="w3-button w3-half w3-lime w3-cell" type="button" name="download" onclick="downloadResume();">Download Resume</button><br>';
                     } ?>
 
-                    <?php if (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
+                    <?php if (isset($_SESSION["account_ID"]) && getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
                         echo "<div id='adminActionBox'>";
                         echo formatAdminPairingBox();
                         echo "</div>";
