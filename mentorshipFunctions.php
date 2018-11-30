@@ -62,6 +62,22 @@ function pendingMentorshipResponse($account_id, $pending_id, $response)
         return $report;
     }
 
+    // If user is an admin, they can force approve mentorships.
+    if (getAccountTypeFromAccountID($account_id) > 1) {
+        if ($response == 1) {
+            $stmt = $con->prepare("UPDATE `Pending Mentorship` SET mentee_status = 1, mentor_status = 1 WHERE pending_ID = ?");
+            $stmt->bindValue(1, $pending_id, PDO::PARAM_INT);
+            $stmt->execute();
+            resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+            $report = new Report("Success", "You have successfully approved of this mentorship", NULL, TRUE);
+            return $report;
+        } else {
+            resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+            $report = new Report("Success", "You have successfully rejected this mentorship", NULL, TRUE);
+            return $report;
+        }
+    }
+
     if ($account_id == $result['mentor_ID']) {
         if ($response == 1) {
             if ($result['mentor_status'] == "1") {
@@ -108,28 +124,9 @@ function pendingMentorshipResponse($account_id, $pending_id, $response)
             $report = new Report("Success", "You have successfully rejected this mentorship", NULL, TRUE);
             return $report;
         }
-    } else {
-
-        if (getAccountTypeFromAccountID($account_id) == 1) {
-            //the current user isn't the mentee, mentor, or an admin, so they shouldn't be here.
-            $con = null;
-            $report = new Report("Error", "You do not have permission to vote on this mentorship", NULL, FALSE);
-            return $report;
-        } else {
-            if ($response == 1) {
-                $stmt = $con->prepare("UPDATE `Pending Mentorship` SET (mentee_status = 1, mentor_status = 1) WHERE pending_ID = ?");
-                $stmt->bindValue(1, $pending_id, PDO::PARAM_INT);
-                $stmt->execute();
-                resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
-                $report = new Report("Success", "You have successfully approved of this mentorship", NULL, TRUE);
-                return $report;
-            } else {
-                resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
-                $report = new Report("Success", "You have successfully rejected this mentorship", NULL, TRUE);
-            }
-        }
     }
     $con = null;
+    $report = new Report("Error", "Unknown error.", NULL, FALSE);
     return $report;
 }
 //this function will create an entry in the Mentorship table based on the info in the related entry
