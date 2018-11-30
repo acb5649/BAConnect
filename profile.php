@@ -10,8 +10,8 @@ if (isset($_REQUEST["action"])) {
         if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
             // user is editing own account
             $profile_account_id = $_SESSION["profile_ID"];
-        } elseif ($_SESSION['type'] > 1) {
-            // user is an admin performing an edit action
+        } elseif ($type > 2) {
+            // user is an admin, not a coordinator, performing an edit action
             $profile_account_id = $_SESSION["profile_ID"];
         } else {
             $_SESSION['title'] = "Error: Forbidden Access";
@@ -29,7 +29,7 @@ if (isset($_REQUEST["action"])) {
             $_SESSION["profile_ID"] = $_REQUEST['user'];
             if ($_SESSION["account_ID"] == $_REQUEST['user']) {
                 $allowEdit = TRUE;
-            } elseif (getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
+            } elseif ($type > 2) {
                 $allowEdit = TRUE;
             }
         } else {
@@ -54,6 +54,32 @@ if (isset($_SESSION["account_ID"])) {
     $approvedUserArr = array_unique($approvedUserArr);
     if (in_array($_SESSION["account_ID"], $approvedUserArr)) {
         $trustedUser = TRUE;
+    }
+}
+
+if (isset($_POST['delete'])) {
+    if (isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
+        if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
+            //code to delete accounts here
+
+            $_SESSION['title'] = "Account Deleted";
+            $_SESSION['msg'] = "You have been logged out.";
+            $_SESSION['nextModal'] = "";
+            $_SESSION['success'] = TRUE;
+            $_SESSION['inputs'] = null;
+            header("Location: logout.php");
+            die;
+        } else {
+            //Code to delete accounts here
+
+            $_SESSION['title'] = "Account Deleted";
+            $_SESSION['msg'] = "User has been notified.";
+            $_SESSION['nextModal'] = "";
+            $_SESSION['success'] = TRUE;
+            $_SESSION['inputs'] = null;
+            header("Location: index.php");
+            die;
+        }
     }
 }
 
@@ -944,6 +970,11 @@ function formatPendingMentorships($profile_account_id) {
                         echo formatAdminPairingBox();
                         echo "</div>";
                     } ?>
+
+                    <?php if ($allowEdit) {
+                        echo '<hr><p class="w3-display-container" id="profile_resume"><button style="width: 100%" class="w3-button w3-red w3-cell" type="button" name="delete" onclick="document.getElementById(\'deleteAccountModal\').style.display=\'block\'">Delete Account</button><br>';
+                    } ?>
+
                 </div>
             </div><br>
 
@@ -953,7 +984,7 @@ function formatPendingMentorships($profile_account_id) {
         <!-- Right Column -->
         <div class="w3-twothird">
 
-            <?php if ($allowEdit) { echo "
+            <?php if ($type > 1 || $allowEdit) { echo "
             <div id=\"pending\" class=\"w3-container w3-display-container w3-card w3-white w3-margin-bottom\">
                 <h2 class=\"w3-text-grey w3-padding-16\"><i class=\"fa fa-users fa-fw w3-margin-right w3-xxlarge w3-text-lime\"></i>Pending Mentorships</h2>
                 <div id=\"pending_content\" class=\"w3-container w3-text-grey\" style=\"padding-bottom:32px\">
@@ -971,7 +1002,7 @@ function formatPendingMentorships($profile_account_id) {
                 <?php echo formatJobs(getJobs($profile_account_id)) . makeHistoryElementEditable($allowEdit, "jobs"); ?>
             </div>
 
-            <?php if ($allowEdit) { echo '
+            <?php if ($type > 1 || $allowEdit) { echo '
             <div id="mentorships" class="w3-container w3-display-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-users fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Mentorships</h2>
                 <div id="mentorships_content" class="w3-container w3-text-grey" style="padding-bottom:32px">
@@ -1030,6 +1061,27 @@ function formatPendingMentorships($profile_account_id) {
                 </button>
                 <button type=\"button\" class=\"w3-button w3-red w3-section\"
                         onclick=\"document.getElementById('uploadResumeModal').style.display='none'\">Close
+                    <i class=\"fa fa-remove\"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div id=\"deleteAccountModal\" class=\"w3-modal\">
+        <div class=\"w3-modal-content w3-animate-top w3-card-4\">
+            <header class=\"w3-container w3-lime w3-center w3-padding-32\">
+            <span onclick=\"document.getElementById('deleteAccountModal').style.display='none'\"
+                  class=\"w3-button w3-lime w3-xlarge w3-display-topright\">×</span>
+                <h2 class=\"w3-wide\"><i class=\"w3-margin-right\"></i>Delete Account</h2>
+            </header>
+            <form method=\"post\" action=\"profile.php\" enctype='multipart/form-data' class=\"w3-container\">
+                <h2>Are you sure you want to delete this account?</h2>
+                <button class=\"w3-button w3-block w3-lime w3-padding-16 w3-section w3-right\" type=\"submit\" name=\"delete\">
+                    Confirm Account Deletion
+                    <i class=\"fa fa-check\"></i>
+                </button>
+                <button type=\"button\" class=\"w3-button w3-red w3-section\"
+                        onclick=\"document.getElementById('deleteAccountModal').style.display='none'\">Close
                     <i class=\"fa fa-remove\"></i>
                 </button>
             </form>
