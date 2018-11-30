@@ -24,7 +24,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "revokeMentorship") {
 
 function formatMentorships() {
     $mentorships = getCurrentMentorships();
-    $result = "<thead><tr><th>Mentor</th><th>Mentee</th><th>Start Date</th><th>Revoke Mentorship</th></tr></thead><tbody>";
+    $result = "<table id='current_mentorships' class='display'><thead><tr><th>Mentor</th><th>Mentee</th><th>Start Date</th><th>Revoke Mentorship</th></tr></thead><tbody>";
     foreach($mentorships as $cur) {
 
         $id = $cur['mentorship_ID'];
@@ -41,7 +41,7 @@ function formatMentorships() {
         $result .= "</tr>";
     }
 
-    $result .= '</tbody>';
+    $result .= '</tbody></table>';
 
     return $result;
 }
@@ -68,7 +68,7 @@ function formatMentorships() {
                     if(this.readyState == 4 && this.status == 200){
                         let table = $('#current_mentorships');
                         table.DataTable().destroy();
-                        document.getElementById("current_mentorships").innerHTML = this.responseText;
+                        document.getElementById("table_container").innerHTML = this.responseText;
                         table.DataTable();
                     }
                 };
@@ -89,11 +89,9 @@ function formatMentorships() {
     <?php include "header.php"; ?>
     <!-- Page content -->
     <div class="w3-content" style="max-width:1400px;">
-    <div class="w3-container w3-card w3-white w3-padding-large">
-        <table id="current_mentorships" class="display">
+        <div id="table_container" class="w3-container w3-card w3-white w3-padding-large">
             <?php echo formatMentorships() ?>
-        </table>
-    </div>
+        </div>
     </div>
     </body>
     <script>

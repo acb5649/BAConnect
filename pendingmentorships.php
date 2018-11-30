@@ -7,14 +7,12 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest")
         //header("location: index.php");
         die();
     }
-
     $pendingMentorship_ID = $_REQUEST['pending_ID'];
 	$response = $_REQUEST['response'];
     $report = pendingMentorshipResponse($_SESSION['account_ID'], $pendingMentorship_ID, $response);
     if ($report->success) {
         echo formatPendingMentorships();
     }
-
     $_SESSION['title'] = $report->title;
     $_SESSION['msg'] = $report->msg;
     $_SESSION['nextModal'] = $report->nextModal;
@@ -26,7 +24,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest")
 
 function formatPendingMentorships() {
     $pendingMentorships = getPendingMentorships();
-    $result = '<table id="pending_mentorship_history_table"  align = "center"><thead><tr><th>Mentor</th><th>|</th><th>Mentee</th><th>|</th><th>Request Date</th><th>|<th><th>Remove Request Button</th></tr></thead><tbody>';
+    $result = '<table id="pending_mentorship_history_table" class="display"><thead><tr><th>Mentor</th><th>Mentee</th><th>Request Date</th><th>Remove Request Button</th></tr></thead><tbody>';
     foreach($pendingMentorships as $pen) {
 
         $id = $pen['pending_ID'];
@@ -36,14 +34,14 @@ function formatPendingMentorships() {
         $menteeLink = '<a href="profile.php?user=' . $pen['mentee_ID'] . '">' . getName($pen['mentee_ID']) . '</a>';
 
         $result .= "<tr>";
-        $result .= "<th><h6>" . $mentorLink . "</h6></th><th> </th>";
-        $result .= "<th><h6>" . $menteeLink . "</h6></th><th> </th>";
-        $result .= "<th><h6>" . $pen['request_date'] . "</h6></th><th> </th>";
-        $result .= "<th></th><th><h6>" . $decline . "</h6></th>";
+        $result .= "<th><h6>" . $mentorLink . "</h6></th>";
+        $result .= "<th><h6>" . $menteeLink . "</h6></th>";
+        $result .= "<th><h6>" . $pen['request_date'] . "</h6></th>";
+        $result .= "<th><h6>" . $decline . "</h6></th>";
         $result .= "</tr>";
     }
 
-    $result .= '</tbody>';
+    $result .= '</tbody></table>';
 
     return $result;
 }
@@ -74,7 +72,6 @@ function formatPendingMentorships() {
                         table.DataTable();
                     }
                 };
-
                 xmlhttp.open("POST", "pendingmentorships.php", true);
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xmlhttp.send("action=handlePendingRequest&pending_ID=" + mentorship_ID + "&response=" +  accept);
@@ -92,9 +89,9 @@ function formatPendingMentorships() {
     <?php include "header.php"; ?>
     <!-- Page content -->
     <div class="w3-content" style="max-width:1400px;">
-    <div id="table_container" class="w3-container w3-card w3-white w3-padding-large">
-        <?php echo formatPendingMentorships() ?>
-    </div>
+        <div id="table_container" class="w3-container w3-card w3-white w3-padding-large">
+            <?php echo formatPendingMentorships() ?>
+        </div>
     </div>
     </body>
     <script>
