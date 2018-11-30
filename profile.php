@@ -118,21 +118,21 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
 
     if (isset($_POST['gender'])) {
         $stmt = $con->prepare("UPDATE Information set gender = ? where account_ID = ?");
-        $stmt->bindValue(1, $_POST['gender'], PDO::PARAM_INT);
+        $stmt->bindValue(1, Input::int($_POST['gender']), PDO::PARAM_INT);
         $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['status'])) {
         $stmt = $con->prepare("UPDATE Information set status = ? where account_ID = ?");
-        $stmt->bindValue(1, $_POST['status'], PDO::PARAM_INT);
+        $stmt->bindValue(1, Input::int($_POST['status']), PDO::PARAM_INT);
         $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['email'])) {
         $stmt = $con->prepare("UPDATE Information set email_address = ? where account_ID = ?");
-        $stmt->bindValue(1, $_POST['email'], PDO::PARAM_STR);
+        $stmt->bindValue(1, Input::email($_POST['email']), PDO::PARAM_STR);
         $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
@@ -167,28 +167,28 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
 
     if (isset($_POST['profile_facebook'])) {
         $stmt = $con->prepare("UPDATE Information set facebook = ? where account_ID = ?");
-        $stmt->bindValue(1, $_POST['profile_facebook'], PDO::PARAM_STR);
+        $stmt->bindValue(1, Input::str($_POST['profile_facebook']), PDO::PARAM_STR);
         $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['profile_linkedin'])) {
         $stmt = $con->prepare("UPDATE Information set linkedin = ? where account_ID = ?");
-        $stmt->bindValue(1, $_POST['profile_linkedin'], PDO::PARAM_STR);
+        $stmt->bindValue(1, Input::str($_POST['profile_linkedin']), PDO::PARAM_STR);
         $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['profile_twitter'])) {
         $stmt = $con->prepare("UPDATE Information set twitter = ? where account_ID = ?");
-        $stmt->bindValue(1, $_POST['profile_twitter'], PDO::PARAM_STR);
+        $stmt->bindValue(1, Input::str($_POST['profile_twitter']), PDO::PARAM_STR);
         $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
     if (isset($_POST['preference'])) {
         $stmt = $con->prepare("UPDATE Information set mentorship_preference = ? where account_ID = ?");
-        $stmt->bindValue(1, $_POST['preference'], PDO::PARAM_STR);
+        $stmt->bindValue(1, Input::int($_POST['preference']), PDO::PARAM_STR);
         $stmt->bindValue(2, $profile_account_id, PDO::PARAM_INT);
         $stmt->execute();
     }
@@ -196,26 +196,26 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     if (isset($_POST['job_ID'])) {
         if (isset($_POST['delete'])) {
             $stmt = $con->prepare("DELETE FROM `Job History` where job_ID = ?");
-            $stmt->bindValue(1, $_POST['job_ID'], PDO::PARAM_INT);
+            $stmt->bindValue(1, Input::int($_POST['job_ID']), PDO::PARAM_INT);
             $stmt->execute();
         } else {
             if ($_POST['job_ID'] == -1) {
                 // adding new degree
                 $stmt = $con->prepare("insert into `Job History` (`account_ID`, employer, profession_field, `start`, `end`) values (?, ?, ?, ?, ?)");
                 $stmt->bindValue(1, $profile_account_id, PDO::PARAM_INT);
-                $stmt->bindValue(2, $_POST['employer'], PDO::PARAM_STR);
-                $stmt->bindValue(3, $_POST['title'], PDO::PARAM_STR);
-                $stmt->bindValue(4, $_POST['start'], PDO::PARAM_INT);
-                $stmt->bindValue(5, $_POST['end'], PDO::PARAM_INT);
+                $stmt->bindValue(2, Input::str($_POST['employer']), PDO::PARAM_STR);
+                $stmt->bindValue(3, Input::str($_POST['title']), PDO::PARAM_STR);
+                $stmt->bindValue(4, Input::int($_POST['start']), PDO::PARAM_INT);
+                $stmt->bindValue(5, Input::int($_POST['end']), PDO::PARAM_INT);
 
                 $stmt->execute();
             } else {
                 $stmt = $con->prepare("UPDATE `Job History` set employer = ?, profession_field = ?, start = ?, `end` = ? where job_ID = ?");
-                $stmt->bindValue(1, $_POST['employer'], PDO::PARAM_STR);
-                $stmt->bindValue(2, $_POST['title'], PDO::PARAM_STR);
-                $stmt->bindValue(3, $_POST['start'], PDO::PARAM_INT);
-                $stmt->bindValue(4, $_POST['end'], PDO::PARAM_INT);
-                $stmt->bindValue(5, $_POST['job_ID'], PDO::PARAM_INT);
+                $stmt->bindValue(1, Input::str($_POST['employer']), PDO::PARAM_STR);
+                $stmt->bindValue(2, Input::str($_POST['title']), PDO::PARAM_STR);
+                $stmt->bindValue(3, Input::int($_POST['start']), PDO::PARAM_INT);
+                $stmt->bindValue(4, Input::int($_POST['end']), PDO::PARAM_INT);
+                $stmt->bindValue(5, Input::int($_POST['job_ID']), PDO::PARAM_INT);
 
                 $stmt->execute();
             }
@@ -225,28 +225,28 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
     if (isset($_POST['degree_ID'])) {
         if (isset($_POST['delete'])) {
             $stmt = $con->prepare("DELETE FROM `Degrees` where degree_ID = ?");
-            $stmt->bindValue(1, $_POST['degree_ID'], PDO::PARAM_INT);
+            $stmt->bindValue(1, Input::int($_POST['degree_ID']), PDO::PARAM_INT);
             $stmt->execute();
         } else {
             if ($_POST['degree_ID'] == -1) {
                 // adding new degree
                 $stmt = $con->prepare("insert into Degrees (account_ID, degree_type_ID, school, major, graduation_year, enrollment_year) values (?, ?, ?, ?, ?, ?)");
                 $stmt->bindValue(1, $profile_account_id, PDO::PARAM_INT);
-                $stmt->bindValue(2, $_POST['degreeType'], PDO::PARAM_INT);
-                $stmt->bindValue(3, $_POST['school'], PDO::PARAM_STR);
-                $stmt->bindValue(4, $_POST['major'], PDO::PARAM_STR);
-                $stmt->bindValue(5, $_POST['end'], PDO::PARAM_INT);
-                $stmt->bindValue(6, $_POST['start'], PDO::PARAM_INT);
+                $stmt->bindValue(2, Input::int($_POST['degreeType']), PDO::PARAM_INT);
+                $stmt->bindValue(3, Input::str($_POST['school']), PDO::PARAM_STR);
+                $stmt->bindValue(4, Input::str($_POST['major']), PDO::PARAM_STR);
+                $stmt->bindValue(5, Input::int($_POST['end']), PDO::PARAM_INT);
+                $stmt->bindValue(6, Input::int($_POST['start']), PDO::PARAM_INT);
 
                 $stmt->execute();
             } else {
                 $stmt = $con->prepare("UPDATE `Degrees` set degree_type_ID = ?, school = ?, major = ?, graduation_year = ?, enrollment_year = ? where degree_ID = ?");
-                $stmt->bindValue(1, $_POST['degreeType'], PDO::PARAM_INT);
-                $stmt->bindValue(2, $_POST['school'], PDO::PARAM_STR);
-                $stmt->bindValue(3, $_POST['major'], PDO::PARAM_STR);
-                $stmt->bindValue(4, $_POST['end'], PDO::PARAM_INT);
-                $stmt->bindValue(5, $_POST['start'], PDO::PARAM_INT);
-                $stmt->bindValue(6, $_POST['degree_ID'], PDO::PARAM_INT);
+                $stmt->bindValue(1, Input::int($_POST['degreeType']), PDO::PARAM_INT);
+                $stmt->bindValue(2, Input::str($_POST['school']), PDO::PARAM_STR);
+                $stmt->bindValue(3, Input::str($_POST['major']), PDO::PARAM_STR);
+                $stmt->bindValue(4, Input::int($_POST['end']), PDO::PARAM_INT);
+                $stmt->bindValue(5, Input::int($_POST['start']), PDO::PARAM_INT);
+                $stmt->bindValue(6, Input::int($_POST['degree_ID']), PDO::PARAM_INT);
 
                 $stmt->execute();
             }
