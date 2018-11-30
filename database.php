@@ -268,11 +268,34 @@ function login($username, $password) {
         return $report;
     }
 
-    $stmt = $con->prepare("select password from Account where account_ID = ? AND active = 1");
+    $stmt = $con->prepare("select password, active from Account where account_ID = ?");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $con = null;
+
+    $active = $row['active'];
+
+    $stmt = $con->prepare("select password, active from Account where account_ID = ? AND active = 0");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if($result != null){
+        $stmt = $con->prepare("SELECT * FROM Registration where account_ID = ?");
+        $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($result == null){
+            $report = new Report("Error", "Invalid username or password", "login", FALSE);
+        }
+        else{
+            $report = new Report("Incomplete Registration", "An email was sent to the given email address, please follow the link to finish registering your account", "login", FALSE);
+        }
+
+        return $report;
+
+    }
 
     if($password == $row['password']){
         $report = new Report("Success", "Login Successful", "login", TRUE);
