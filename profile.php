@@ -928,10 +928,10 @@ function formatPendingMentorships($profile_account_id) {
                         echo '<p class="w3-display-container" id="profile_privilege"><i class="fa fa-lock fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getPrivilege($profile_account_id)) . makeEditable($allowEdit, "profile_privilege") . '</p>';
                     } ?>
 
-                    <?php if (isset($_SESSION["account_ID"]) && $_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
+                    <?php if (isset($_SESSION["account_ID"]) && $_SESSION["profile_ID"] != $_SESSION["account_ID"]) {
                         $disabled = "";
                         if (hasAlreadySentRequest($profile_account_id)) { $disabled = "disabled=''"; }
-                        echo "<hr><button id='request' " . $disabled . " class='w3-button w3-block w3-dark-grey' onclick='sendMentorshipRequest()'>+ Connect</button>";
+                        echo "<hr><button id='request' " . $disabled . " class='w3-button w3-block w3-dark-grey w3-margin-bottom' onclick='sendMentorshipRequest()'>+ Connect</button>";
                     } ?>
 
                     <?php if ($allowEdit) {
