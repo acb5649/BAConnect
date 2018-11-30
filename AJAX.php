@@ -70,25 +70,6 @@ if($_REQUEST["action"] == "getMentors" && $type > 1){
     }
 }
 
-if($_REQUEST["action"] == "endMentorship"){ //profile.php
-  $mentorship_ID = $_REQUEST['id'];
-  $account_ID = $_REQUEST['account'];
-  $report = endMentorship($account_ID, $mentorship_ID);
-
-  $_SESSION['title'] = $report->title;
-  $_SESSION['msg'] = $report->msg;
-  $_SESSION['nextModal'] = $report->nextModal;
-  $_SESSION['success'] = $report->success;
-  $_SESSION['inputs'] = $report->inputs;
-
-  if($report->success == TRUE){
-    echo "<?php formatMentorships(); ?>";
-  }
-  else{
-    echo "";
-  }
-}
-
 if($_REQUEST['action'] == "adminStartPair"){
     $_SESSION['pair_user'] = $_SESSION["profile_ID"];
     echo formatAdminPairingBox();

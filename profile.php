@@ -281,49 +281,46 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "handlePendingRequest")
     $pending = $_REQUEST['pending'];
     $response = $_REQUEST['response'];
 
-    $success = pendingMentorshipResponse($user, $pending, $response);
-    if ($success) {
-        echo formatPendingMentorships($profile_account_id);
-        die();
-    } else {
-        die();
-    }
+    $report = pendingMentorshipResponse($user, $pending, $response);
+
+    $_SESSION['title'] = $report->title;
+    $_SESSION['msg'] = $report->msg;
+    $_SESSION['nextModal'] = $report->nextModal;
+    $_SESSION['success'] = $report->success;
+    $_SESSION['inputs'] = $report->inputs;
+
+    echo formatPendingMentorships($profile_account_id);
+    die();
 }
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == "endMentorship") {
     $mentorship_ID = $_REQUEST['id'];
 
     $report = endMentorship($_SESSION['account_ID'], $mentorship_ID);
-    if ($report->success) {
-        echo formatMentorships($profile_account_id);
-        /*
-        $_SESSION['title'] = $report->title;
-        $_SESSION['msg'] = $report->msg;
-        $_SESSION['nextModal'] = $report->nextModal;
-        $_SESSION['success'] = $report->success;
-        $_SESSION['inputs'] = $report->inputs;
-        header("Location: profile.php?user=" . $_REQUEST['user']);
-        */
-        die();
-    } else {
-        /*
-        $_SESSION['title'] = $report->title;
-        $_SESSION['msg'] = $report->msg;
-        $_SESSION['nextModal'] = $report->nextModal;
-        $_SESSION['success'] = $report->success;
-        $_SESSION['inputs'] = $report->inputs;
-        header("Location: profile.php?user=" . $_REQUEST['user']);
-        */
-        die();
-    }
+
+    $_SESSION['title'] = $report->title;
+    $_SESSION['msg'] = $report->msg;
+    $_SESSION['nextModal'] = $report->nextModal;
+    $_SESSION['success'] = $report->success;
+    $_SESSION['inputs'] = $report->inputs;
+
+    echo formatMentorships($profile_account_id);
+    die();
 }
 
 if(isset($_REQUEST['action']) && $_REQUEST['action'] == "sendMentorshipRequest"){
     $user = $_REQUEST['user'];
     $proposerID = $_SESSION['account_ID'];
 
-    $message = proposeMentorship($user, $proposerID, $proposerID) . "<br>";
-    print $message;
+    $report = proposeMentorship($user, $proposerID, $proposerID);
+
+    $_SESSION['title'] = $report->title;
+    $_SESSION['msg'] = $report->msg;
+    $_SESSION['nextModal'] = $report->nextModal;
+    $_SESSION['success'] = $report->success;
+    $_SESSION['inputs'] = $report->inputs;
+
+    header("Location: profile.php?user=" . $_REQUEST['user']);
     die();
 }
 
@@ -614,10 +611,11 @@ function formatPendingMentorships($profile_account_id) {
                         "info":     false,
                         "searching":   false
                     });
+                    location.reload();
                 }
             };
 
-            xmlhttp.open("POST", "AJAX.php", true);
+            xmlhttp.open("POST", "profile.php", true);
             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xmlhttp.send("action=endMentorship&id=" + mentorship_ID + "&account=" + account_ID);
         }
@@ -634,6 +632,7 @@ function formatPendingMentorships($profile_account_id) {
                         "info":     false,
                         "searching":   false
                     });
+                    location.reload();
                 }
             };
 
