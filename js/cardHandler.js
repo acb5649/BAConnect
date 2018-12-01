@@ -1,7 +1,7 @@
 function cardAjax(ids) {
     ids.forEach(function(id) {
         if (!$('#mentorDisplay').find('#' + id["account_ID"]).length) {
-            let cached = localStorage.getItem(id["account_ID"]);
+            let cached = sessionStorage.getItem(id["account_ID"]);
             if (cached != null) {
                 document.getElementById("mentorDisplay").innerHTML += cached;
                 imageAjax(id);
@@ -9,7 +9,7 @@ function cardAjax(ids) {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
-                        localStorage.setItem(id["account_ID"], this.responseText);
+                        sessionStorage.setItem(id["account_ID"], this.responseText);
                         document.getElementById("mentorDisplay").innerHTML += this.responseText;
                         imageAjax(id);
                     }
@@ -23,7 +23,7 @@ function cardAjax(ids) {
 
 function imageAjax(id) {
 
-    let cached = localStorage.getItem(id["account_ID"] + "_img");
+    let cached = sessionStorage.getItem(id["account_ID"] + "_img");
     if (cached != null) {
         document.getElementById(id["account_ID"]).src = cached;
     } else {
@@ -31,7 +31,7 @@ function imageAjax(id) {
         xmlhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 let elementID = id["account_ID"];
-                localStorage.setItem(elementID + "_img", this.responseText);
+                sessionStorage.setItem(elementID + "_img", this.responseText);
                 document.getElementById(elementID).src = this.responseText;
             }
         };
