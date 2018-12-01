@@ -394,18 +394,6 @@ if(isset($_POST['upgrade'])){
         }
     };
 
-    /*
-    window.onscroll = function(ev) {
-        if ((window.compatibleInnerHeight + window.pageYOffset) >= document.body.offsetHeight) {
-            let term = document.getElementById("searchBox").value;
-            if (term = "") {
-                continuallyLoadCards(10);
-            } else {
-                searchCards(10, false);
-            }
-        }
-    };*/
-
     $(window).on("load", function(){
         $(window).on("scroll", function(){
             if (($(window).scrollTop() - ($(document).height() - $(window).height()) <= 5) && ($(window).scrollTop() - ($(document).height() - $(window).height()) >= -5)) {

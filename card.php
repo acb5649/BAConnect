@@ -56,6 +56,6 @@ function createCard($account_id) {
   <hr>
   <p>' . $location . '</p>
   </div>
-  <a class="w3-button w3-block w3-dark-grey" href="profile.php?user=' . $account_id . '">+ Connect</a>
+  <a class="w3-button w3-block w3-dark-grey" href="profile.php?user=' . $account_id . '">+ View Profile</a>
   </div></div>';
 }

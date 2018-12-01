@@ -44,8 +44,17 @@ class User extends Account {
         $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $addr = new Address($row['street_address'], $row['street_address2'], $row['city'], $row['post_code'], $row['state_name'], $row['country']);
-        return new self($row['username'], $row['password'], $row['first_name'], $row['middle_name'], $row['last_name'], $row['email_address'], $row['gender'], $row['phone_number'], $row['status'], $addr);
+        $con = null;
+        if ($row != null) {
+            $addr = new Address($row['street_address'], $row['street_address2'], $row['city'], $row['post_code'], $row['state_name'], $row['country']);
+            return new self($row['username'], $row['password'], $row['first_name'], $row['middle_name'], $row['last_name'], $row['email_address'], $row['gender'], $row['phone_number'], $row['status'], $addr);
+        } else {
+            $addr = new Address("", "", "", "", 1, 1);
+            updateUserAddress($account_id, $addr);
+            registerNewPhoneNumber($account_id, 0);
+
+            return User::fromID($account_id);
+        }
     }
 
     public function formatName() {
