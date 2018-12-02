@@ -18,7 +18,7 @@ require_once "session.php";
 			$set= 1;
 		}
 		$question .= '</select>';
-		if($set != 0){
+		if($set != 1){
 			$con = null;
 			header('Location: forget.php');//skips questions
 			return true;
@@ -102,7 +102,7 @@ require_once "session.php";
 ?>
 <html>
  <head>
-  <title>Custom Search in jQuery Datatables using PHP Ajax</title>
+  <title></title>
  </head>
  <body>
  <div>
