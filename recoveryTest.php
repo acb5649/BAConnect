@@ -42,7 +42,7 @@ require_once "session.php";
 		if(!$isFirst){
 			 $stmt = $con->prepare("insert into `RecoveryQuestions` (`account_ID`, `question_Number`, question, answer) values (?, ?, ?, ?)");
 			 $stmt->bindValue(1, $accountID, PDO::PARAM_INT);
-			 $stmt->bindValue(2, 0, PDO::PARAM_INT);
+			 $stmt->bindValue(2, 1, PDO::PARAM_INT);
 			 $stmt->bindValue(3, $question, PDO::PARAM_STR);
 			 $stmt->bindValue(4, $answer, PDO::PARAM_STR);
 			 $stmt->execute();
