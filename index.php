@@ -55,10 +55,7 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
 if(isset($_POST["action"]) && $_POST["action"] == "openModal"){
     echo "<script>document.getElementById('" . $_POST["modal"] . "').style.display='block';</script>";
 }
-if(isset($_POST["security"])){
-    $_SESSION['email'] = trim($_POST['email']);
-    echo "<script>document.getElementById('securityModal').style.display='block'';</script>";
-}
+
 if (isset($_POST['register'])) {
     $error = false;
     $msg = "";
@@ -311,14 +308,14 @@ if(isset($_POST['upgrade'])){
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>BAConnect Home</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="js/registration.js"></script>
     <script src="js/closeModals.js"></script>
     <script src="js/cardHandler.js"></script>
 </head>
 
-<body class="w3-light-grey"  onload="init();">
+<body class="w3-light-grey" onload="init();">
 <!-- Navbar -->
 <?php include "header.php"; ?>
 <!-- Page content -->

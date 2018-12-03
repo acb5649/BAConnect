@@ -117,6 +117,7 @@ if(isset($_POST["security"])){
 		$con = null;
 		return $set;
 	}
+
 	require_once "session.php";
 	$email=$_SESSION['email'];
 	print "<h1><b>".$email."</b></h1>";
