@@ -153,6 +153,10 @@ if (isset($_POST['register'])) {
     if (!is_numeric($_SESSION['status']) || ($_SESSION['status'] != 0 && $_SESSION['status'] != 1)) {
         $error = true;
         $msg .= "\nInvalid status.";
+        if ($_SESSION['status'] == 1 && count($work) == 0) {
+            $error = true;
+            $msg .= "\nA Working Professional must have a work history.";
+        }
     }
 
     // check that preference is in range
