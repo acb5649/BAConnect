@@ -50,7 +50,7 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
         <?php
         print"<div style='display: inline-block;padding: 15px;'>";
         if($type == 0){
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'loginModal'".').style.display='."'block'".'">LOG IN</a>';
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'loginModal'".').style.display='."'block'".'">LOG IN <i class="fas fa-sign-in-alt"></i></a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'registerModal'".').style.display='."'block'".'">REGISTER</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'forgotModal'".').style.display='."'block'".'">FORGOT LOGIN</a>';
         }
