@@ -76,13 +76,6 @@ require_once "session.php";
 			$stmt->execute();
 			$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			if(strcasecmp($answer,$row['answer'])==0){
-				$stmt = $con->prepare("insert into `Password Recovery` (account_ID, code) values (?, ?)");
-				$stmt->bindValue(1, $accountID, PDO::PARAM_INT);
-				$stmt->bindValue(2, $code, PDO::PARAM_STR);
-				$stmt->execute();
-				$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-				//$url = str_replace("forgot.php", "verify.php", $url);//fix
-				mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://" . $url . "?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
 				$con = null;
 				return True;
 				//return new Report("Success!", "An email has been sent to the address registered with your account.", "", TRUE);
@@ -126,6 +119,7 @@ require_once "session.php";
 	$questionA = 0;
 	$questionB = 0;
 	$questionC = 0;
+	$continue = 1;
 	$msg = "";
 	if (isset($_POST['enter'])){
 		if(isset($_POST['answerQuestion_A'])){
@@ -179,6 +173,9 @@ require_once "session.php";
 				}
 
 			}
+		}
+		if($continue != 0){
+			//send recover to mailer code goes here
 		}
 	}
 	print $msg;
