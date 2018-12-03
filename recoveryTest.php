@@ -77,7 +77,7 @@ require_once "session.php";
 			$stmt->bindValue(2, $question_Num, PDO::PARAM_INT);
 			$stmt->execute();
 			$row = $stmt->fetch(PDO::FETCH_ASSOC);
-			if(strcasecmp($answer,$row['answer'])==0){
+			if(strcasecmp($answer,$row['answer'])===0){
 				$con = null;
 				return True;
 				//return new Report("Success!", "An email has been sent to the address registered with your account.", "", TRUE);
