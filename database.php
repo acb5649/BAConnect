@@ -169,7 +169,7 @@ function resetPassword($email) {
     $stmt->bindValue(1, $email, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn() < 1) {
-        return new Report("Error", "This email address is not associated with an account.", "forgotModal", FALSE);
+        return new Report("Error", "This email address (" . $email . ") is not associated with an account.", "forgotModal", FALSE);
     }
 
     $account_id = getAccountIDFromEmail($email);

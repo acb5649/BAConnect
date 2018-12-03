@@ -188,14 +188,15 @@ if (isset($_SESSION['email'])) {
             }
         }
         if ($continue != 0 || $countSet === 0) {
-            $report = resetPassword($_SESSION['email']);
+            $report = resetPassword($_POST['email']);
             $_SESSION['title'] = $report->title;
             $_SESSION['msg'] = $report->msg;
             $_SESSION['nextModal'] = $report->nextModal;
             $_SESSION['success'] = $report->success;
             $_SESSION['inputs'] = $report->inputs;
-            //header("Location: index.php");
-            //die();
+            unset($_SESSION['email']);
+            header("Location: index.php");
+            die();
 
             //send recover to mailer code goes here
             //$msg = "<span style='color:green'>You've Made it!</span>";
@@ -206,8 +207,9 @@ if (isset($_SESSION['email'])) {
             $_SESSION['nextModal'] = $report->nextModal;
             $_SESSION['success'] = $report->success;
             $_SESSION['inputs'] = $report->inputs;
-            //header("Location: index.php");
-            //die();
+            unset($_SESSION['email']);
+            header("Location: index.php");
+            die();
 
             //$msg.="<span style='color:red'><br/>Error, perhaps you made one to many attempts if this problem persists contact support!<br/></span>";
         }
@@ -218,7 +220,7 @@ if (isset($_SESSION['email'])) {
         <header class="w3-container w3-lime w3-center w3-padding-32">
             <span onclick="document.getElementById(\'securityModal\').style.display=\'none\'"
                   class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
-            <h2 class="w3-wide"><i class="w3-margin-right"></i>Security Question </h2>
+            <h2 class="w3-wide"><i class="w3-margin-right"></i>Security Questions for ' . $_SESSION['email'] . ' </h2>
         </header>
         <form action="recovery.php" method="post" class="w3-container">
             <div>';
@@ -228,25 +230,26 @@ if (isset($_SESSION['email'])) {
         $modal .= '<select name="security_question_A" id="security_question_A" required><option value="">Select A Security Question</option>';
         $modal .= loadOnSecurity($account_id);
         $modal .= "</select><br/>";
-        $modal .= '<input type="password" maxlength = "150" value="\' . $answerA . \'" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
+        $modal .= '<input type="text" maxlength = "150" value="' . $answerA . '" name="answerQuestion_A" id="answer_Q1" required  /><br/><br/><br/>';
     }
     if ($countSet > 1) {
         $modal .= "<b>Question 2.</b><br/><br/>";
         $modal .= '<select name="security_question_B" id="security_question_B" required><option value="">Select A Security Question</option>';
         $modal .= loadOnSecurity($account_id);
         $modal .= "</select><br/>";
-        $modal .= '<input type="password" maxlength = "150" value="\' . $answerB . \'" name="answerQuestion_B" id="answer_Q2" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
+        $modal .= '<input type="text" maxlength = "150" value="' . $answerB . '" name="answerQuestion_B" id="answer_Q2" required  /><br/><br/><br/>';
     }
     if ($countSet > 2) {
         $modal .= "<b>Question 3.</b><br/><br/>";
         $modal .= '<select name="security_question_C" id="security_question_C" required><option value="">Select A Security Question</option>';
         $modal .= loadOnSecurity($account_id);
         $modal .= "</select><br/>";
-        $modal .= '<input type="password" maxlength = "150" value="\' . $answerC . \'" name="answerQuestion_C" id="answer_Q3" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
+        $modal .= '<input type="text" maxlength = "150" value="' . $answerC . '" name="answerQuestion_C" id="answer_Q3" required  /><br/><br/><br/>';
     }
 
     $modal .= '</div>
             <br/>
+            <input type="hidden" id="email" name="email" value="' . $_SESSION['email'] . '">
             <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="enter">Submit</button>
         </form>
     </div>

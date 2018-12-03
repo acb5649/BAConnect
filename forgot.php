@@ -4,7 +4,7 @@ require_once "session.php";
 
 if(isset($_POST["security"]) && isset($_POST["email"])){
     $_SESSION['email'] = Input::email($_POST['email']);
-    $report = new Report("Security Audit", "Please answer your security questions to continue.", "securityModal", true);
+    $report = new Report("Security Audit", "Please answer your security questions to reset the account for " . $_SESSION['email'], "securityModal", true);
     $_SESSION['title'] = $report->title;
     $_SESSION['msg'] = $report->msg;
     $_SESSION['nextModal'] = $report->nextModal;
