@@ -6,52 +6,6 @@ require_once "card.php";
 //require_once "extras/fakegen.php";
 //generateFakes(200);
 
-if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
-    if(!isset($_POST["offset"])){
-        $offset = 0;
-    } else {
-        $offset = $_POST["offset"];
-    }
-
-    if(!isset($_POST["search"])){
-        $num = $_POST["num"];
-
-        $con = Connection::connect();
-        $stmt = $con->prepare("SELECT `account_ID` FROM Information LIMIT " . $num . " OFFSET " . $offset);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $con = null;
-        echo json_encode($result);
-        die();
-    } else {
-        $num = $_POST["num"];
-        $search = Input::str($_POST["search"]);
-
-        $con = Connection::connect();
-	$match = "";
-	$words = preg_split('/\s+/', $search);
-	$columns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
-	for ($i=0; $i<count($words); $i++) {
-		if ($i != 0) {
-			$match .= "OR ";
-		}
-		for ($j=0; $j<count($columns); $j++) {
-			$match .= "(`" . $columns[$j] . "` LIKE '%" . $words[$i] . "%') ";
-			if ($j != count($columns) - 1) {
-				$match .= "OR ";
-			}
-		}
-	}
-	$stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressGenderJobsDegreesView WHERE ". $match ."  LIMIT " . $num . " OFFSET " . $offset);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $con = null;
-
-        echo json_encode($result);
-        die();
-    }
-}
-
 if(isset($_POST["action"]) && $_POST["action"] == "openModal"){
     echo "<script>document.getElementById('" . $_POST["modal"] . "').style.display='block';</script>";
 }
@@ -350,7 +304,7 @@ if(isset($_POST['upgrade'])){
             }
         };
         let params = "action=loadCards&num=" + num +"&offset=" + offset;
-        xmlhttp.open("POST", "index.php", true);
+        xmlhttp.open("POST", "search.php", true);
         xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xmlhttp.send(params);
         offset += num;
@@ -381,7 +335,7 @@ if(isset($_POST['upgrade'])){
         };
 
         let params = "action=loadCards&num=" + num +"&offset=" + offset + "&search=" + term;
-        xmlhttp.open("POST", "index.php", true);
+        xmlhttp.open("POST", "search.php", true);
         xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xmlhttp.send(params);
         offset += num;
