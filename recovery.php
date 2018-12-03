@@ -198,12 +198,6 @@ if(isset($_POST["security"])){
 			//send recover to mailer code goes here
 			$msg = "<span style='color:green'>You've Made it!</span>";
 		}else{
-			$answerA = "";
-			$answerB = "";
-			$answerC = "";
-			$questionA = 0;
-			$questionB = 0;
-			$questionC = 0;
 			$msg.="<span style='color:red'><br/>Error, perhaps you made one to many attempts if this problem persists contact support!<br/></span>";
 		}
 	}

@@ -59,7 +59,9 @@ if (isset($_POST['login'])) {
             <button type="button" class="w3-button w3-red w3-section" onclick="document.getElementById('loginModal').style.display='none'">Close
                 <i class="fa fa-remove"></i>
             </button>
-            <p class="w3-right"><a href="#" style="color: #CDDC37;" onclick="document.getElementById('registerModal').style.display='block'">Need an account?</a></p>
+            <p class="w3-right">Need an
+                <a href="#" class="w3-text-blue" onclick="document.getElementById('registerModal').style.display='block'">account?</a>
+            </p>
         </form>
     </div>
 </div>
