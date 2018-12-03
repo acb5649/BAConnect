@@ -8,7 +8,7 @@ require_once "session.php";
 		$con = Connection::connect();
 		$set=0;
 		$question = '<select name="security_question" id="security_question" required><option value="">Select Question</option>';
-		$query = "SELECT account_ID FROM RecoveryQuestions WHERE account_ID = '".$accountID."' ORDER BY question_Number ASC";
+		$query = "SELECT * FROM RecoveryQuestions WHERE account_ID = '".$accountID."' ORDER BY question_Number ASC";
 		$statement = $con->prepare($query);
 		$statement->execute();
 		$result = $statement->fetchAll();
