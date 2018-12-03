@@ -7,7 +7,7 @@ require_once "session.php";
 	function loadOnSecurity($accountID){
 		$con = Connection::connect();
 		$set=0;
-		$question = '<select name="security_question" id="security_question" required><option value="">Select A Security Question</option>';
+		$question = '';
 		$query = "SELECT * FROM RecoveryQuestions WHERE account_ID = '".$accountID."' ORDER BY question_Number ASC";
 		$statement = $con->prepare($query);
 		$statement->execute();
@@ -17,7 +17,6 @@ require_once "session.php";
 			$question .= '<option value="'.$row['question_Number'].'">'.$row['question'].'</option>';
 			$set= 1;
 		}
-		$question .= '</select>';
 		if($set != 1){
 			$con = null;
 			header('Location: index.php');//skips questions
@@ -101,7 +100,16 @@ require_once "session.php";
 			return False;
 		}
 	}
+	$countSet = 0;
 	$answerA = "";
+	$answerB = "";
+	$answerC = "";
+	$questionA = 0;
+	$questionB = 0;
+	$questionC = 0;
+	if (isset($_POST['enter'])){
+		
+	}
 ?>
 <html>
  <head>
@@ -110,10 +118,22 @@ require_once "session.php";
  <body>
  <form action="recoveryTest.php" method="post">
  	<div>
-	 	<b>Question 1.</b><br/>
- 		<?php echo loadOnSecurity(1); ?><br/><br/>
- 		<input type="password" maxlength = "150" value="<?php print $answerA; ?>" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer!" required  /><br/>
- 	</div><br/><br/>
+	 	<b>Question 1.</b><br/><br/>
+		<select name="security_question_A" id="security_question_A" required><option value="">Select A Security Question</option>
+ 			<?php echo loadOnSecurity(1); ?>
+		</select><br/>
+ 		<input type="password" maxlength = "150" value="<?php print $answerA; ?>" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer Here" required  /><br/><br/><br/>
+		<b>Question 2.</b><br/><br/>
+ 		<select name="security_question_B" id="security_question_B" required><option value="">Select A Security Question</option>
+ 			<?php echo loadOnSecurity(1); ?>
+		</select><br/>
+ 		<input type="password" maxlength = "150" value="<?php print $answerB; ?>" name="answerQuestion_B" id="answer_Q2" placeholder="Enter Answer Here" required  /><br/><br/><br/>
+		 <b>Question 3.</b><br/><br/>
+ 		<select name="security_question_C" id="security_question_C" required><option value="">Select A Security Question</option>
+ 			<?php echo loadOnSecurity(1); ?>
+		</select><br/>
+ 		<input type="password" maxlength = "150" value="<?php print $answerC; ?>" name="answerQuestion_C" id="answer_Q3" placeholder="Enter Answer Here" required  /><br/><br/><br/>
+ 	</div><br/>
  	<input name="enter" class="btn" type="submit" value="Submit" /><br/>
 </form>
  </body>
