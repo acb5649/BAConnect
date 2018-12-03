@@ -20,8 +20,8 @@ require_once "session.php";
 		$question .= '</select>';
 		if($set != 1){
 			$con = null;
-			header('Location: forget.php');//skips questions
-			return true;
+			header('Location: index.php');//skips questions
+			return False;
 		}
 		$con = null;
 		return $question;
@@ -108,7 +108,7 @@ require_once "session.php";
   <title>Forgot Password Security System</title>
  </head>
  <body>
- <form action="login.php" method="post">
+ <form action="recoveryTest.php" method="post">
  	<div>
  		<?php echo loadOnSecurity(1); ?>
  		<input type="password" maxlength = "150" value="<?php print $answerA; ?>" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer!" required  /><br/>
