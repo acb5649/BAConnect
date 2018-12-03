@@ -137,7 +137,7 @@ require_once "session.php";
 		if ($countSet >0){
 			if(isset($_POST['security_question_A']) != 0){
 				$questionA = trim($_POST['security_question_A']);
-				$continue = checkSecurityQ(1, $questionA, $answerA);
+				$continue = checkSecurityQ($account_id, $questionA, $answerA);
 			}
 		}
 		if($countSet > 1){
@@ -154,7 +154,7 @@ require_once "session.php";
 					$continue= 0;
 				}
 				if($continue != 0){
-					$continue = checkSecurityQ(1, $questionB, $answerB);
+					$continue = checkSecurityQ($account_id, $questionB, $answerB);
 				}
 			}
 		}
