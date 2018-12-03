@@ -14,7 +14,7 @@ require_once "session.php";
 		$result = $statement->fetchAll();
 		foreach($result as $row)
 		{
-			$question .= '<option value="'.$row['question_Number'].'">'.$row['question'].'</option>';
+			$question .= '<option value='.$row['question_Number'].'>'.$row['question'].'</option>';
 			$set= 1;
 		}
 		if($set != 1){
@@ -126,9 +126,45 @@ require_once "session.php";
 	$questionA = 0;
 	$questionB = 0;
 	$questionC = 0;
+	$msg = "";
 	if (isset($_POST['enter'])){
+		if(isset($_POST['answerQuestion_A'])){
+			$answerA = trim($_POST['answerQuestion_A']);
+		}
+		if(isset($_POST['answerQuestion_B'])){
+			$answerA = trim($_POST['answerQuestion_B']);
+		}
+		if(isset($_POST['answerQuestion_C'])){
+			$answerA = trim($_POST['answerQuestion_C']);
+		}
+		if ($countSet >0){
+			if(isset($_POST['security_question_A']) != 0){
+				$questionA = trim($_POST['security_question_A']);
+			}
+		}
+		if($countSet > 1){
+			if(isset($_POST['security_question_B'])){
+				$questionB = trim($_POST['security_question_B']);
+				if ($questionB == $questionA){
+					$msg .= "<span style='color:red'><br/>Question 1 and Question 2 are identical please change one or both of them!<br/></span>";
+				}
+			}
+		}
+		if($countSet > 2){
+			if(isset($_POST['security_question_C'])){
+				$questionC = trim($_POST['security_question_C']);
+				if ($questionA == $questionC){
+					$msg .= "<span style='color:red'><br/>Question 1 and Question 3 are identical please change one or both of them!<br/></span>";
+				}
+				if ($questionB == $questionC){
+					$msg .= "<span style='color:red'><br/>Question 2 and Question 3 are identical please change one or both of them!<br/></span>";
+				}
 
+			}
+		}
 	}
+	print $msg;
+	$msg = "";
 ?>
 <html>
  <head>
@@ -142,21 +178,21 @@ require_once "session.php";
 					print '<select name="security_question_A" id="security_question_A" required><option value="">Select A Security Question</option>'; 
  					echo loadOnSecurity(1); 
 					print "</select><br/>";
-					print '<input type="password" maxlength = "150" value="<?php print $answerA; ?>" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
+					print '<input type="password" maxlength = "150" value="'.$answerA.'" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
 				 }
 			if($countSet > 1){
 				print "<b>Question 2.</b><br/><br/>";
  				print '<select name="security_question_B" id="security_question_B" required><option value="">Select A Security Question</option>';
  				echo loadOnSecurity(1);
 				print "</select><br/>";
-				print '<input type="password" maxlength = "150" value="<?php print $answerB; ?>" name="answerQuestion_B" id="answer_Q2" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
+				print '<input type="password" maxlength = "150" value="'.$answerB.'" name="answerQuestion_B" id="answer_Q2" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
 			}
 			if($countSet > 2){
 		 		print "<b>Question 3.</b><br/><br/>";
  				print '<select name="security_question_C" id="security_question_C" required><option value="">Select A Security Question</option>';
  				echo loadOnSecurity(1);
 				print"</select><br/>";
-		 		print'<input type="password" maxlength = "150" value="<?php print $answerC; ?>" name="answerQuestion_C" id="answer_Q3" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
+		 		print'<input type="password" maxlength = "150" value="'.$answerC.'" name="answerQuestion_C" id="answer_Q3" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
 			}
 			?>
  	</div><br/>
