@@ -18,6 +18,7 @@ require_once "session.php";
 if ($type == 0) {
     include "login.php";
     include "forgot.php";
+    include "recovery.php";
 }
 
 if ($type > 2) {
