@@ -187,10 +187,11 @@ require_once "session.php";
 			}
 		}
 		if($continue != 0 || $countSet === 0){
-			require_once "session.php";
 			$report = resetPassword($email);
 			//send recover to mailer code goes here
-			$msg = "You've Made it!";
+			$msg = "<span style='color:green'>You've Made it!</span>";
+		}else{
+			$msg.="<span style='color:red'><br/>Error!<br/></span>";
 		}
 	}
 	print $msg;
