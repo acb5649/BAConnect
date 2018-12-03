@@ -71,8 +71,8 @@ $question="";
 $msg = "";
 if (isset($_POST['enter'])){
     if(isset($_POST['answerQuestion'])){
-        $question= trim($_POST['set_question']);
-        $answer = trim($_POST['answerQuestion']);
+        $question= Input::str($_POST['set_question']);
+        $answer = Input::str($_POST['answerQuestion']);
         $response=enableNewSecurity(4, $question, $answer);//change 4 to account id
         if(!$response){
             $msg="<span style='color:red'><br/>Error, overlapping question!<br/></span>";
