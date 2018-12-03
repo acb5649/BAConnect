@@ -6,14 +6,8 @@ require_once "session.php";
 
 if (isset($_POST['submit'])) {
     require_once "database.php";
-    $user_email = $_POST['email'];
-    $report = resetPassword($user_email);
-    $_SESSION['title'] = $report->title;
-    $_SESSION['msg'] = $report->msg;
-    $_SESSION['nextModal'] = $report->nextModal;
-    $_SESSION['success'] = $report->success;
-    $_SESSION['inputs'] = $report->inputs;
-    header("Location: index.php");
+    $_SESSION['email'] = trim($_POST['email']);
+    header("Location: recoveryTest.php");
     die();
 }
 ?>
