@@ -4,9 +4,9 @@ require_once "database.php";
 
 require_once "session.php";
 if(isset($_POST["security"])){
-    $_SESSION['remail'] = trim($_POST['remail']);
+    $_SESSION['email'] = trim($_POST['email']);
     echo "<script>document.getElementById('securityModal').style.display='block'';</script>";
-    header('Location: index.php');
+    header('Location: recovery.php');
     die;
 }
 
@@ -19,7 +19,7 @@ if(isset($_POST["security"])){
                   class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
             <h2 class="w3-wide"><i class="w3-margin-right"></i>Reset Password </h2>
         </header>
-        <form method="post" action="index.php" class="w3-container">
+        <form method="post" action="recovery.php" class="w3-container">
             <p>
                 <label>
                     <i class="fa fa-user"></i> Email associated with an account

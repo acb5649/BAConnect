@@ -2,7 +2,11 @@
 require_once "database.php";
 
 require_once "session.php";
-
+if(isset($_POST["security"])){
+    $_SESSION['email'] = trim($_POST['email']);
+    header('Location: recovery.php');
+    die;
+}
 	
 	function loadOnSecurity($accountID){
 		$con = Connection::connect();
@@ -113,8 +117,10 @@ require_once "session.php";
 		$con = null;
 		return $set;
 	}
-	print "<h1><b>".$remail."</b></h1>";
-	$account_id = getAccountIDFromEmail($remail);
+	require_once "session.php";
+	$email=$_SESSION['email'];
+	print "<h1><b>".$email."</b></h1>";
+	$account_id = getAccountIDFromEmail($email);
 	$countSet = getSet($account_id);
 	$answerA = "";
 	$answerB = "";
@@ -188,7 +194,7 @@ require_once "session.php";
 			}
 		}
 		if($continue != 0 || $countSet === 0){
-			$report = resetPassword($remail);
+			$report = resetPassword($email);
 			//send recover to mailer code goes here
 			$msg = "<span style='color:green'>You've Made it!</span>";
 		}else{
@@ -204,15 +210,16 @@ require_once "session.php";
 	print $msg;
 	$msg = "";
 ?>
-<div id="securityModal" class="w3-modal">
-    <div class="w3-modal-content w3-animate-top w3-card-4">
-        <header class="w3-container w3-lime w3-center w3-padding-32">
-            <span onclick="document.getElementById('securityModal').style.display='none'"
-                  class="w3-button w3-lime w3-xlarge w3-display-topright">�</span>
-            <h2 class="w3-wide"><i class="w3-margin-right"></i>Reset Password </h2>
-        </header>
- 		<form action="recovery.php" method="post" class="w3-container">
- 			<div>
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<title>Security Questions</title>
+	</head>
+	<body>
+   	<center>
+ 	<form action="recovery.php" method="post" class="w3-container">
+ 	<div>
 		<?php if($countSet > 0){
 	 				print "<b>Question 1.</b><br/><br/>";
 					print '<select name="security_question_A" id="security_question_A" required><option value="">Select A Security Question</option>'; 
@@ -233,10 +240,10 @@ require_once "session.php";
  				echo loadOnSecurity($account_id);
 				print"</select><br/>";
 		 		print'<input type="password" maxlength = "150" value="'.$answerC.'" name="answerQuestion_C" id="answer_Q3" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
-			}
-			?>
- 		</div><br/>
- 		<input name="enter" class="btn" type="submit" value="Submit" /><br/>
+			}?>
+ 	</div><br/>
+ 	<input name="enter" class="btn" type="submit" value="Submit" /><br/>
 	</form>
-	</div>
-</div>
+	</center>	
+	</body>
+</html>
