@@ -110,9 +110,6 @@ require_once "session.php";
 		return $set;
 	}
 	$countSet = getSet(1);
-	if($countSet < 1){
-		header('Location: index.php');//skips questions
-	}
 	$answerA = "";
 	$answerB = "";
 	$answerC = "";
@@ -121,7 +118,7 @@ require_once "session.php";
 	$questionC = 0;
 	$continue = 1;
 	$msg = "";
-	if (isset($_POST['enter'])){
+	if ((isset($_POST['enter']))|| ($countSet === 0)){
 		if(isset($_POST['answerQuestion_A'])){
 			$answerA = trim($_POST['answerQuestion_A']);
 		}
@@ -174,7 +171,7 @@ require_once "session.php";
 
 			}
 		}
-		if($continue != 0){
+		if($continue != 0 || $countSet === 0){
 			//send recover to mailer code goes here
 		}
 	}
