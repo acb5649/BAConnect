@@ -58,7 +58,7 @@
     <div class="w3-modal-content w3-animate-top w3-card-4">
         <header class="w3-container w3-lime w3-center w3-padding-32">
             <span onclick="document.getElementById('addDegreeModal').style.display='none'" class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
-            <h2 class="w3-wide"><i class="w3-margin-right"></i>Add Country </h2>
+            <h2 class="w3-wide"><i class="w3-margin-right"></i>Add Degree </h2>
         </header>
         <form method = 'post' action="addDegreeType.php" class="w3-container">
             <h1>Add new Degree Type</h1>
