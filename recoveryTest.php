@@ -81,32 +81,39 @@ require_once "session.php";
 				$stmt->bindValue(1, $accountID, PDO::PARAM_INT);
 				$stmt->bindValue(2, $code, PDO::PARAM_STR);
 				$stmt->execute();
-				$con = null;
 				$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 				//$url = str_replace("forgot.php", "verify.php", $url);//fix
 				mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://" . $url . "?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
-				return new Report("Success!", "An email has been sent to the address registered with your account.", "", TRUE);
+				$con = null;
+				return True;
+				//return new Report("Success!", "An email has been sent to the address registered with your account.", "", TRUE);
 			}else{
 				$stmt = $con->prepare("insert into `Password Recovery` (account_ID, code) values (?, ?)");
 				$stmt->bindValue(1, $accountID, PDO::PARAM_INT);
 				$stmt->bindValue(2, $code, PDO::PARAM_STR);
 				$stmt->execute();
 				$con = null;
-				return new Report("FAILURE", "There was an error validating your identity!", "", FALSE);
+				return False;
+				//return new Report("FAILURE", "There was an error validating your identity!", "", FALSE);
 			}
 		} else {
 			$con = null;
-			return false;
+			return False;
 		}
 	}
+	$answerA = "";
 ?>
 <html>
  <head>
-  <title></title>
+  <title>Forgot Password Security System</title>
  </head>
  <body>
- <div>
- <?php echo loadOnSecurity(1); ?>
- </div>
+ <form action="login.php" method="post">
+ 	<div>
+ 		<?php echo loadOnSecurity(1); ?>
+ 		<input type="password" maxlength = "150" value="<?php print $answerA; ?>" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer!" required  /><br/>
+ 	</div>
+ 	<input name="enter" class="btn" type="submit" value="Submit" /><br/>
+</form>
  </body>
 </html>
