@@ -131,6 +131,7 @@ require_once "session.php";
 		if ($countSet >0){
 			if(isset($_POST['security_question_A']) != 0){
 				$questionA = trim($_POST['security_question_A']);
+				$continue = checkSecurityQ(1, $questionA, $answerA);
 			}
 		}
 		if($countSet > 1){
@@ -144,6 +145,10 @@ require_once "session.php";
 					$questionB = 0;
 					$questionC = 0;
 					$msg .= "<span style='color:red'><br/>Question 1 and Question 2 are identical please change one or both of them!<br/></span>";
+					$continue= 0;
+				}
+				if($continue != 0){
+					$continue = checkSecurityQ(1, $questionB, $answerB);
 				}
 			}
 		}
@@ -158,6 +163,7 @@ require_once "session.php";
 					$questionB = 0;
 					$questionC = 0;
 					$msg .= "<span style='color:red'><br/>Question 1 and Question 3 are identical please change one or both of them!<br/></span>";
+					$continue = 0;
 				}
 				if ($questionB == $questionC){
 					$answerA = "";
@@ -167,8 +173,12 @@ require_once "session.php";
 					$questionB = 0;
 					$questionC = 0;
 					$msg .= "<span style='color:red'><br/>Question 2 and Question 3 are identical please change one or both of them!<br/></span>";
+					$continue = 0;
 				}
-
+				if($continue != 0){
+					$continue = checkSecurityQ(1, $questionC, $answerC);
+				}
+				
 			}
 		}
 		if($continue != 0 || $countSet === 0){
