@@ -1110,7 +1110,7 @@ if ($allowEdit) { echo "
                 <h2>Are you sure you want to delete this account?</h2>
                 <button class=\"w3-button w3-block w3-lime w3-padding-16 w3-section w3-right\" type=\"submit\" name=\"delete\">
                     Confirm Account Deletion
-                    <i class=\"fa fa-check\"></i>
+                    <i class=\"fas fa-check-circle\"></i>
                 </button>
                 <button type=\"button\" class=\"w3-button w3-red w3-section\"
                         onclick=\"document.getElementById('deleteAccountModal').style.display='none'\">Close
