@@ -22,8 +22,13 @@ function enableNewSecurity($accountID, $question_ID, $answer){// var for new que
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if($row['question_Number'] != null){
+            $stmt = $con->prepare("UPDATE `RecoveryQuestions` SET answer = ? WHERE account_ID = ? AND question_Number = ? ");
+            $stmt->bindValue(1, $answer, PDO::PARAM_STR);
+			 $stmt->bindValue(2, $accountID, PDO::PARAM_INT);
+			 $stmt->bindValue(3, $row['question_Number'], PDO::PARAM_INT);
+			 $stmt->execute();
             $con = null;
-		    return false;
+		    return true;
         }
 		$stmt = $con->prepare("SELECT question_Number FROM RecoveryQuestions WHERE account_ID = '" . $accountID . "' ORDER BY question_Number ASC");
 		$stmt->execute();
