@@ -2,23 +2,26 @@
 require_once "database.php";
 
 require_once "session.php";
-function enableNewSecurity($accountID, $question, $answer){// var for new questions and answers
+function enableNewSecurity($accountID, $question_ID, $answer){// var for new questions and answers
         $con = Connection::connect();
         $isFirst = 0;
-        $stmt = $con->prepare("SELECT question FROM `RecoveryQuestionsList` WHERE question = ?");
-        $stmt->bindValue(1, $question, PDO::PARAM_STR);
+        $question = "";
+        $stmt = $con->prepare("SELECT questions FROM `RecoveryQuestionsList` WHERE question_ID = ? AND active = ?");
+        $stmt->bindValue(1, $question_ID, PDO::PARAM_STR);
+        $stmt->bindValue(2, 1, PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if($row['question'] != null){
+        $question = $row['questions'];
+        if($row['questions'] == null){
             $con = null;
 		    return false;
         }
-        $stmt = $con->prepare("SELECT answer FROM `RecoveryQuestions` WHERE account_ID = ? AND question = ? ");
+        $stmt = $con->prepare("SELECT question_Number FROM `RecoveryQuestions` WHERE account_ID = ? AND question = ? ");
         $stmt->bindValue(1, $accountID, PDO::PARAM_INT);
 		$stmt->bindValue(2, $question, PDO::PARAM_STR);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if($row['answer'] != null){
+        if($row['question_Number'] != null){
             $con = null;
 		    return false;
         }
@@ -60,18 +63,18 @@ function loadSecurityOptions(){
 		$result = $statement->fetchAll();
 		foreach($result as $row)
 		{
-			$question .= '<option value='.$row['questions'].'>'.$row['questions'].'</option>';
+			$question .= '<option value='.$row['question_ID'].'>'.$row['questions'].'</option>';
 			$set= 1;
 		}
 		$con = null;
 		return $question;
 }//loadOnSecurity
 $answer="";
-$question="";
+$question=0;
 $msg = "";
 if (isset($_POST['enter'])){
     if(isset($_POST['answerQuestion'])){
-        $question= Input::str($_POST['set_question']);
+        $question= Input::int($_POST['set_question']);
         $answer = Input::str($_POST['answerQuestion']);
         $response=enableNewSecurity(4, $question, $answer);//change 4 to account id
         if(!$response){
