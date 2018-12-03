@@ -112,9 +112,9 @@ function getSet($accountID)
     return $set;
 }
 
-if (isset($_SESSION['email'])) {
+if (isset($_SESSION['recovery_email'])) {
     //print "<h1><b>" . $_SESSION['email'] . "</b></h1>";
-    $account_id = getAccountIDFromEmail($_SESSION['email']);
+    $account_id = getAccountIDFromEmail($_SESSION['recovery_email']);
     $countSet = getSet($account_id);
     $answerA = "";
     $answerB = "";
@@ -194,7 +194,7 @@ if (isset($_SESSION['email'])) {
             $_SESSION['nextModal'] = $report->nextModal;
             $_SESSION['success'] = $report->success;
             $_SESSION['inputs'] = $report->inputs;
-            unset($_SESSION['email']);
+            unset($_SESSION['recovery_email']);
             header("Location: index.php");
             die();
 
@@ -207,7 +207,7 @@ if (isset($_SESSION['email'])) {
             $_SESSION['nextModal'] = $report->nextModal;
             $_SESSION['success'] = $report->success;
             $_SESSION['inputs'] = $report->inputs;
-            unset($_SESSION['email']);
+            unset($_SESSION['recovery_email']);
             header("Location: index.php");
             die();
 
@@ -220,7 +220,7 @@ if (isset($_SESSION['email'])) {
         <header class="w3-container w3-lime w3-center w3-padding-32">
             <span onclick="document.getElementById(\'securityModal\').style.display=\'none\'"
                   class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
-            <h2 class="w3-wide"><i class="w3-margin-right"></i>Security Questions for ' . $_SESSION['email'] . ' </h2>
+            <h2 class="w3-wide"><i class="w3-margin-right"></i>Security Questions for ' . $_SESSION['recovery_email'] . ' </h2>
         </header>
         <form action="recovery.php" method="post" class="w3-container">
             <div>';
@@ -251,7 +251,7 @@ if (isset($_SESSION['email'])) {
     }
 
     $modal .= '</div>
-            <input type="hidden" id="email" name="email" value="' . $_SESSION['email'] . '">
+            <input type="hidden" id="email" name="email" value="' . $_SESSION['recovery_email'] . '">
             <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="enter">Submit</button>
         </form>
     </div>
