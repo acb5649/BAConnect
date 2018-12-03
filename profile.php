@@ -4,9 +4,7 @@ require_once "database.php";
 
 $allowEdit = FALSE;
 $trustedUser = FALSE;
-if (!isset($_SESSION["profile_ID"]){
-    header("location: index.php");
-}
+
 if (isset($_REQUEST["action"])) {
     if (isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
         if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
@@ -45,6 +43,11 @@ if (isset($_REQUEST["action"])) {
         $profile_account_id = $_REQUEST['user'];
         $_SESSION["profile_ID"] = $_REQUEST['user'];
     }
+}
+
+if (!isset($profile_account_id)) {
+    header("Location: index.php");
+    die();
 }
 
 if (isset($_SESSION["account_ID"])) {
