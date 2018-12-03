@@ -310,14 +310,14 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "addEmptyJob") {
             <input type="hidden" id="degree_ID" name="job_ID" value="-1">
             <input type="hidden" id="account_ID" name="account_ID" value="' . $profile_account_id . '">
             <input type="hidden" id="user" name="user" value="' . $_REQUEST['user'] . '">
-            <button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save <i class="far fa-save"></i></button>
-            <button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete <i class="fas fa-trash-alt"></i></button>
+            <button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button>
+            <button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button>
             <hr></form>';
     die();
 }
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == "addEmptyDegree") {
-    echo '<form method="post" class="w3-container w3-text-grey" action="profile.php"><p><span>Degree Type:</span></p><select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . '</select><p><span>Major:</span></p><input class="w3-input w3-border" type="text" value="" name="major"/><p><span>University/College:</span></p><input class="w3-input w3-border" type="text" value="" name="school"/><p><span>Enrollment Year:</span></p><input class="w3-input w3-border" type="text" value="" name="start"/><p><span>Graduation Year:</span></p><input class="w3-input w3-border" type="text" value="" name="end"/><input type="hidden" id="degree_ID" name="degree_ID" value="-1"><input type="hidden" id="user" name="user" value="' . $_REQUEST['user'] . '"><button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save <i class="far fa-save"></i></button><button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete <i class="fas fa-trash-alt"></i></button><hr></form>';
+    echo '<form method="post" class="w3-container w3-text-grey" action="profile.php"><p><span>Degree Type:</span></p><select name="degreeType" id="degreeType" class="w3-select w3-border">' . listDegreeTypes() . '</select><p><span>Major:</span></p><input class="w3-input w3-border" type="text" value="" name="major"/><p><span>University/College:</span></p><input class="w3-input w3-border" type="text" value="" name="school"/><p><span>Enrollment Year:</span></p><input class="w3-input w3-border" type="text" value="" name="start"/><p><span>Graduation Year:</span></p><input class="w3-input w3-border" type="text" value="" name="end"/><input type="hidden" id="degree_ID" name="degree_ID" value="-1"><input type="hidden" id="user" name="user" value="' . $_REQUEST['user'] . '"><button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Save</button><button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button><hr></form>';
     die();
 }
 
@@ -427,8 +427,8 @@ function formatDegrees($degrees) {
 
 function formatDegreesEditable($degrees, $profile_account_ID) {
     $result = '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>';
-    $result .= '<button name="addDegree" class="w3-button w3-third w3-lime w3-section" onclick="addEmptyDegree();">Add Degree <i class="fas fa-plus"></i></button>';
-    $result .= '<button name="cancel" class="w3-button w3-third w3-red w3-section" onclick="exitHistoryElementEditState(\'degrees\');">Cancel <i class="far fa-times-circle"></i></button>';
+    $result .= '<button name="addDegree" class="w3-button w3-third w3-lime w3-section" onclick="addEmptyDegree();">Add Degree</button>';
+    $result .= '<button name="cancel" class="w3-button w3-third w3-red w3-section" onclick="exitHistoryElementEditState(\'degrees\');">Cancel</button>';
     foreach($degrees as $degree) {
         $result .= '<form method="post" class="w3-container w3-text-grey" action="profile.php">';
         $result .= '<p><span>Degree Type:</span></p>';
@@ -464,8 +464,8 @@ function formatJobs($jobs) {
 
 function formatJobsEditable($jobs, $profile_account_ID) {
     $result = '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>';
-    $result .= '<button name="addJob" class="w3-button w3-third w3-lime w3-section" onclick="addEmptyJob();">Add Job <i class="fas fa-plus"></i></button>';
-    $result .= '<button name="cancel" class="w3-button w3-third w3-red w3-section" onclick="exitHistoryElementEditState(\'jobs\');">Cancel <i class="far fa-times-circle"></i></button>';
+    $result .= '<button name="addJob" class="w3-button w3-third w3-lime w3-section" onclick="addEmptyJob();">Add Job</button>';
+    $result .= '<button name="cancel" class="w3-button w3-third w3-red w3-section" onclick="exitHistoryElementEditState(\'jobs\');">Cancel</button>';
     foreach($jobs as $job) {
         $result .= '<form method="post" class="w3-container w3-text-grey" action="profile.php">';
         $result .= '<p><span>Company:</span></p>';
@@ -813,7 +813,7 @@ function formatPendingMentorships($profile_account_id) {
                     </select>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Gender</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('gender');">Cancel <i class="far fa-times-circle"></i></button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('gender');">Cancel</button>
                     </form>`;
             } else if (id == "status") {
                 document.getElementById(id).innerHTML = `
@@ -825,7 +825,7 @@ function formatPendingMentorships($profile_account_id) {
                     </select>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Status</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('status');">Cancel <i class="far fa-times-circle"></i></button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('status');">Cancel</button>
                     </form>`;
             } else if (id == "profile_email") {
                 document.getElementById(id).innerHTML = `
@@ -834,7 +834,7 @@ function formatPendingMentorships($profile_account_id) {
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getEmail($profile_account_id); ?>" name="email" id="email"/>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Email</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_email');">Cancel <i class="far fa-times-circle"></i></button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_email');">Cancel</button>
                     </form>`;
             } else if (id == "phone") {
                 document.getElementById(id).innerHTML = `
@@ -843,7 +843,7 @@ function formatPendingMentorships($profile_account_id) {
                     <input class="w3-input w3-border w3-cell" type="tel" value="<?php echo getFormattedPhoneNumber($profile_account_id); ?>" name="phone"/>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Phone</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('phone');">Cancel <i class="far fa-times-circle"></i></button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('phone');">Cancel</button>
                     </form>`;
             } else if (id == "location") {
                 document.getElementById(id).innerHTML = `
@@ -874,7 +874,7 @@ function formatPendingMentorships($profile_account_id) {
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
 
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Location</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('location');">Cancel <i class="far fa-times-circle"></i></button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('location');">Cancel</button>
                     </form>`;
                 document.getElementById("countrySpan").innerHTML = " ";
             } else if (id == "profile_facebook") {
@@ -884,7 +884,7 @@ function formatPendingMentorships($profile_account_id) {
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getFacebookLink($profile_account_id); ?>" name="profile_facebook" id="profile_facebook"/>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Facebook</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_facebook');">Cancel <i class="far fa-times-circle"></i></button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_facebook');">Cancel</button>
                     </form>`;
             } else if (id == "profile_linkedin") {
                 document.getElementById(id).innerHTML = `
@@ -893,7 +893,7 @@ function formatPendingMentorships($profile_account_id) {
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getLinkedinLink($profile_account_id); ?>" name="profile_linkedin" id="profile_linkedin"/>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Linkedin</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_linkedin');">Cancel <i class="far fa-times-circle"></i></button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_linkedin');">Cancel</button>
                     </form>`;
             } else if (id == "profile_twitter") {
                 document.getElementById(id).innerHTML = `
@@ -902,7 +902,7 @@ function formatPendingMentorships($profile_account_id) {
                     <input class="w3-input w3-border w3-cell" type="text" maxlength="50" value="<?php echo getTwitterLink($profile_account_id); ?>" name="profile_twitter" id="profile_twitter"/>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Twitter</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_twitter');">Cancel <i class="far fa-times-circle"></i></button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_twitter');">Cancel</button>
                     </form>`;
             } else if (id == "preference") {
                 document.getElementById(id).innerHTML = `
@@ -915,7 +915,7 @@ function formatPendingMentorships($profile_account_id) {
                     </select>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Preference</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('preference');">Cancel <i class="far fa-times-circle"></i></button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('preference');">Cancel</button>
                     </form>`;
             } else if (id == "profile_privilege") {
                 document.getElementById(id).innerHTML = `
@@ -926,7 +926,7 @@ function formatPendingMentorships($profile_account_id) {
                     </select>
                     <input type="hidden" id="user" name="user" value="<?php echo $profile_account_id; ?>">
                     <button class="w3-button w3-half w3-lime w3-cell w3-margin-top" type="submit" name="submit">Edit Privilege</button>
-                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_privilege');">Cancel <i class="far fa-times-circle"></i></button>
+                    <button class="w3-button w3-half w3-red w3-cell w3-margin-top" type="button" onclick="exitEditState('profile_privilege');">Cancel</button>
                     </form>`;
             }
         }
