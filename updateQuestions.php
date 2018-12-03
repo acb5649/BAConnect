@@ -108,18 +108,19 @@ if (isset($_POST['enter']) && isset($_POST['answerQuestion'])) {
                   class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
             <h2 class="w3-wide"><i class="w3-margin-right"></i>Set Security Questions </h2>
         </header>
-        <form action="updateQuestions.php" method="post">
+        <form action="updateQuestions.php" method="post" class="w3-container">
             <div>
                 <?php
-                print '<select name="set_question" id="set_question" required><option value="">Select A Security Question</option>';
+                echo '<p><label>Select A Security Question:</label></p>';
+                echo '<select class="w3-select w3-border" name="set_question" id="set_question" required><option value="">Select A Security Question</option>';
                 echo loadSecurityOptions();
-                print"</select><br/>";
-                print'<input type="text" maxlength = "150" value="' . $answer . '" name="answerQuestion" id="answer_Q" required  /><br/><br/><br/>';
+                echo "</select><br/>";
+                echo '<p><label>Answer:</label></p>';
+                echo '<input class="w3-input w3-border" type="text" maxlength = "150" value="' . $answer . '" name="answerQuestion" id="answer_Q" required />';
                 ?>
             </div>
             <br/>
-            <button name="enter" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit"
-                    value="Submit"></button>
+            <button name="enter" class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit">Add</button>
             <button type="button" class="w3-button w3-red w3-section"
                     onclick="document.getElementById('questionModal').style.display='none'">Close
                 <i class="fa fa-remove"></i>

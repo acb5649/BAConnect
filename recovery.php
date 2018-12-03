@@ -226,29 +226,31 @@ if (isset($_SESSION['email'])) {
             <div>';
 
     if ($countSet > 0) {
-        $modal .= "<b>Question 1.</b><br/><br/>";
-        $modal .= '<select name="security_question_A" id="security_question_A" required><option value="">Select A Security Question</option>';
+        $modal .= "<p><label>Question 1: </label></p>";
+        $modal .= '<select class="w3-select w3-border" name="security_question_A" id="security_question_A" required><option value="">Select A Security Question</option>';
         $modal .= loadOnSecurity($account_id);
-        $modal .= "</select><br/>";
-        $modal .= '<input type="text" maxlength = "150" value="' . $answerA . '" name="answerQuestion_A" id="answer_Q1" required  /><br/><br/><br/>';
+        $modal .= "</select>";
+        $modal .= "<p><label>Answer: </label></p>";
+        $modal .= '<input class="w3-input w3-border" type="text" maxlength = "150" value="' . $answerA . '" name="answerQuestion_A" id="answer_Q1" required  />';
     }
     if ($countSet > 1) {
-        $modal .= "<b>Question 2.</b><br/><br/>";
-        $modal .= '<select name="security_question_B" id="security_question_B" required><option value="">Select A Security Question</option>';
+        $modal .= "<p><label>Question 2: </label></p>";
+        $modal .= '<select class="w3-select w3-border" name="security_question_B" id="security_question_B" required><option value="">Select A Security Question</option>';
         $modal .= loadOnSecurity($account_id);
-        $modal .= "</select><br/>";
-        $modal .= '<input type="text" maxlength = "150" value="' . $answerB . '" name="answerQuestion_B" id="answer_Q2" required  /><br/><br/><br/>';
+        $modal .= "</select>";
+        $modal .= "<p><label>Answer: </label></p>";
+        $modal .= '<input class="w3-input w3-border" type="text" maxlength = "150" value="' . $answerB . '" name="answerQuestion_B" id="answer_Q2" required  />';
     }
     if ($countSet > 2) {
-        $modal .= "<b>Question 3.</b><br/><br/>";
-        $modal .= '<select name="security_question_C" id="security_question_C" required><option value="">Select A Security Question</option>';
+        $modal .= "<p><label>Question 3: </label></p>";
+        $modal .= '<select class="w3-select w3-border" name="security_question_C" id="security_question_C" required><option value="">Select A Security Question</option>';
         $modal .= loadOnSecurity($account_id);
-        $modal .= "</select><br/>";
-        $modal .= '<input type="text" maxlength = "150" value="' . $answerC . '" name="answerQuestion_C" id="answer_Q3" required  /><br/><br/><br/>';
+        $modal .= "</select>";
+        $modal .= "<p><label>Answer: </label></p>";
+        $modal .= '<input class="w3-input w3-border" type="text" maxlength = "150" value="' . $answerC . '" name="answerQuestion_C" id="answer_Q3" required  />';
     }
 
     $modal .= '</div>
-            <br/>
             <input type="hidden" id="email" name="email" value="' . $_SESSION['email'] . '">
             <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="enter">Submit</button>
         </form>
