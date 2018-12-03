@@ -183,6 +183,7 @@ require_once "session.php";
 		}
 		if($continue != 0 || $countSet === 0){
 			//send recover to mailer code goes here
+			$msg = "You've Made it!";
 		}
 	}
 	print $msg;
