@@ -113,6 +113,7 @@ require_once "session.php";
 		$con = null;
 		return $set;
 	}
+	print "<h1><b>".$email."</b></h1>";
 	$account_id = getAccountIDFromEmail($email);
 	$countSet = getSet($account_id);
 	$answerA = "";
