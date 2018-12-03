@@ -9,7 +9,7 @@ if (isset($_SESSION['type'])) {
     $type=0;
 }
 if (isset($_SESSION['email'])) {
-    $email = $_SESSION['email'];
+    $remail = $_SESSION['email'];
 } else {
-    $email = "";
+    $remail = "";
 }

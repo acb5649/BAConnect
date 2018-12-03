@@ -45,9 +45,10 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
     <div class="w3-bar w3-lime w3-card" style="z-index: 0;">
         <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="toggleNav()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
         <!-- The homepage will have a feed of the newest users and updated users -->
-        <a class="w3-bar-item w3-button w3-padding-large" href="index.php">BAConnect</a>
+        <a class="w3-bar-item w3-button w3-padding-large" href="index.php"><img src="image/logo.png" height= "60" alt="Image"></a>
         <!-- If user is logged in, don't show this link -->
         <?php
+        print"<div style='display: inline-block;padding: 15px;'>";
         if($type == 0){
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'loginModal'".').style.display='."'block'".'">LOG IN</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'registerModal'".').style.display='."'block'".'">REGISTER</a>';
@@ -77,7 +78,7 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addDegreeModal'".').style.display='."'block'".'">ADD DEGREE TYPE</a>';
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addStateModal'".').style.display='."'block'".'">ADD STATE</a>';
         }
-
+        print"</div>";
         ?>
     </div>
     <?php

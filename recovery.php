@@ -113,8 +113,8 @@ require_once "session.php";
 		$con = null;
 		return $set;
 	}
-	print "<h1><b>".$email."</b></h1>";
-	$account_id = getAccountIDFromEmail($email);
+	print "<h1><b>".$remail."</b></h1>";
+	$account_id = getAccountIDFromEmail($remail);
 	$countSet = getSet($account_id);
 	$answerA = "";
 	$answerB = "";
@@ -188,7 +188,7 @@ require_once "session.php";
 			}
 		}
 		if($continue != 0 || $countSet === 0){
-			$report = resetPassword($email);
+			$report = resetPassword($remail);
 			//send recover to mailer code goes here
 			$msg = "<span style='color:green'>You've Made it!</span>";
 		}else{
