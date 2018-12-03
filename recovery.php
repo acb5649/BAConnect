@@ -204,13 +204,15 @@ require_once "session.php";
 	print $msg;
 	$msg = "";
 ?>
-<html>
- <head>
-  <title>Forgot Password Security System</title>
- </head>
- <body>
- <form action="recovery.php" method="post">
- 	<div>
+<div id="securityModal" class="w3-modal">
+    <div class="w3-modal-content w3-animate-top w3-card-4">
+        <header class="w3-container w3-lime w3-center w3-padding-32">
+            <span onclick="document.getElementById('forgotModal').style.display='none'"
+                  class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
+            <h2 class="w3-wide"><i class="w3-margin-right"></i>Reset Password </h2>
+        </header>
+ 		<form action="recovery.php" method="post" class="w3-container">
+ 			<div>
 		<?php if($countSet > 0){
 	 				print "<b>Question 1.</b><br/><br/>";
 					print '<select name="security_question_A" id="security_question_A" required><option value="">Select A Security Question</option>'; 
@@ -233,8 +235,8 @@ require_once "session.php";
 		 		print'<input type="password" maxlength = "150" value="'.$answerC.'" name="answerQuestion_C" id="answer_Q3" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
 			}
 			?>
- 	</div><br/>
- 	<input name="enter" class="btn" type="submit" value="Submit" /><br/>
-</form>
- </body>
-</html>
+ 		</div><br/>
+ 		<input name="enter" class="btn" type="submit" value="Submit" /><br/>
+	</form>
+	</div>
+</div>
