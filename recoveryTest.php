@@ -182,7 +182,7 @@ require_once "session.php";
 					$continue = 0;
 				}
 				if($continue != 0){
-					$continue = checkSecurityQ(1, $questionC, $answerC);
+					$continue = checkSecurityQ($account_id, $questionC, $answerC);
 				}
 				
 			}
