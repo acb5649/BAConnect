@@ -72,10 +72,10 @@ require_once "session.php";
 			}
 		}
 		if(ct < 2){
-			$stmt = $con->prepare("SELECT * FROM RecoveryQuestions WHERE account_ID = '" . $accountID . "' AND question_Number = '" . $question_Num . "' ORDER BY question_Number ASC");
+			$stmt = $con->prepare("SELECT answer FROM RecoveryQuestions WHERE account_ID = '" . $accountID . "' AND question_Number = '" . $question_Num . "");
 			$stmt->execute();
 			$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			if((strtolower($answer)) === (strtolower($row['answer']))){
+			if(strcasecmp($answer,$row['answer'])==0){
 				$con = null;
 				return True;
 				//return new Report("Success!", "An email has been sent to the address registered with your account.", "", TRUE);
