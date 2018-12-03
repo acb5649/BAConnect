@@ -56,12 +56,12 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
         }
 
         if($type > 0){
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="profile.php">PROFILE</a>';
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="profile.php">PROFILE <i class="far fa-user-circle"></i></a>';
             $filename = basename($_SERVER['REQUEST_URI']);
             if ($filename == "index.php" || $filename == "courseproject") {
-                print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="openSearch(\'search\')">SEARCH</a>';
+                print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="openSearch(\'search\')">SEARCH <i class="fas fa-search"></i></a>';
             }
-            print '<a class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right" href="logout.php">LOG OUT</a>';
+            print '<a class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right" href="logout.php">LOG OUT <i class="fas fa-sign-out-alt"></i></a>';
         }
 
         if($type > 1){
@@ -107,14 +107,14 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
 <div id="navMobile" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
     <?php
     if($type == 0){
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'loginModal'".').style.display='."'block'".'">LOG IN</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'loginModal'".').style.display='."'block'".'">LOG IN <i class="fas fa-sign-in-alt"></i></a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'registerModal'".').style.display='."'block'".'">REGISTER</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'forgotModal'".').style.display='."'block'".'">FORGOT LOGIN</a>';
     }
 
     if($type > 0){
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="profile.php">PROFILE</a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" href="logout.php">LOG OUT</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="profile.php">PROFILE <i class="far fa-user-circle"></i></a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" href="logout.php">LOG OUT <i class="fas fa-sign-out-alt"></i></a>';
     }
 
     if($type > 1){
