@@ -203,7 +203,7 @@ require_once "session.php";
   <title>Forgot Password Security System</title>
  </head>
  <body>
- <form action="recoveryTest.php" method="post">
+ <form action="recovery.php" method="post">
  	<div>
 		<?php if($countSet > 0){
 	 				print "<b>Question 1.</b><br/><br/>";

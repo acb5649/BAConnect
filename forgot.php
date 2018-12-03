@@ -7,7 +7,7 @@ require_once "session.php";
 if (isset($_POST['submit'])) {
     require_once "database.php";
     $_SESSION['email'] = trim($_POST['email']);
-    header("Location: recoveryTest.php");
+    header("Location: recovery.php");
     die();
 }
 ?>
