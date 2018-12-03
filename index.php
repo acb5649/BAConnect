@@ -55,7 +55,10 @@ if(isset($_POST["action"]) && $_POST["action"] == "loadCards"){
 if(isset($_POST["action"]) && $_POST["action"] == "openModal"){
     echo "<script>document.getElementById('" . $_POST["modal"] . "').style.display='block';</script>";
 }
-
+if(isset($_POST["security"])){
+    $_SESSION['email'] = trim($_POST['email']);
+    echo "<script>document.getElementById('securityModal').style.display='block'';</script>";
+}
 if (isset($_POST['register'])) {
     $error = false;
     $msg = "";
