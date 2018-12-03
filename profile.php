@@ -987,7 +987,7 @@ function formatPendingMentorships($profile_account_id) {
 
                     <?php if ($allowEdit) {
                         // show resume
-                        echo '<hr><p class="w3-display-container" id="profile_resume"><button class="w3-button w3-half w3-lime w3-cell" type="button" name="upload" onclick="document.getElementById(\'uploadResumeModal\').style.display=\'block\'">Upload Resume</button><button class="w3-button w3-half w3-lime w3-cell" type="button" name="download" onclick="downloadResume();">Download Resume</button><br>';
+                        echo '<hr><p class="w3-display-container" id="profile_resume"><button class="w3-button w3-half w3-lime w3-cell" type="button" name="upload" onclick="document.getElementById(\'uploadResumeModal\').style.display=\'block\'">Upload Resume <i class="fas fa-upload"></i></button><button class="w3-button w3-half w3-lime w3-cell" type="button" name="download" onclick="downloadResume();">Download Resume <i class="fas fa-download"></i></button><br>';
                     } ?>
 
                     <?php if (isset($_SESSION["account_ID"]) && getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
@@ -997,7 +997,7 @@ function formatPendingMentorships($profile_account_id) {
                     } ?>
 
                     <?php if ($allowEdit) {
-                        echo '<hr><p class="w3-display-container" id="profile_resume"><button style="width: 100%" class="w3-button w3-red w3-cell" type="button" name="delete" onclick="document.getElementById(\'deleteAccountModal\').style.display=\'block\'">Delete Account</button><br>';
+                        echo '<hr><p class="w3-display-container" id="profile_resume"><button style="width: 100%" class="w3-button w3-red w3-cell" type="button" name="delete" onclick="document.getElementById(\'deleteAccountModal\').style.display=\'block\'">Delete Account <i class="fas fa-trash-alt"></i></button><br>';
                     } ?>
 
                 </div>
