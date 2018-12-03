@@ -207,8 +207,8 @@ require_once "session.php";
 <div id="securityModal" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
         <header class="w3-container w3-lime w3-center w3-padding-32">
-            <span onclick="document.getElementById('forgotModal').style.display='none'"
-                  class="w3-button w3-lime w3-xlarge w3-display-topright">×</span>
+            <span onclick="document.getElementById('securityModal').style.display='none'"
+                  class="w3-button w3-lime w3-xlarge w3-display-topright">ï¿½</span>
             <h2 class="w3-wide"><i class="w3-margin-right"></i>Reset Password </h2>
         </header>
  		<form action="recovery.php" method="post" class="w3-container">
