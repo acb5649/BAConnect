@@ -189,7 +189,7 @@ function resetPassword($email) {
 
         $url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-        $url = str_replace("forgot.php", "verify.php", $url);
+        $url = str_replace("recovery.php", "verify.php", $url);
 
         mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://" . $url . "?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
 
