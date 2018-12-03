@@ -192,7 +192,7 @@ require_once "session.php";
 			//send recover to mailer code goes here
 			$msg = "<span style='color:green'>You've Made it!</span>";
 		}else{
-			$msg.="<span style='color:red'><br/>Error!<br/></span>";
+			$msg.="<span style='color:red'><br/>Error, perhaps you made one to many attempts if this problem persists contact support!<br/></span>";
 		}
 	}
 	print $msg;
