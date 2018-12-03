@@ -99,8 +99,27 @@ require_once "session.php";
 			$con = null;
 			return False;
 		}
+	}//end checkSecurity
+	function getSet($accountID){
+		$con = Connection::connect();
+		$set=0;
+		$question = '';
+		$query = "SELECT * FROM RecoveryQuestions WHERE account_ID = '".$accountID."' ORDER BY question_Number ASC";
+		$statement = $con->prepare($query);
+		$statement->execute();
+		$result = $statement->fetchAll();
+		foreach($result as $row)
+		{
+			$question .= '<option value="'.$row['question_Number'].'">'.$row['question'].'</option>';
+			$set= $set + 1;
+		}
+		$con = null;
+		return $set;
 	}
-	$countSet = 0;
+	$countSet = getSet(1);
+	if($countSet < 1){
+		header('Location: index.php');//skips questions
+	}
 	$answerA = "";
 	$answerB = "";
 	$answerC = "";
@@ -108,7 +127,7 @@ require_once "session.php";
 	$questionB = 0;
 	$questionC = 0;
 	if (isset($_POST['enter'])){
-		
+
 	}
 ?>
 <html>
@@ -118,21 +137,27 @@ require_once "session.php";
  <body>
  <form action="recoveryTest.php" method="post">
  	<div>
-	 	<b>Question 1.</b><br/><br/>
-		<select name="security_question_A" id="security_question_A" required><option value="">Select A Security Question</option>
- 			<?php echo loadOnSecurity(1); ?>
-		</select><br/>
- 		<input type="password" maxlength = "150" value="<?php print $answerA; ?>" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer Here" required  /><br/><br/><br/>
-		<b>Question 2.</b><br/><br/>
- 		<select name="security_question_B" id="security_question_B" required><option value="">Select A Security Question</option>
- 			<?php echo loadOnSecurity(1); ?>
-		</select><br/>
- 		<input type="password" maxlength = "150" value="<?php print $answerB; ?>" name="answerQuestion_B" id="answer_Q2" placeholder="Enter Answer Here" required  /><br/><br/><br/>
-		 <b>Question 3.</b><br/><br/>
- 		<select name="security_question_C" id="security_question_C" required><option value="">Select A Security Question</option>
- 			<?php echo loadOnSecurity(1); ?>
-		</select><br/>
- 		<input type="password" maxlength = "150" value="<?php print $answerC; ?>" name="answerQuestion_C" id="answer_Q3" placeholder="Enter Answer Here" required  /><br/><br/><br/>
+		<?php if($countSet > 0){
+	 				print "<b>Question 1.</b><br/><br/>";
+					print '<select name="security_question_A" id="security_question_A" required><option value="">Select A Security Question</option>'; 
+ 					echo loadOnSecurity(1); 
+					print "</select><br/>";
+					print '<input type="password" maxlength = "150" value="<?php print $answerA; ?>" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
+				 }
+			if($countSet > 1){
+				print "<b>Question 2.</b><br/><br/>";
+ 				print '<select name="security_question_B" id="security_question_B" required><option value="">Select A Security Question</option>';
+ 				echo loadOnSecurity(1);
+				print "</select><br/>";
+				print '<input type="password" maxlength = "150" value="<?php print $answerB; ?>" name="answerQuestion_B" id="answer_Q2" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
+			}
+			if($countSet > 2){
+		 		print "<b>Question 3.</b><br/><br/>";
+ 				print '<select name="security_question_C" id="security_question_C" required><option value="">Select A Security Question</option>';
+ 				echo loadOnSecurity(1);
+				print"</select><br/>";
+		 		print'<input type="password" maxlength = "150" value="<?php print $answerC; ?>" name="answerQuestion_C" id="answer_Q3" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
+			}
  	</div><br/>
  	<input name="enter" class="btn" type="submit" value="Submit" /><br/>
 </form>
