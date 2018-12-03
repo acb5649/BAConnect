@@ -26,7 +26,7 @@ if(isset($_POST["security"])){
                 </label>
             </p>
             <input class="w3-input w3-border" type="text" placeholder="" name="email" id="email">
-            <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" onclick="document.getElementById('securityModal').style.display='block" type="submit" name="security">
+            <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" onclick="document.getElementById('securityModal').style.display='block'" type="submit" name="security">
                 Reset Password
                 <i class="fa fa-check"></i>
             </button>
