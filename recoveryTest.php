@@ -158,6 +158,7 @@ require_once "session.php";
 				print"</select><br/>";
 		 		print'<input type="password" maxlength = "150" value="<?php print $answerC; ?>" name="answerQuestion_C" id="answer_Q3" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
 			}
+			?>
  	</div><br/>
  	<input name="enter" class="btn" type="submit" value="Submit" /><br/>
 </form>
