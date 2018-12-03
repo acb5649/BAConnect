@@ -111,9 +111,9 @@ require_once "session.php";
  <form action="recoveryTest.php" method="post">
  	<div>
 	 	<b>Question 1.</b><br/>
- 		<?php echo loadOnSecurity(1); ?><br/>
+ 		<?php echo loadOnSecurity(1); ?><br/><br/>
  		<input type="password" maxlength = "150" value="<?php print $answerA; ?>" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer!" required  /><br/>
- 	</div>
+ 	</div><br/><br/>
  	<input name="enter" class="btn" type="submit" value="Submit" /><br/>
 </form>
  </body>
