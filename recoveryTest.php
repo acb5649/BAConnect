@@ -7,7 +7,7 @@ require_once "session.php";
 	function loadOnSecurity($accountID){
 		$con = Connection::connect();
 		$set=0;
-		$question = '<select name="security_question" id="security_question" required><option value="">Select Question</option>';
+		$question = '<select name="security_question" id="security_question" required><option value="">Select A Security Question</option>';
 		$query = "SELECT * FROM RecoveryQuestions WHERE account_ID = '".$accountID."' ORDER BY question_Number ASC";
 		$statement = $con->prepare($query);
 		$statement->execute();
@@ -110,7 +110,8 @@ require_once "session.php";
  <body>
  <form action="recoveryTest.php" method="post">
  	<div>
- 		<?php echo loadOnSecurity(1); ?>
+	 	<b>Question 1.</b><br/>
+ 		<?php echo loadOnSecurity(1); ?><br/>
  		<input type="password" maxlength = "150" value="<?php print $answerA; ?>" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer!" required  /><br/>
  	</div>
  	<input name="enter" class="btn" type="submit" value="Submit" /><br/>
