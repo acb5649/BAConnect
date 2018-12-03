@@ -46,13 +46,13 @@ if (isset($_POST['login'])) {
                     <i class="fa fa-user"></i> Username
                 </label>
             </p>
-            <input class="w3-input w3-border" type="text" placeholder="" name="username" id="username">
+            <input class="w3-input w3-border" type="text" style = "text-align:center;" placeholder="Enter Username" name="username" id="username">
             <p>
                 <label>
                     <i class="fa fa-lock"></i> Password
                 </label>
             </p>
-            <input class="w3-input w3-border" type="password" placeholder="" name="password" id="password">
+            <input class="w3-input w3-border" style = "text-align:center;" type="password" placeholder="Enter Password" name="password" id="password">
             <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="login" id="login">Log In
                 <i class="fa fa-check"></i>
             </button>
