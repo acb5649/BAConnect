@@ -1,10 +1,7 @@
 <?php
 require_once "session.php";
 require_once "database.php";
- if($type === 0){
-     header('Location: index.php');
-     die;
- }
+
 $allowEdit = FALSE;
 $trustedUser = FALSE;
 
