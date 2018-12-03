@@ -356,7 +356,7 @@ if(isset($_POST['upgrade'])){
         $(window).on("scroll", function(){
             if (($(window).scrollTop() - ($(document).height() - $(window).height()) <= 5) && ($(window).scrollTop() - ($(document).height() - $(window).height()) >= -5)) {
                 let term = document.getElementById("searchBox").value;
-                if (term = "") {
+                if (term == "") {
                     continuallyLoadCards(10);
                 } else {
                     searchCards(10, false);

@@ -3,6 +3,24 @@ require_once "session.php";
 require_once "database.php";
 require_once "card.php";
 
+function buildQueryString($search) {
+    $match = "";
+    $words = preg_split('/\s+/', $search);
+    $columns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
+    for ($i = 0; $i < count($words); $i++) {
+        if ($i != 0) {
+            $match .= "OR ";
+        }
+        for ($j = 0; $j < count($columns); $j++) {
+            $match .= "(`" . $columns[$j] . "` LIKE '%" . $words[$i] . "%') ";
+            if ($j != count($columns) - 1) {
+                $match .= "OR ";
+            }
+        }
+    }
+    return $match;
+}
+
 if (isset($_POST["action"]) && $_POST["action"] == "loadCards") {
     if (!isset($_POST["offset"])) {
         $offset = 0;
@@ -28,24 +46,9 @@ if (isset($_POST["action"]) && $_POST["action"] == "loadCards") {
             $search = Input::str($_POST["search"]);
 
             $con = Connection::connect();
-            $match = "";
-            $words = preg_split('/\s+/', $search);
-            $columns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
-            for ($i = 0; $i < count($words); $i++) {
-                if ($i != 0) {
-                    $match .= "OR ";
-                }
-                for ($j = 0; $j < count($columns); $j++) {
-                    $match .= "(`" . $columns[$j] . "` LIKE '%" . $words[$i] . "%') ";
-                    if ($j != count($columns) - 1) {
-                        $match .= "OR ";
-                    }
-                }
-            }
-            $stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressGenderJobsDegreesView WHERE ? LIMIT ? OFFSET ?");
-            $stmt->bindValue(1, $match, PDO::PARAM_INT);
-            $stmt->bindValue(2, (int)$num, PDO::PARAM_INT);
-            $stmt->bindValue(3, (int)$offset, PDO::PARAM_INT);
+            $stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressGenderJobsDegreesView WHERE " . buildQueryString($search) . " LIMIT ? OFFSET ?");
+            $stmt->bindValue(1, (int)$num, PDO::PARAM_INT);
+            $stmt->bindValue(2, (int)$offset, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $con = null;
@@ -74,25 +77,10 @@ if (isset($_POST["action"]) && $_POST["action"] == "loadCards") {
             $search = Input::str($_POST["search"]);
 
             $con = Connection::connect();
-            $match = "";
-            $words = preg_split('/\s+/', $search);
-            $columns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
-            for ($i = 0; $i < count($words); $i++) {
-                if ($i != 0) {
-                    $match .= "OR ";
-                }
-                for ($j = 0; $j < count($columns); $j++) {
-                    $match .= "(`" . $columns[$j] . "` LIKE '%" . $words[$i] . "%') ";
-                    if ($j != count($columns) - 1) {
-                        $match .= "OR ";
-                    }
-                }
-            }
-            $stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressGenderJobsDegreesView WHERE (mentorship_preference = ?) AND ? LIMIT ? OFFSET ?");
+            $stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressGenderJobsDegreesView WHERE (mentorship_preference = ?) AND " . buildQueryString($search) . " LIMIT ? OFFSET ?");
             $stmt->bindValue(1, (int)$pref, PDO::PARAM_INT);
-            $stmt->bindValue(2, $match, PDO::PARAM_INT);
-            $stmt->bindValue(3, (int)$num, PDO::PARAM_INT);
-            $stmt->bindValue(4, (int)$offset, PDO::PARAM_INT);
+            $stmt->bindValue(2, (int)$num, PDO::PARAM_INT);
+            $stmt->bindValue(3, (int)$offset, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $con = null;
