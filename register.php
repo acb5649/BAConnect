@@ -16,31 +16,31 @@ require_once "dbhelper.php";
             <p>
                 <label>First name<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['firstName']) ? $_SESSION['firstName'] : "") ?>" name="firstName" id="firstName" required/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['firstName']) ? $_SESSION['firstName'] : "") ?>" style = "text-align:center;" placeholder="Enter First Name" name="firstName" id="firstName" required/>
             <p>
                 <label>Middle name</label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['middleName']) ? $_SESSION['middleName'] : "") ?>" name="middleName" id="middleName"/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['middleName']) ? $_SESSION['middleName'] : "") ?>" style = "text-align:center;" placeholder="Enter Middle Name" name="middleName" id="middleName"/>
             <p>
                 <label>Last name<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['lastName']) ? $_SESSION['lastName'] : "") ?>" name="lastName" id="lastName" required/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['lastName']) ? $_SESSION['lastName'] : "") ?>" style = "text-align:center;" placeholder="Enter Last Name" name="lastName" id="lastName" required/>
             <p>
                 <label>Email<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['email']) ? $_SESSION['email'] : "") ?>" name="email" id="email" required/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="<?php echo (isset($_SESSION['email']) ? $_SESSION['email'] : "") ?>" style = "text-align:center;" placeholder="Enter Email" name="email" id="email" required/>
             <p>
                 <label>User Name<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="username" id="username" required/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" style = "text-align:center;" placeholder="Enter Username" name="username" id="username" required/>
             <p>
                 <label>Password (Must be longer than 12 characters and contains at least 1 digit)<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="password" maxlength="50" value="" name="password" id="password" required/>
+            <input class="w3-input w3-border" type="password" maxlength="50" value="" style = "text-align:center;" placeholder="Enter Password" name="password" id="password" required/>
             <p>
                 <label>Confirm Password<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="password" maxlength="50" value="" name="confirmedPassword" id="confirmedPassword" required/>
+            <input class="w3-input w3-border" type="password" maxlength="50" value="" style = "text-align:center;" placeholder="Confirm Password" name="confirmedPassword" id="confirmedPassword" required/>
             <p>
                 <label>Gender<span class="w3-text-red">*</span></label>
             </p>
@@ -65,24 +65,24 @@ require_once "dbhelper.php";
             <p>
                 <label>Address Line 1</label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="street" id="street"/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" style = "text-align:center;" placeholder="Enter Street" name="street" id="street"/>
             <p>
                 <label>Address Line 2</label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="street2" id="street2"/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" style = "text-align:center;" placeholder="Enter Second Street" name="street2" id="street2"/>
             <p>
                 <label>City</label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="city" id="city"/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" style = "text-align:center;" placeholder="Enter City" name="city" id="city"/>
             <p>
                 <label>Postal Code</label>
             </p>
-            <input class="w3-input w3-border" type="text" maxlength="50" value="" name="postcode" id="postcode"/>
+            <input class="w3-input w3-border" type="text" maxlength="50" value="" style = "text-align:center;" placeholder=" Enter Postal Code" name="postcode" id="postcode"/>
 
             <p>
                 <label>Phone number<span class="w3-text-red">*</span></label>
             </p>
-            <input class="w3-input w3-border" type="tel" value="" name="phoneNumber"/>
+            <input class="w3-input w3-border" type="tel" value="" style = "text-align:center;" placeholder="Enter Phone Number" name="phoneNumber"/>
 
             <p>
                 <label>Facebook Link</label>
