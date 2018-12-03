@@ -1001,7 +1001,8 @@ function formatPendingMentorships($profile_account_id) {
                     } ?>
 
                     <?php if ($allowEdit) {
-                        echo '<hr><p class="w3-display-container" id="profile_resume"><button style="width: 100%" class="w3-button w3-red w3-cell" type="button" name="delete" onclick="document.getElementById(\'deleteAccountModal\').style.display=\'block\'">Delete Account</button><br>';
+                        echo '<hr><p class="w3-display-container" id="profile_security"><button style="width: 100%" class="w3-button w3-lime w3-cell" type="button" name="security" onclick="document.getElementById(\'questionModal\').style.display=\'block\'">Add Security Question</button><br>';
+                        echo '<p class="w3-display-container" id="profile_del"><button style="width: 100%" class="w3-button w3-red w3-cell" type="button" name="delete" onclick="document.getElementById(\'deleteAccountModal\').style.display=\'block\'">Delete Account</button><br>';
                     } ?>
 
                 </div>
@@ -1145,7 +1146,9 @@ if ($allowEdit) { echo "
         </div>
     </div>
     
-    ";} ?>
+    ";
+include "updateQuestions.php"; }
+?>
 
     <!-- End Page Container -->
 </div>
