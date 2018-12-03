@@ -146,6 +146,12 @@ require_once "session.php";
 			if(isset($_POST['security_question_B'])){
 				$questionB = trim($_POST['security_question_B']);
 				if ($questionB == $questionA){
+					$answerA = "";
+					$answerB = "";
+					$answerC = "";
+					$questionA = 0;
+					$questionB = 0;
+					$questionC = 0;
 					$msg .= "<span style='color:red'><br/>Question 1 and Question 2 are identical please change one or both of them!<br/></span>";
 				}
 			}
@@ -154,9 +160,21 @@ require_once "session.php";
 			if(isset($_POST['security_question_C'])){
 				$questionC = trim($_POST['security_question_C']);
 				if ($questionA == $questionC){
+					$answerA = "";
+					$answerB = "";
+					$answerC = "";
+					$questionA = 0;
+					$questionB = 0;
+					$questionC = 0;
 					$msg .= "<span style='color:red'><br/>Question 1 and Question 3 are identical please change one or both of them!<br/></span>";
 				}
 				if ($questionB == $questionC){
+					$answerA = "";
+					$answerB = "";
+					$answerC = "";
+					$questionA = 0;
+					$questionB = 0;
+					$questionC = 0;
 					$msg .= "<span style='color:red'><br/>Question 2 and Question 3 are identical please change one or both of them!<br/></span>";
 				}
 
