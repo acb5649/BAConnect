@@ -4,7 +4,7 @@ require_once "database.php";
 
 require_once "session.php";
 if(isset($_POST["security"])){
-    $_SESSION['email'] = trim($_POST['email']);
+    $_SESSION['remail'] = trim($_POST['remail']);
     echo "<script>document.getElementById('securityModal').style.display='block'';</script>";
     header('Location: index.php');
     die;

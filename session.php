@@ -8,8 +8,8 @@ if (isset($_SESSION['type'])) {
 } else {
     $type=0;
 }
-if (isset($_SESSION['email'])) {
-    $remail = $_SESSION['email'];
+if (isset($_SESSION['remail'])) {
+    $remail = $_SESSION['remail'];
 } else {
     $remail = "";
 }
