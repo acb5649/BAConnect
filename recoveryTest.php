@@ -113,7 +113,8 @@ require_once "session.php";
 		$con = null;
 		return $set;
 	}
-	$countSet = getSet(1);
+	$account_id = getAccountIDFromEmail($email);
+	$countSet = getSet($account_id);
 	$answerA = "";
 	$answerB = "";
 	$answerC = "";
@@ -205,21 +206,21 @@ require_once "session.php";
 		<?php if($countSet > 0){
 	 				print "<b>Question 1.</b><br/><br/>";
 					print '<select name="security_question_A" id="security_question_A" required><option value="">Select A Security Question</option>'; 
- 					echo loadOnSecurity(1); 
+ 					echo loadOnSecurity($account_id); 
 					print "</select><br/>";
 					print '<input type="password" maxlength = "150" value="'.$answerA.'" name="answerQuestion_A" id="answer_Q1" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
 				 }
 			if($countSet > 1){
 				print "<b>Question 2.</b><br/><br/>";
  				print '<select name="security_question_B" id="security_question_B" required><option value="">Select A Security Question</option>';
- 				echo loadOnSecurity(1);
+ 				echo loadOnSecurity($account_id);
 				print "</select><br/>";
 				print '<input type="password" maxlength = "150" value="'.$answerB.'" name="answerQuestion_B" id="answer_Q2" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
 			}
 			if($countSet > 2){
 		 		print "<b>Question 3.</b><br/><br/>";
  				print '<select name="security_question_C" id="security_question_C" required><option value="">Select A Security Question</option>';
- 				echo loadOnSecurity(1);
+ 				echo loadOnSecurity($account_id);
 				print"</select><br/>";
 		 		print'<input type="password" maxlength = "150" value="'.$answerC.'" name="answerQuestion_C" id="answer_Q3" placeholder="Enter Answer Here" required  /><br/><br/><br/>';
 			}
