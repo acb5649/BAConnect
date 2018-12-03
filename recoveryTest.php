@@ -75,7 +75,7 @@ require_once "session.php";
 			$stmt = $con->prepare("SELECT * FROM RecoveryQuestions WHERE account_ID = '" . $accountID . "' AND question_Number = '" . $question_Num . "' ORDER BY question_Number ASC");
 			$stmt->execute();
 			$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			if(strcasecmp($answer,$row['answer'])==0){
+			if((strtolower($answer)) === (strtolower($row['answer']))){
 				$con = null;
 				return True;
 				//return new Report("Success!", "An email has been sent to the address registered with your account.", "", TRUE);
