@@ -354,9 +354,9 @@ function registerNewResume($account_id, $resume) {
     $file = fopen($resume,'rb');
 
     $con = Connection::connect();
-    $stmt = $con->prepare("insert into Resumes (account_ID, file_extension, resume_file, ) values (?, ?, ?)");
+    $stmt = $con->prepare("insert into Resumes (account_ID, file_extension, resume_file) values (?, ?, ?)");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
-    $stmt->bindValue(2, pathinfo($file, PATHINFO_EXTENSION), PDO::PARAM_LOB);
+    $stmt->bindValue(2, pathinfo($resume, PATHINFO_EXTENSION), PDO::PARAM_STR);
     $stmt->bindValue(3, $file, PDO::PARAM_LOB);
     $stmt->execute();
     $con = null;

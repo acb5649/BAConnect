@@ -1,12 +1,13 @@
 <?php
 include_once "database.php";
+include_once "session.php";
 
-if (isset($_GET['account_id'])) {
+if (isset($_SESSION['profile_ID'])) {
     $con = Connection::connect();
     $result = $con->prepare("SELECT * FROM Resumes where account_ID = ?");
-    if ($result->execute(array($_GET['account_id']))) {
+    if ($result->execute(array($_SESSION['profile_ID']))) {
         $row = $result->fetch();
-        $filename = getName($_GET['account_id']) . "_resume." . $row['file_extension'];
+        $filename = getName($_SESSION['profile_ID']) . "_resume." . $row['file_extension'];
         $ctype = "";
         switch ($row['file_extension'])
         {
