@@ -198,7 +198,14 @@ if (isset($_POST['register'])) {
         $user = new User($_SESSION['username'], $_SESSION['password'], $_SESSION['firstName'], $_SESSION['middleName'], $_SESSION['lastName'], $_SESSION['email'], $_SESSION['gender'], $_SESSION['phoneNumber'], $_SESSION['status'], $_SESSION['preference']);
         $address = new Address($_SESSION['street'], $_SESSION['street2'], $_SESSION['city'], $_SESSION['postcode'], $_SESSION['state'], $_SESSION['country']);
         registerUser($user, $address, $degree, $work, $picturePath, $resumePath);
-        header("Location: created.php");
+        //header("Location: created.php");
+        $report = new Report("Registration Success", "Check email to confirm account", "", FALSE);
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        header("Location: index.php");
         die();
     } else {
         $report = new Report("Error in Registration!", $msg, "registerModal", FALSE);

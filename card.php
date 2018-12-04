@@ -10,7 +10,7 @@ function formatDegreesAndJobs($degrees, $jobs) {
     $result = "";
 
     foreach($degrees as $degree) {
-        $result = $result . "<p style='margin:0.5em;'><span class='w3-text-lime'><i class='fa fa-graduation-cap'></i><b> " . $degree[2] . "-" .$degree[3] . "</b></span> " . $degree[1] ."</p>";
+        $result = $result . "<p style='margin:0.5em;'><span class='w3-text-lime'><i class='fa fa-graduation-cap'></i><b> " . $degree[3] . "-" .$degree[2] . "</b></span> " . $degree[1] ."</p>";
         $result = $result . "<p style='margin:0.5em;'>" . $degree[0] . "</p>";
     }
 
@@ -20,7 +20,7 @@ function formatDegreesAndJobs($degrees, $jobs) {
 
     $result = $result . "<hr>";
     foreach($jobs as $job) {
-        $result = $result . "<p style='margin:0.5em;'><span class='w3-text-lime'><i class='fa fa-briefcase'></i><b> " . $job[3] . "-" .$job[2] . "</b></span> " . $job[1] ."</p>";
+        $result = $result . "<p style='margin:0.5em;'><span class='w3-text-lime'><i class='fa fa-briefcase'></i><b> " . $job[2] . "-" .$job[3] . "</b></span> " . $job[1] ."</p>";
         $result = $result . "<p style='margin:0.5em;'>" . $job[0]. "</p>";
     }
     return $result;
