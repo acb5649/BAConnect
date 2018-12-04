@@ -168,15 +168,15 @@ if (isset($_POST['register'])) {
         die();
     }
 }
-if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee'])) {
-	if ($type <= 2) {
+if(isset($_REQUEST['match']) && isset($_REQUEST['mentor']) && isset($_REQUEST['mentee'])) {
+	if ($type < 2) {
 		header("Location: index.php");
 		die;
-	} elseif ($type >2) {
+	} elseif ($type > 2) {
 
 		$con = Connection::connect();
 		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-		$stmt->bindValue(1, $_POST['mentor'], PDO::PARAM_STR);
+		$stmt->bindValue(1, $_REQUEST['mentor'], PDO::PARAM_STR);
 		$stmt->execute();
 		$row = $stmt->fetch();
 		if ($row == null) {
@@ -192,7 +192,7 @@ if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee']))
 		$mentorID = $row['account_ID'];
 
 		$stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-		$stmt->bindValue(1, $_POST['mentee'], PDO::PARAM_STR);
+		$stmt->bindValue(1, $_REQUEST['mentee'], PDO::PARAM_STR);
 		$stmt->execute();
 		$row = $stmt->fetch();
 		if ($row == null) {
@@ -208,7 +208,7 @@ if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee']))
 		$menteeID = $row['account_ID'];
 
 		proposeMentorship($mentorID, $menteeID, $_SESSION['account_ID']);
-        $report = new Report("Manual Match Completed", "Users were matched.", "matchModal", TRUE);
+        $report = new Report("Manual Match Completed", getName($mentorID) . " and " . getName($menteeID) . " are now matched.", "matchModal", TRUE);
         $_SESSION['title'] = $report->title;
         $_SESSION['msg'] = $report->msg;
         $_SESSION['nextModal'] = $report->nextModal;
