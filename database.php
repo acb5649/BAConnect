@@ -330,10 +330,12 @@ function deleteAccount($account_id){
 
     if($result == null){
         $report = new Report("No change", "The Account is already disabled", "", FALSE);
+        $con = null;
         return $report;
     }
     else{
         $report = new Report("Success", "The Account was successfully disabled", "", TRUE);
+        $con = null;
         return $report;
     }
 }
