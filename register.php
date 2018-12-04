@@ -6,6 +6,7 @@ if(isset($_SESSION['email'])){
 ?>
 
 <script src="js/showStates.js"></script>
+<script src="js/registration.js"></script>
 
 <div id="registerModal" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
