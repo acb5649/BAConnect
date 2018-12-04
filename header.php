@@ -70,8 +70,6 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
 
         if ($type > 1) {
 
-            print '';
-
             print '<div class="w3-dropdown-hover">
                     <button class="w3-bar-item w3-button w3-padding-large w3-hide-small">ADD...</button>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">

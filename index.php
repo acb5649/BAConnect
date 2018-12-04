@@ -153,6 +153,9 @@ if (isset($_POST['register'])) {
     if (!is_numeric($_SESSION['status']) || ($_SESSION['status'] != 0 && $_SESSION['status'] != 1)) {
         $error = true;
         $msg .= "\nInvalid status.";
+    } else if ($_SESSION['status'] == 1 && count($work) == 0) {
+        $error = true;
+        $msg .= "\nWorking Professionals must enter at least one job.";
     }
 
     // check that preference is in range
@@ -267,38 +270,6 @@ if(isset($_POST['match']) && isset($_POST['mentor']) && isset($_POST['mentee']))
         header("Location: index.php");
 		die;
 	}
-}
-if(isset($_POST['editSearch']) && isset($_POST['username'])) {
-
-    if(!isset($type)){
-        header("Location: index.php");
-        die;
-    }
-    if($type <= 2){
-        header("Location: index.php");
-        die;
-    }
-
-    $con = Connection::connect();
-    $stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE username = ?");
-    $stmt->bindValue(1, $_POST['username'], PDO::PARAM_STR);
-    $stmt->execute();
-
-    $row = $stmt->fetch();
-
-    if ($row == null) {
-        $report = new Report("Error in Profile Search", "There is no user with the given username.", "editModal", TRUE);
-        $_SESSION['title'] = $report->title;
-        $_SESSION['msg'] = $report->msg;
-        $_SESSION['nextModal'] = $report->nextModal;
-        $_SESSION['success'] = $report->success;
-        $_SESSION['inputs'] = $report->inputs;
-        header("Location: index.php");
-        die();
-    }
-
-    header("Location: profile.php?user=" . $row['account_ID']);
-    die;
 }
 
 if(isset($_POST['upgrade'])){
