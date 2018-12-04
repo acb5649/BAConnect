@@ -5,24 +5,6 @@ require_once "database.php";
 $allowEdit = FALSE;
 $trustedUser = FALSE;
 
-if(isset($_SESSION["profile_ID"])){
-    $con = Connection::connect();
-
-    $stmt = $con->prepare("SELECT * FROM `Account` WHERE active = 0 AND account_ID = ?");
-    $stmt->bindValue(1, $_SESSION['profile_ID'], PDO::PARAM_INT);
-    $stmt->execute();
-
-    $result = $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if($result != null){
-        $con = null;
-        header("Location: index.php");
-        die();
-    }
-
-    $con = null;
-}
-
 if (isset($_REQUEST["action"])) {
     if (isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
         if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
@@ -65,6 +47,24 @@ if (isset($_REQUEST["action"])) {
     }
 }
 
+if(isset($_SESSION["profile_ID"])){
+    $con = Connection::connect();
+
+    $stmt = $con->prepare("SELECT * FROM `Account` WHERE active = 0 AND account_ID = ?");
+    $stmt->bindValue(1, $_SESSION['profile_ID'], PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if($result != null){
+        $con = null;
+        header("Location: index.php");
+        die();
+    }
+
+    $con = null;
+}
+
 if (!isset($profile_account_id)) {
     header("Location: index.php");
     die();
@@ -82,32 +82,28 @@ if (isset($_SESSION["account_ID"])) {
     }
 }
 
-if (isset($_POST['delete'])) {
-    if (isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
-        if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
-            //code to delete accounts here
-            deleteAccount($_SESSION["profile_ID"]);
+if (isset($_POST['delete']) && isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
+    if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
+        deleteAccount($profile_account_id);
 
-            $_SESSION['title'] = "Account Deleted";
-            $_SESSION['msg'] = "You have been logged out.";
-            $_SESSION['nextModal'] = "";
-            $_SESSION['success'] = TRUE;
-            $_SESSION['inputs'] = null;
-            header("Location: logout.php");
-            die();
+        $_SESSION['title'] = "Account Deleted";
+        $_SESSION['msg'] = "You have been logged out.";
+        $_SESSION['nextModal'] = "";
+        $_SESSION['success'] = TRUE;
+        $_SESSION['inputs'] = null;
+        header("Location: logout.php");
+        die();
 
-        } elseif ($type > 2) {
-            //Code to delete accounts here
-            $report = deleteAccount($_SESSION["profile_ID"]);
+    } elseif ($type > 2) {
+        $report = deleteAccount($profile_account_id);
 
-            $_SESSION['title'] = $report->title;
-            $_SESSION['msg'] = $report->msg;
-            $_SESSION['nextModal'] = $report->nextModal;
-            $_SESSION['success'] = $report->success;
-            $_SESSION['inputs'] = $report->inputs;
-            header("Location: index.php");
-            die();
-        }
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        header("Location: index.php");
+        die();
     }
 }
 
