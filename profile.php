@@ -1016,7 +1016,7 @@ function formatPendingMentorships($profile_account_id) {
 
                     <?php if ($allowEdit) {
                         // show resume
-                        echo '<hr><p class="w3-display-container" id="profile_resume"><button class="w3-button w3-half w3-lime w3-cell" type="button" name="upload" onclick="document.getElementById(\'uploadResumeModal\').style.display=\'block\'">Upload Resume</button><button class="w3-button w3-half w3-lime w3-cell" type="button" name="download" onclick="downloadResume();">Download Resume</button><br>';
+                        echo '<hr><p class="w3-display-container" id="profile_resume"><button class="w3-button w3-half w3-lime w3-cell" type="button" name="upload" onclick="document.getElementById(\'uploadResumeModal\').style.display=\'block\'">Upload Resume</button><a class="w3-button w3-half w3-lime w3-cell" type="button" name="download" href="resume.php">Download Resume</a><br>';
                     } ?>
 
                     <?php if (isset($_SESSION["account_ID"]) && getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
