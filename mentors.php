@@ -22,7 +22,7 @@ require_once "card.php";
 <!-- Navbar -->
 <?php include "header.php"; ?>
 <!-- Page content -->
-<div id="mentorDisplay" class="flex-container" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; align-content: flex-start;">
+<div id="cardDisplay" class="flex-container" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; align-content: flex-start;">
 
 </div>
 </body>
@@ -59,7 +59,7 @@ require_once "card.php";
 
     function searchCards(num, startOver) {
         if (startOver) {
-            document.getElementById("mentorDisplay").innerHTML = "";
+            document.getElementById("cardDisplay").innerHTML = "";
             offset = 0;
         }
 
