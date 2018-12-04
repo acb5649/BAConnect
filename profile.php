@@ -66,6 +66,7 @@ if (isset($_POST['delete'])) {
     if (isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
         if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
             //code to delete accounts here
+            deleteAccount($_SESSION["profile_ID"]);
 
             $_SESSION['title'] = "Account Deleted";
             $_SESSION['msg'] = "You have been logged out.";
@@ -74,14 +75,16 @@ if (isset($_POST['delete'])) {
             $_SESSION['inputs'] = null;
             header("Location: logout.php");
             die;
+
         } elseif ($type > 2) {
             //Code to delete accounts here
+            $report = deleteAccount($_SESSION["profile_ID"]);
 
-            $_SESSION['title'] = "Account Deleted";
-            $_SESSION['msg'] = "User has been notified.";
-            $_SESSION['nextModal'] = "";
-            $_SESSION['success'] = TRUE;
-            $_SESSION['inputs'] = null;
+            $_SESSION['title'] = $report->title;
+            $_SESSION['msg'] = $report->msg;
+            $_SESSION['nextModal'] = $report->nextModal;
+            $_SESSION['success'] = $report->success;
+            $_SESSION['inputs'] = $report->inputs;
             header("Location: index.php");
             die;
         }
@@ -1074,7 +1077,7 @@ if ($allowEdit) { echo "
             </form>
         </div>
     </div>
-    
+
     <div id=\"uploadResumeModal\" class=\"w3-modal\">
         <div class=\"w3-modal-content w3-animate-top w3-card-4\">
             <header class=\"w3-container w3-lime w3-center w3-padding-32\">
@@ -1100,7 +1103,7 @@ if ($allowEdit) { echo "
             </form>
         </div>
     </div>
-    
+
     <div id=\"deleteAccountModal\" class=\"w3-modal\">
         <div class=\"w3-modal-content w3-animate-top w3-card-4\">
             <header class=\"w3-container w3-lime w3-center w3-padding-32\">
@@ -1121,7 +1124,7 @@ if ($allowEdit) { echo "
             </form>
         </div>
     </div>
-    
+
     <div id=\"changeNameModal\" class=\"w3-modal\">
         <div class=\"w3-modal-content w3-animate-top w3-card-4\">
             <header class=\"w3-container w3-lime w3-center w3-padding-32\">
@@ -1145,7 +1148,7 @@ if ($allowEdit) { echo "
             </form>
         </div>
     </div>
-    
+
     ";
 include "updateQuestions.php"; }
 ?>

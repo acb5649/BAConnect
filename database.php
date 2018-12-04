@@ -317,6 +317,27 @@ function verifyCode($code, $email) {
     return ($hash == $codeHash);
 }
 
+function deleteAccount($account_id){
+    $con = Connection::connect();
+    if($con == null){
+        $report = new Report("Error connecting to database", "We were unable to connect to the database at this time", "", FALSE);
+        return $report;
+    }
+
+    $stmt = $con->prepare("UPDATE `Account` SET active = 0 WHERE account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $result = $stmt->execute();
+
+    if($result == null){
+        $report = new Report("No change", "The Account is already disabled", "", FALSE);
+        return $report;
+    }
+    else{
+        $report = new Report("Success", "The Account was successfully disabled", "", TRUE);
+        return $report;
+    }
+}
+
 
 
 
