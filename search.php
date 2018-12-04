@@ -33,7 +33,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "loadCards") {
             $num = $_POST["num"];
 
             $con = Connection::connect();
-            $stmt = $con->prepare("SELECT `account_ID` FROM Information LIMIT ? OFFSET ?");
+            $stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE (active = 1) LIMIT ? OFFSET ?");
             $stmt->bindValue(1, (int)$num, PDO::PARAM_INT);
             $stmt->bindValue(2, (int)$offset, PDO::PARAM_INT);
             $stmt->execute();
@@ -46,7 +46,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "loadCards") {
             $search = Input::str($_POST["search"]);
 
             $con = Connection::connect();
-            $stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressGenderJobsDegreesView WHERE " . buildQueryString($search) . " LIMIT ? OFFSET ?");
+            $stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressGenderJobsDegreesView WHERE (active = 1) AND " . buildQueryString($search) . " LIMIT ? OFFSET ?");
             $stmt->bindValue(1, (int)$num, PDO::PARAM_INT);
             $stmt->bindValue(2, (int)$offset, PDO::PARAM_INT);
             $stmt->execute();
@@ -63,7 +63,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "loadCards") {
             $num = $_POST["num"];
 
             $con = Connection::connect();
-            $stmt = $con->prepare("SELECT `account_ID` FROM Information WHERE (mentorship_preference = ?) LIMIT ? OFFSET ?");
+            $stmt = $con->prepare("SELECT `account_ID` FROM Account WHERE (mentorship_preference = ?, active = 1) LIMIT ? OFFSET ?");
             $stmt->bindValue(1, (int)$pref, PDO::PARAM_INT);
             $stmt->bindValue(2, (int)$num, PDO::PARAM_INT);
             $stmt->bindValue(3, (int)$offset, PDO::PARAM_INT);
@@ -77,7 +77,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "loadCards") {
             $search = Input::str($_POST["search"]);
 
             $con = Connection::connect();
-            $stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressGenderJobsDegreesView WHERE (mentorship_preference = ?) AND " . buildQueryString($search) . " LIMIT ? OFFSET ?");
+            $stmt = $con->prepare("SELECT DISTINCT `account_ID` FROM UserAddressGenderJobsDegreesView WHERE (mentorship_preference = ?) AND (active = 1) AND " . buildQueryString($search) . " LIMIT ? OFFSET ?");
             $stmt->bindValue(1, (int)$pref, PDO::PARAM_INT);
             $stmt->bindValue(2, (int)$num, PDO::PARAM_INT);
             $stmt->bindValue(3, (int)$offset, PDO::PARAM_INT);
