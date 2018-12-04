@@ -5,6 +5,24 @@ require_once "database.php";
 $allowEdit = FALSE;
 $trustedUser = FALSE;
 
+if(isset($_SESSION["profile_ID"])){
+    $con = Connection::connect();
+
+    $stmt = $con->prepare("SELECT * FROM `Account` WHERE active = 0 AND account_ID = ?");
+    $stmt->bindValue(1, $_SESSION['profile_ID'], PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if($result != null){
+        $con = null;
+        header("Location: index.php");
+        die();
+    }
+
+    $con = null;
+}
+
 if (isset($_REQUEST["action"])) {
     if (isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
         if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
@@ -17,9 +35,11 @@ if (isset($_REQUEST["action"])) {
             $_SESSION['title'] = "Error: Forbidden Access";
             $_SESSION['msg'] = "Contact an admin if you believe this is a error.";
             header("location: index.php");
+            die();
         }
     } else {
         header("location: index.php");
+        die();
     }
 } else {
     if (isset($_SESSION["account_ID"])) {
@@ -74,7 +94,7 @@ if (isset($_POST['delete'])) {
             $_SESSION['success'] = TRUE;
             $_SESSION['inputs'] = null;
             header("Location: logout.php");
-            die;
+            die();
 
         } elseif ($type > 2) {
             //Code to delete accounts here
@@ -86,7 +106,7 @@ if (isset($_POST['delete'])) {
             $_SESSION['success'] = $report->success;
             $_SESSION['inputs'] = $report->inputs;
             header("Location: index.php");
-            die;
+            die();
         }
     }
 }
@@ -106,6 +126,7 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
 
     registerNewPicture($profile_account_id, $target);
     header("location: profile.php?user=" . $profile_account_id);
+    die();
 } elseif (isset($_POST['submit']) && isset($_FILES['resume'])) {
     $image_dir = 'documents';
     $image_dir_path = getcwd() . DIRECTORY_SEPARATOR . $image_dir;
@@ -121,6 +142,7 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
 
     registerNewResume($profile_account_id, $target);
     header("location: profile.php?user=" . $profile_account_id);
+    die();
 } elseif (isset($_POST['submit'])) {
     $con = Connection::connect();
 
