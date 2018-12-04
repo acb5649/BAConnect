@@ -68,19 +68,26 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
             print '<a class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right" href="logout.php">LOG OUT</a>';
         }
 
-        if($type > 1){
+        if ($type > 1) {
 
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
+            print '';
 
-			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="pendingmentorships.php">VIEW PENDING PAIRS</a>';
-			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="currentmentorships.php">VIEW CURRENT PAIRS</a>';
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="endedmentorships.php">VIEW ENDED PAIRS</a>';
-        }
+            print '<div class="w3-dropdown-hover">
+                    <button class="w3-bar-item w3-button w3-padding-large w3-hide-small">ADD...</button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById(' . "'registerModal'" . ').style.display=' . "'block'" . '">ADD USER</a>
+                        <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addCountryModal'".').style.display='."'block'".'">ADD COUNTRY</a>
+                        <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addStateModal'".').style.display='."'block'".'">ADD STATE</a>
+                        <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addDegreeModal'".').style.display='."'block'".'">ADD DEGREE TYPE</a>
+                    </div></div>';
 
-        if($type > 2){
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addCountryModal'".').style.display='."'block'".'">ADD COUNTRY</a>';
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addDegreeModal'".').style.display='."'block'".'">ADD DEGREE TYPE</a>';
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'addStateModal'".').style.display='."'block'".'">ADD STATE</a>';
+            print '<div class="w3-dropdown-hover">
+                    <button class="w3-bar-item w3-button w3-padding-large w3-hide-small">VIEW...</button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="pendingmentorships.php">VIEW PENDING PAIRS</a>
+                        <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="currentmentorships.php">VIEW CURRENT PAIRS</a>
+                        <a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="endedmentorships.php">VIEW ENDED PAIRS</a>
+                    </div></div>';
         }
 
         ?>
@@ -130,16 +137,14 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
 
     if($type > 1){
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addCountryModal'".').style.display='."'block'".'">ADD COUNTRY</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addDegreeModal'".').style.display='."'block'".'">ADD DEGREE TYPE</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addStateModal'".').style.display='."'block'".'">ADD STATE</a>';
 
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="pendingmentorships.php">VIEW PENDING PAIRS</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="currentmentorships.php">VIEW CURRENT PAIRS</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="endedmentorships.php">VIEW ENDED PAIRS</a>';
     }
 
-    if($type > 2){
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addCountryModal'".').style.display='."'block'".'">ADD COUNTRY</a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addDegreeModal'".').style.display='."'block'".'">ADD DEGREE TYPE</a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'addStateModal'".').style.display='."'block'".'">ADD STATE</a>';
-    }
     ?>
 </div>
