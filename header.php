@@ -117,6 +117,10 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
 
     if($type > 0){
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="profile.php">PROFILE</a>';
+        $filename = basename($_SERVER['REQUEST_URI']);
+        if ($filename == "index.php" || $filename == "mentors.php" || $filename == "mentees.php" || $filename == "courseproject") {
+            print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav(); openSearch(\'search\')">SEARCH</a>';
+        }
         print '<a class="w3-bar-item w3-button w3-padding-large" href="mentors.php">MENTORS</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" href="mentees.php">MENTEES</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" href="logout.php">LOG OUT</a>';

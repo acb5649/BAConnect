@@ -1,16 +1,16 @@
 function cardAjax(ids) {
     ids.forEach(function(id) {
-        if (!$('#mentorDisplay').find('#' + id["account_ID"]).length) {
+        if (!$('#cardDisplay').find('#' + id["account_ID"]).length) {
             let cached = sessionStorage.getItem(id["account_ID"]);
             if (cached != null) {
-                document.getElementById("mentorDisplay").innerHTML += cached;
+                document.getElementById("cardDisplay").innerHTML += cached;
                 imageAjax(id);
             } else {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         sessionStorage.setItem(id["account_ID"], this.responseText);
-                        document.getElementById("mentorDisplay").innerHTML += this.responseText;
+                        document.getElementById("cardDisplay").innerHTML += this.responseText;
                         imageAjax(id);
                     }
                 };
