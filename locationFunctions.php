@@ -346,6 +346,9 @@ function deleteCountry($country_ID){
         $report = new Report("Failed to disable country", "There was an error while trying to disable the country", "addCountry", FALSE);
     }
 
+    $stmt = $con->prepare("UPDATE `States` SET enabled = 0 WHERE country_ID = ?");
+    $stmt->bindValue(1, $country_ID, PDO::PARAM_INT);
+
     $con = null;
     $stmt = null;
     return $report;
@@ -370,6 +373,17 @@ function getStateID($account_id) {
     return $result['state'];
 }
 
+//returns all enabled states in the form of an array, not for displaying.
+function getStatesArray(){
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT country_ID, state_name, state_ID FROM States WHERE enabled = 1");
+    $stmt->execute();
+    $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $list;
+}
+
+//returns all states belonging to the given country, for use in drop-down lists.
 function getStatesList($countryID, $account_id = -1){
     $con = Connection::connect();
     $stmt = $con->prepare("SELECT state_name, state_ID FROM States WHERE country_ID = ? AND enabled = 1");

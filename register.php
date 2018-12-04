@@ -1,6 +1,8 @@
 <?php
 require_once "dbhelper.php";
-
+if(isset($_SESSION['email'])){
+    $_SESSION['email']= "";
+}
 ?>
 
 <script src="js/showStates.js"></script>
@@ -59,7 +61,7 @@ require_once "dbhelper.php";
                 <label>State/Province<span class="w3-text-red">*</span></label>
             </p>
             <select class="w3-select w3-border" name="state" id="state">
-
+                <option value= '-1'>Please select a State/Province</option>
             </select>
 
             <p>

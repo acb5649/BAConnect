@@ -18,18 +18,13 @@ require_once "session.php";
 if ($type == 0) {
     include "login.php";
     include "forgot.php";
+    include "recovery.php";
 }
 
 if ($type > 2) {
     include "addCountry.php";
     include "addDegreeType.php";
     include "addState.php";
-}
-
-if ($type > 1) {
-    include "match.php";
-    include "edit.php";
-    include "upgrade.php";
 }
 
 include "register.php";
@@ -41,7 +36,7 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
     unset($_SESSION['title']);
     unset($_SESSION['msg']);
     unset($_SESSION['nextModal']);
-    if(isset($_SESSION['success'])){
+    if(isset($_SESSION['success'])) {
         unset($_SESSION['success']);
     }
 }
@@ -63,21 +58,22 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
         if($type > 0){
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="profile.php">PROFILE</a>';
             $filename = basename($_SERVER['REQUEST_URI']);
-            if ($filename == "index.php" || $filename == "courseproject") {
+            if ($filename == "index.php" || $filename == "mentors.php" || $filename == "mentees.php" || $filename == "courseproject") {
                 print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="openSearch(\'search\')">SEARCH</a>';
             }
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="mentors.php">MENTORS</a>';
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="mentees.php">MENTEES</a>';
+
             print '<a class="w3-bar-item w3-button w3-hover-red w3-padding-large w3-hide-small w3-right" href="logout.php">LOG OUT</a>';
         }
 
         if($type > 1){
 
             print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'editModal'".').style.display='."'block'".'">EDIT USER</a>';
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'upgradeModal'".').style.display='."'block'".'">PROMOTE USER</a>';
-            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" onclick="document.getElementById('."'matchModal'".').style.display='."'block'".'">MATCH USERS</a>';
 
 			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="pendingmentorships.php">VIEW PENDING PAIRS</a>';
-			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="mentorships.php">VIEW PAIRS</a>';
+			print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="currentmentorships.php">VIEW CURRENT PAIRS</a>';
+            print '<a class="w3-bar-item w3-button w3-padding-large w3-hide-small" href="endedmentorships.php">VIEW ENDED PAIRS</a>';
         }
 
         if($type > 2){
@@ -90,7 +86,7 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
     </div>
     <?php
         $filename = basename($_SERVER['REQUEST_URI']);
-        if ($filename == "index.php" || $filename == "courseproject") {
+        if ($filename == "index.php" || $filename == "mentors.php" || $filename == "mentees.php" || $filename == "courseproject") {
             echo "<div id=\"search\" class=\"w3-center w3-hide w3-container w3-card w3-dark-grey w3-animate-top w3-padding-16\" style=\"width: 50%; margin: auto; z-index: -1;\">
                     <input id=\"searchBox\" class=\"w3-input w3-border\" type=\"text\" placeholder=\"Search...\" style=\"width: 100%\" onkeyup=\"searchCards(30, true)\">
                   </div>";
@@ -121,17 +117,17 @@ if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
 
     if($type > 0){
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="profile.php">PROFILE</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" href="mentors.php">MENTORS</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" href="mentees.php">MENTEES</a>';
         print '<a class="w3-bar-item w3-button w3-padding-large" href="logout.php">LOG OUT</a>';
     }
 
     if($type > 1){
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'registerModal'".').style.display='."'block'".'">ADD USER</a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'editModal'".').style.display='."'block'".'">EDIT USER</a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'upgradeModal'".').style.display='."'block'".'">PROMOTE USER</a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();document.getElementById('."'matchModal'".').style.display='."'block'".'">MATCH USERS</a>';
 
         print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="pendingmentorships.php">VIEW PENDING PAIRS</a>';
-        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="mentorships.php">VIEW PAIRS</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="currentmentorships.php">VIEW CURRENT PAIRS</a>';
+        print '<a class="w3-bar-item w3-button w3-padding-large" onclick="toggleNav();" href="endedmentorships.php">VIEW ENDED PAIRS</a>';
     }
 
     if($type > 2){

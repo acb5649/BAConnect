@@ -46,7 +46,8 @@ function getPendingMentorships($account_id = null){
     return $list;
 }
 
-function pendingMentorshipResponse($account_id, $pending_id, $response){
+function pendingMentorshipResponse($account_id, $pending_id, $response)
+{
     //$mentee;
     $con = Connection::connect();
 
@@ -56,78 +57,76 @@ function pendingMentorshipResponse($account_id, $pending_id, $response){
 
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if($result == null){
+    if ($result == null) {
         $report = new Report("Error", "The selected Pending Mentorship is invalid", NULL, FALSE);
         return $report;
     }
 
-    if($account_id == $result['mentor_ID']){
-        if($response == 1){
-            if($result['mentor_status'] == "1"){
+    // If user is an admin, they can force approve mentorships.
+    if (getAccountTypeFromAccountID($account_id) > 1) {
+        if ($response == 1) {
+            $stmt = $con->prepare("UPDATE `Pending Mentorship` SET mentee_status = 1, mentor_status = 1 WHERE pending_ID = ?");
+            $stmt->bindValue(1, $pending_id, PDO::PARAM_INT);
+            $stmt->execute();
+            resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+            $report = new Report("Success", "You have successfully approved of this mentorship", NULL, TRUE);
+            return $report;
+        } else {
+            resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
+            $report = new Report("Success", "You have successfully rejected this mentorship", NULL, TRUE);
+            return $report;
+        }
+    }
+
+    if ($account_id == $result['mentor_ID']) {
+        if ($response == 1) {
+            if ($result['mentor_status'] == "1") {
                 $con = null;
                 $report = new Report("Error", "You have already approved of this mentorship", NULL, FALSE);
                 return $report; //this user has already approved of this relationghip, so nothing happens.
-            }
-            else{
+            } else {
                 $stmt = $con->prepare("UPDATE `Pending Mentorship` SET mentor_status = 1 WHERE pending_ID = ?");
                 $stmt->bindValue(1, $pending_id, PDO::PARAM_INT);
                 $stmt->execute();
-                if($result['mentee_status'] == "1"){
+                if ($result['mentee_status'] == "1") {
                     resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
                 }
                 $con = null;
-                $report = new Report("Success", "You have Successfully approved of this mentorship", NULL, TRUE);
+                $report = new Report("Success", "You have successfully approved of this mentorship", NULL, TRUE);
                 return $report;
             }
-        }
-        else{
+        } else {
             resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
             $con = null;
-            $report = new Report("Success", "You have Successfully rejected this mentorship", NULL, TRUE);
+            $report = new Report("Success", "You have successfully rejected this mentorship", NULL, TRUE);
             return $report;
         }
-    }
-    else if($account_id == $result['mentee_ID']){
-        if($response == 1){
-            if($result['mentee_status'] == "1"){
+    } else if ($account_id == $result['mentee_ID']) {
+        if ($response == 1) {
+            if ($result['mentee_status'] == "1") {
                 $con = null;
                 $report = new Report("Error", "You have already approved of this mentorship", NULL, FALSE);
                 return $report; //this user has already approved of this relationghip, so nothing happens.
-            }
-            else{
+            } else {
                 $stmt = $con->prepare("UPDATE `Pending Mentorship` SET mentee_status = 1 WHERE pending_ID = ?");
                 $stmt->bindValue(1, $pending_id, PDO::PARAM_INT);
                 $stmt->execute();
-                if($result['mentor_status'] == "1"){
+                if ($result['mentor_status'] == "1") {
                     resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
                 }
                 $con = null;
-                $report = new Report("Success", "You have Successfully approved of this mentorship", NULL, TRUE);
+                $report = new Report("Success", "You have successfully approved of this mentorship", NULL, TRUE);
                 return $report;
             }
-        }
-        else{
+        } else {
             resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
             $con = null;
-            $report = new Report("Success", "You have Successfully rejected this mentorship", NULL, TRUE);
+            $report = new Report("Success", "You have successfully rejected this mentorship", NULL, TRUE);
             return $report;
-        }
-    }
-    else{
-
-        if(getAccountTypeFromAccountID($account_id) == "1"){
-            //the current user isn't the mentee, mentor, or an admin, so they shouldn't be here.
-            $con = null;
-            $report = new Report("Error", "You do not have permission to vote on this mentorship", NULL, FALSE);
-            return $report;
-        }
-        else{
-            resolvePendingMentorship($result['mentor_ID'], $result['mentee_ID'], $account_id);
-
-            $report = new Report("Success", "You have Successfully rejected this mentorship", NULL, TRUE);
         }
     }
     $con = null;
+    $report = new Report("Error", "Unknown error.", NULL, FALSE);
     return $report;
 }
 //this function will create an entry in the Mentorship table based on the info in the related entry
@@ -322,7 +321,7 @@ function getRejectedMentorships($account_id = null){
     return $list;
 }
 //a mentorship that was started but later ended will have NEITHER it's 'start' nor 'end' dates set to null
-function getEndedMentorships($account_id){
+function getEndedMentorships($account_id = null){
     $con = Connection::connect();
 
     if($account_id != null){
@@ -346,7 +345,8 @@ function getEndedMentorships($account_id){
 
 function proposeMentorship($mentorID, $menteeID, $proposerID){
     if($mentorID == $menteeID){
-        return "mentor and mentee are the same";
+        $report = new Report("Error", "The proposed mentor and mentee are the same user.", "", FALSE);
+        return $report;
     }
     $mentorPreference = getUserMentorshipPreference($mentorID);
     $menteePreference = getUserMentorshipPreference($menteeID);
@@ -357,7 +357,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
             $menteeID = $temp;
         }
         else{
-            $report = new Report("Error", "The proposed mentor and mentee have incompatible preferences", NULL, FALSE);
+            $report = new Report("Error", "The proposed mentor and mentee have incompatible preferences", "", FALSE);
             return $report;
         }
     }
@@ -372,7 +372,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
 
     if($result != null){
         $con = null;
-        $report = new Report("Duplicate detected", "Duplicate mentorships are not allowed", NULL, FALSE);
+        $report = new Report("Duplicate detected", "Duplicate mentorships are not allowed", "", FALSE);
         return $report;
     }
 
@@ -384,7 +384,7 @@ function proposeMentorship($mentorID, $menteeID, $proposerID){
 
     if($result != null){
         $con = null;
-        $report = new Report("Duplicate detected", "Duplicate mentorships are not allowed", NULL, FALSE);
+        $report = new Report("Duplicate detected", "Duplicate mentorships are not allowed", "", FALSE);
         return $report;
     }
 

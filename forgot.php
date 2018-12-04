@@ -1,20 +1,17 @@
 <?php
-
 require_once "database.php";
-
 require_once "session.php";
 
-if (isset($_POST['submit'])) {
-    require_once "database.php";
-    $user_email = $_POST['email'];
-    $report = resetPassword($user_email);
+if(isset($_POST["security"]) && isset($_POST["email"])){
+    $_SESSION['recovery_email'] = Input::email($_POST['email']);
+    $report = new Report("Security Audit", "Please answer your security questions to reset the account for " . $_SESSION['email'], "securityModal", true);
     $_SESSION['title'] = $report->title;
     $_SESSION['msg'] = $report->msg;
     $_SESSION['nextModal'] = $report->nextModal;
     $_SESSION['success'] = $report->success;
     $_SESSION['inputs'] = $report->inputs;
-    header("Location: index.php");
-    die();
+    header('Location: index.php');
+    die;
 }
 ?>
 
@@ -32,7 +29,7 @@ if (isset($_POST['submit'])) {
                 </label>
             </p>
             <input class="w3-input w3-border" type="text" placeholder="" name="email" id="email">
-            <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="submit">
+            <button class="w3-button w3-block w3-lime w3-padding-16 w3-section w3-right" type="submit" name="security">
                 Reset Password
                 <i class="fa fa-check"></i>
             </button>

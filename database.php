@@ -18,7 +18,11 @@ class Report{
         if((strpos($next, 'Modal') === false) && $next != ""){
             $next = $next . "Modal";
         }
-        $this->nextModal = $next;
+        if ($next == null) {
+            $this->nextModal = "";
+        } else {
+            $this->nextModal = $next;
+        }
         $this->success = $worked;
         $this->inputs = null;
     }
@@ -165,7 +169,7 @@ function resetPassword($email) {
     $stmt->bindValue(1, $email, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn() < 1) {
-        return new Report("Error", "This email address is not associated with an account.", "forgotModal", FALSE);
+        return new Report("Error", "This email address (" . $email . ") is not associated with an account.", "forgotModal", FALSE);
     }
 
     $account_id = getAccountIDFromEmail($email);
@@ -185,7 +189,7 @@ function resetPassword($email) {
 
         $url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-        $url = str_replace("forgot.php", "verify.php", $url);
+        $url = str_replace("recovery.php", "verify.php", $url);
 
         mail($email, "BAConnect: Reset Your Password", "Click this link to reset your password: http://" . $url . "?code=" . $code . "&email=" . urlencode($email) . "&type=reset");
 
@@ -264,11 +268,34 @@ function login($username, $password) {
         return $report;
     }
 
-    $stmt = $con->prepare("select password from Account where account_ID = ?");
+    $stmt = $con->prepare("select password, active from Account where account_ID = ?");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $con = null;
+
+    $active = $row['active'];
+
+    $stmt = $con->prepare("select password, active from Account where account_ID = ? AND active = 0");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if($result != null){
+        $stmt = $con->prepare("SELECT * FROM Registration where account_ID = ?");
+        $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($result == null){
+            $report = new Report("Error", "Invalid username or password", "login", FALSE);
+        }
+        else{
+            $report = new Report("Incomplete Registration", "An email was sent to the given email address, please follow the link to finish registering your account", "login", FALSE);
+        }
+
+        return $report;
+
+    }
 
     if($password == $row['password']){
         $report = new Report("Success", "Login Successful", "login", TRUE);
@@ -317,11 +344,10 @@ function registerNewWork($account_id, $workHistory) {
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->bindValue(2, $workHistory->companyName, PDO::PARAM_STR);
     $stmt->bindValue(3, $workHistory->jobTitle, PDO::PARAM_STR);
-    $stmt->bindValue(3, $workHistory->startYear, PDO::PARAM_INT);
-    $stmt->bindValue(4, $workHistory->endYear, PDO::PARAM_INT);
+    $stmt->bindValue(4, $workHistory->startYear, PDO::PARAM_INT);
+    $stmt->bindValue(5, $workHistory->endYear, PDO::PARAM_INT);
     $stmt->execute();
 
-    $stmt->execute();
     $con = null;
 }
 
@@ -471,7 +497,11 @@ function getAccountTypeFromAccountID($account_id) {
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $con = null;
-    return $row['type'];
+    if ($row['type'] == null) {
+        return 0;
+    } else {
+        return $row['type'];
+    }
 }
 
 function getAccountIDFromUsername($username) {
@@ -494,9 +524,19 @@ function getAccountIDFromEmail($email) {
     return $row['account_ID'];
 }
 
+function getUsernameFromAccountID($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select username from Account where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $con = null;
+    return $row['username'];
+}
+
 function getName($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from Information where account_ID = ?");
+    $stmt = $con->prepare("select first_name, middle_name, last_name from Information where account_ID = ?");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -504,12 +544,26 @@ function getName($account_id) {
         return "Missing Name";
     }
     $con = null;
-    return $row['first_name'] . " " . $row['middle_name'] . " " . $row['last_name'];
+    if ($row['middle_name'] == "") {
+        return $row['first_name'] . " " . $row['last_name'];
+    } else {
+        return $row['first_name'] . " " . $row['middle_name'] . " " . $row['last_name'];
+    }
+}
+
+function getNameArray($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select first_name, middle_name, last_name from Information where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $con = null;
+    return array($row['first_name'], $row['middle_name'], $row['last_name']);
 }
 
 function getEmail($account_id) {
     $con = Connection::connect();
-    $stmt = $con->prepare("select * from Information where account_ID = ?");
+    $stmt = $con->prepare("select email_address from Information where account_ID = ?");
     $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -577,6 +631,34 @@ function getPhoneNumber($account_id) {
     }
     $con = null;
     return $row['phone_number'];
+}
+
+function getFormattedPhoneNumber($account_id) {
+    $phoneNumber = getPhoneNumber($account_id);
+
+    if(strlen($phoneNumber) > 10) {
+        $countryCode = substr($phoneNumber, 0, strlen($phoneNumber)-10);
+        $areaCode = substr($phoneNumber, -10, 3);
+        $nextThree = substr($phoneNumber, -7, 3);
+        $lastFour = substr($phoneNumber, -4, 4);
+
+        $phoneNumber = '+'.$countryCode.' ('.$areaCode.') '.$nextThree.'-'.$lastFour;
+    }
+    else if(strlen($phoneNumber) == 10) {
+        $areaCode = substr($phoneNumber, 0, 3);
+        $nextThree = substr($phoneNumber, 3, 3);
+        $lastFour = substr($phoneNumber, 6, 4);
+
+        $phoneNumber = '('.$areaCode.') '.$nextThree.'-'.$lastFour;
+    }
+    else if(strlen($phoneNumber) == 7) {
+        $nextThree = substr($phoneNumber, 0, 3);
+        $lastFour = substr($phoneNumber, 3, 4);
+
+        $phoneNumber = $nextThree.'-'.$lastFour;
+    }
+
+    return $phoneNumber;
 }
 
 function getGender($account_id) {
@@ -670,4 +752,69 @@ function getTwitterLink($account_id) {
     }
     $con = null;
     return $row['twitter'];
+}
+
+function getPrivilege($account_id) {
+    $con = Connection::connect();
+    $stmt = $con->prepare("select type from `Account` where account_ID = ?");
+    $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $con = null;
+    if($row['type'] == "0"){
+        return "Unregistered";
+    } elseif($row['type'] == "1"){
+        return "User";
+    } elseif($row['type'] == "2"){
+        return "Coordinator";
+    } elseif($row['type'] == "3"){
+        return "Admin";
+    } elseif($row['type'] == "4"){
+        return "Super Admin";
+    }
+    return "";
+}
+
+function getUpgradeTiers($account_id) {
+    $list = "";
+    $rank = getAccountTypeFromAccountID($account_id);
+    $types = array(1 => "User", 2 => "Coordinator", 3 => "Admin");
+
+    for ($x = 1; $x < 4 && $x < $rank; $x++) {
+        $list = $list . '<option value = "' . $x . '">' . $types[$x] . '</option>';
+    }
+    return $list;
+}
+
+function formatAdminPairingBox() {
+    $result = "";
+    if (isset($_SESSION['pair_user'])) {
+        $result .= '<p class="w3-display-container" id="admin_pair_selector"><button style="width: 100%" class="w3-button w3-lime w3-margin-top" type="button" name="select" onclick="adminFinishPair()">Pair This User with ' . getName($_SESSION['pair_user']) . '</button>';
+        $result .= '<p class="w3-display-container" id="admin_stop_selector"><button style="width: 100%" class="w3-button w3-red" type="button" name="select" onclick="adminClearPair()">Stop Pairing for ' . getName($_SESSION['pair_user']) . '</button>';
+    } else {
+        $result .= '<p class="w3-display-container" id="admin_start_selector"><button style="width: 100%" class="w3-button w3-lime w3-margin-top" type="button" name="select" onclick="adminStartPair();">Select User for Pairing</button>';
+    }
+    return $result;
+}
+
+function query_to_csv($result, $filename, $attachment = false, $headers = true) {
+
+    if($attachment) {
+        // send response headers to the browser
+        header( 'Content-Type: text/csv' );
+        header( 'Content-Disposition: attachment;filename='.$filename);
+        $fp = fopen('php://output', 'w');
+    } else {
+        $fp = fopen($filename, 'w');
+    }
+
+    if($headers) {
+        fputcsv($fp, array_keys($result[0]));
+    }
+
+    foreach($result as $row) {
+        fputcsv($fp, $row);
+    }
+
+    fclose($fp);
 }
