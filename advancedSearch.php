@@ -2,7 +2,7 @@
 require_once "session.php";
 require_once "database.php";
 
-if ($type < 2) {
+if ($type < 1) {
 	header("location: index.php");
 	die();
 }
@@ -20,7 +20,16 @@ function getSearchResults() {
 
 function formatSearch() {
 	$users = getSearchResults();
-	$tableColumns = array('account_ID', 'state', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'gender', 'email_address', 'phone_number', 'gender_desc', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
+	global $type;
+	if ($type == 1) {
+		$tableColumns = array('first_name', 'last_name', 'gender_desc');
+	}
+	elseif ($type == 2) {
+		$tableColumns = array('account_ID', 'state', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'gender_desc', 'email_address', 'phone_number', 'gender_desc', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
+	}
+	elseif ($type == 3) {
+		$tableColumns = array('account_ID', 'state', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'gender_desc', 'email_address', 'phone_number', 'gender_desc', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
+	}
 	$result = "<table id='searchResults' class='display'><thead><tr>";
 	foreach($tableColumns as $column) {
 		$result .= "<th>" . $column . "</th>";
@@ -29,7 +38,7 @@ function formatSearch() {
 	foreach($users as $user) {
 		$result .= '<tr>';
 		foreach($tableColumns as $column) {
-			$result .= '<th><h6><a href="profile.php?user=' . $user['account_ID'] . '">' . $user[$column] . '</a>';
+			$result .= '<th><h6><a href="profile.php?user=' . $user['account_ID'] . '">' . $user[$column] . '</a></h6></th>';
 		}
 		$result .= '</tr>';
 	}
