@@ -86,17 +86,6 @@ require_once "card.php";
         offset += num;
     }
 
-    window.compatibleInnerHeight= function(){
-        if(window.innerWidth != undefined){
-            return window.innerHeight;
-        }
-        else{
-            var B= document.body,
-                D= document.documentElement;
-            return Math.max(D.clientHeight, B.clientHeight);
-        }
-    };
-
     $(window).on("load", function(){
         $(window).on("scroll", function(){
             if (($(window).scrollTop() - ($(document).height() - $(window).height()) <= 5) && ($(window).scrollTop() - ($(document).height() - $(window).height()) >= -5)) {

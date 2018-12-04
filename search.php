@@ -9,7 +9,7 @@ function buildQueryString($search) {
     $columns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
     for ($i = 0; $i < count($words); $i++) {
         if ($i != 0) {
-            $match .= "OR ";
+            $match .= "AND ";
         }
         for ($j = 0; $j < count($columns); $j++) {
             $match .= "(`" . $columns[$j] . "` LIKE '%" . $words[$i] . "%') ";

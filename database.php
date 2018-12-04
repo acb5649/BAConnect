@@ -1,5 +1,6 @@
 <?php
 
+require_once "session.php";
 require_once "dbhelper.php";
 require_once "locationFunctions.php";
 require_once "mentorshipFunctions.php";
@@ -812,9 +813,13 @@ function getUpgradeTiers($account_id) {
 
 function formatAdminPairingBox() {
     $result = "";
-    if (isset($_SESSION['pair_user'])) {
-        $result .= '<p class="w3-display-container" id="admin_pair_selector"><button style="width: 100%" class="w3-button w3-lime w3-margin-top" type="button" name="select" onclick="adminFinishPair()">Pair This User with ' . getName($_SESSION['pair_user']) . '</button>';
-        $result .= '<p class="w3-display-container" id="admin_stop_selector"><button style="width: 100%" class="w3-button w3-red" type="button" name="select" onclick="adminClearPair()">Stop Pairing for ' . getName($_SESSION['pair_user']) . '</button>';
+    if (isset($_SESSION['pair_user']) && isset($_SESSION['profile_ID'])) {
+        if ($_SESSION["profile_ID"] != $_SESSION['pair_user']) {
+            $result .= '<p class="w3-display-container" id="admin_pair_selector"><button style="width: 100%" class="w3-button w3-lime w3-margin-top" type="button" name="select" onclick="adminFinishPair()">Pair ' . getName($_SESSION['profile_ID']) . ' with ' . getName($_SESSION['pair_user']) . '</button>';
+            $result .= '<p class="w3-display-container" id="admin_stop_selector"><button style="width: 100%" class="w3-button w3-red" type="button" name="select" onclick="adminClearPair()">Stop Pairing for ' . getName($_SESSION['pair_user']) . '</button>';
+        } else {
+            $result .= '<p class="w3-display-container" id="admin_stop_selector"><button style="width: 100%" class="w3-button w3-red w3-margin-top" type="button" name="select" onclick="adminClearPair()">Stop Pairing for ' . getName($_SESSION['pair_user']) . '</button>';
+        }
     } else {
         $result .= '<p class="w3-display-container" id="admin_start_selector"><button style="width: 100%" class="w3-button w3-lime w3-margin-top" type="button" name="select" onclick="adminStartPair();">Select User for Pairing</button>';
     }
