@@ -38,7 +38,7 @@ function createCard($account_id) {
     //$imageSrc = file_get_contents("http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id);
     //$imageSrc = "http://corsair.cs.iupui.edu:22891/courseproject/image.php?account_id=" . $account_id;
 
-    return '<div class="w3-container" style="display: inline-block; text-align: center;">
+    return '<div class="w3-container" style="display: inline-block; text-align: center; order: ' . $account_id . ';">
   <div class="w3-card-4 w3-margin-bottom">
   <header class="w3-container w3-pale-red">
     <h3>'.$user->formatName().'</h3>

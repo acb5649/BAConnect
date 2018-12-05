@@ -28,17 +28,17 @@ if ($type == 0) {
     include "login.php";
     include "forgot.php";
     include "recovery.php";
+    include "register.php";
 }
 
-if ($type > 2) {
+if ($type > 1) {
+    include "register.php";
     include "addCountry.php";
     include "addDegreeType.php";
     include "addState.php";
 }
 
-include "register.php";
-
-require_once "dialog.php";
+include "dialog.php";
 
 if (isset($_SESSION['title']) && isset($_SESSION['msg'])) {
     echo "<script>document.getElementById('dialogModal').style.display='block'</script>";

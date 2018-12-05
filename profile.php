@@ -13,6 +13,9 @@ if (isset($_REQUEST["action"]) || isset($_REQUEST["delete"])) {
         } elseif ($type > 2) {
             // user is an admin, not a coordinator, performing an edit action
             $profile_account_id = $_SESSION["profile_ID"];
+        } elseif ($_REQUEST['action'] == "sendMentorshipRequest") {
+            // user is only attempting to do a mentorship request
+            $profile_account_id = $_SESSION["profile_ID"];
         } else {
             $_SESSION['title'] = "Error: Forbidden Access";
             $_SESSION['msg'] = "Contact an admin if you believe this is a error.";
@@ -396,7 +399,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "endMentorship") {
 }
 
 if(isset($_REQUEST['action']) && $_REQUEST['action'] == "sendMentorshipRequest"){
-    $user = $_REQUEST['user'];
+    $user = $profile_account_id;
     $proposerID = $_SESSION['account_ID'];
 
     $report = proposeMentorship($user, $proposerID, $proposerID);
@@ -407,7 +410,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == "sendMentorshipRequest")
     $_SESSION['success'] = $report->success;
     $_SESSION['inputs'] = $report->inputs;
 
-    header("Location: profile.php?user=" . $_REQUEST['user']);
+    //header("Location: profile.php?user=" . $profile_account_id);
     die();
 }
 
@@ -723,11 +726,13 @@ function formatPendingMentorships($profile_account_id) {
             xmlhttp.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){
                     $('#request').attr("disabled",true);
+                    location.reload();
                 }
             };
 
-            xmlhttp.open("POST", "profile.php?action=sendMentorshipRequest&user=<?php echo $profile_account_id?>", true);
-            xmlhttp.send();
+            xmlhttp.open("POST", "profile.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("action=sendMentorshipRequest");
         }
 
         function enterHistoryElementEditState(id) {
