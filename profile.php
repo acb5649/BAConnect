@@ -605,16 +605,6 @@ function formatPendingMentorships($profile_account_id) {
     <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script>
-        // Used to toggle the menu on small screens when clicking on the menu button
-        function toggleNav() {
-            let x = document.getElementById("navMobile");
-            if (x.className.indexOf("w3-show") == -1) {
-                x.className += " w3-show";
-            } else {
-                x.className = x.className.replace(" w3-show", "");
-            }
-        }
-
         function init() {
 
         }

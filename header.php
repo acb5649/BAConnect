@@ -11,6 +11,15 @@ require_once "session.php";
             x.className = x.className.replace(" w3-show", "");
         }
     }
+
+    function toggleNav() {
+        let x = document.getElementById("navMobile");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+        }
+    }
 </script>
 
 <?php
