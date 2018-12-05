@@ -24,7 +24,7 @@ function formatSearch() {
 	if ($type == 1) {
 		$tableColumns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
 	} elseif ($type > 1) {
-		$tableColumns = array('account_ID', 'state', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'gender_desc', 'email_address', 'phone_number', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields', 'registration_date');
+		$tableColumns = array('account_ID', 'state', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'dob', 'gender_desc', 'email_address', 'phone_number', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields', 'registration_date');
 	}
 	$result = "<table id='searchResults' class='display'><thead><tr>";
 	foreach($tableColumns as $column) {
@@ -49,7 +49,6 @@ function formatSearch() {
 
 	return $result;
 }
-
 ?>
 	<!-- name, email, location stuff, mentor/mentee, gender, working professional/student, phone number, username -->
 <!-- template from: https://www.w3schools.com/w3css/w3css_templates.asp -->
