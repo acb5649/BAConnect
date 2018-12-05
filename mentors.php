@@ -26,68 +26,20 @@ require_once "card.php";
 
 </div>
 </body>
+<script src="js/search.js"></script>
 <script>
-    var offset = 0;
-
-    function continuallyLoadCards(num) {
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                let array = JSON.parse(this.responseText);
-                //console.log(array);
-                cardAjax(array);
-            }
-        };
-        let params = "action=loadCards&num=" + num +"&offset=" + offset + "&pref=0";
-        xmlhttp.open("POST", "search.php", true);
-        xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xmlhttp.send(params);
-        offset += num;
-    }
-
-    continuallyLoadCards(30);
-
-    function searchCards(num, startOver) {
-        if (startOver) {
-            document.getElementById("cardDisplay").innerHTML = "";
-            offset = 0;
-        }
-
-        let term = document.getElementById("searchBox").value;
-        if (term === "") {
-            continuallyLoadCards(30);
-            return;
-        }
-
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                let array = JSON.parse(this.responseText);
-                //console.log(array);
-                //cardAjax([...new Set(array)]);
-                cardAjax(array);
-            }
-        };
-
-        let params = "action=loadCards&num=" + num +"&offset=" + offset + "&search=" + term + "&pref=0";
-        xmlhttp.open("POST", "search.php", true);
-        xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xmlhttp.send(params);
-        offset += num;
-    }
-
     $(window).on("load", function(){
+        continuallyLoadCards(30, 0);
         $(window).on("scroll", function(){
             if (($(window).scrollTop() - ($(document).height() - $(window).height()) <= 5) && ($(window).scrollTop() - ($(document).height() - $(window).height()) >= -5)) {
                 let term = document.getElementById("searchBox").value;
                 if (term == "") {
-                    continuallyLoadCards(10);
+                    continuallyLoadCards(10, 0);
                 } else {
-                    searchCards(10, false);
+                    searchCards(10, false, 0);
                 }
             }
         });
     });
-
 </script>
 </html>
