@@ -23,11 +23,13 @@ function formatSearch() {
 	global $type;
 	if ($type == 1) {
 		$tableColumns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
+		$tableNames = array('Country', 'State', 'City', 'Post Code', 'First Name', 'Middle Name', 'Last Name', 'Gender', 'Facebook', 'Linkedin', 'Twitter', 'Institutions', 'Majors', 'Degrees', 'Employers', 'Professional Fields');
 	} elseif ($type > 1) {
-		$tableColumns = array('account_ID', 'state', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'dob', 'gender_desc', 'email_address', 'phone_number', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields', 'registration_date');
+		$tableColumns = array('account_ID', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'dob', 'gender_desc', 'email_address', 'phone_number', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields', 'registration_date');
+        $tableNames = array('account_ID', 'Country', 'State', 'City', 'Post Code', 'Street Address 1', 'Street Address 2', 'Username', 'Frozen', 'First Name', 'Middle Name', 'Last Name', 'Birth Date', 'Gender', 'Email Address', 'Phone Number', 'Facebook', 'Linkedin', 'Twitter', 'Institutions', 'Majors', 'Degrees', 'Employers', 'Professional Fields', 'Registration Date');
 	}
 	$result = "<table id='searchResults' class='display'><thead><tr>";
-	foreach($tableColumns as $column) {
+	foreach($tableNames as $column) {
 		$result .= "<th>" . $column . "</th>";
 	}
 	$result .= "</tr></thead><tbody>";
@@ -40,7 +42,7 @@ function formatSearch() {
 	}
 	$result .= "</tbody>";
 	$result .= "<tfoot><tf>";
-	foreach($tableColumns as $column) {
+	foreach($tableNames as $column) {
 		$result .= "<th>" . $column . "</th>";
 	}
 	$result .= "</tf></tfoot>";
@@ -61,8 +63,7 @@ function formatSearch() {
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
-	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
