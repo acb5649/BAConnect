@@ -994,7 +994,7 @@ function formatPendingMentorships($profile_account_id) {
                         echo '<p class="w3-display-container" id="profile_privilege"><i class="fa fa-lock fa-fw w3-margin-right w3-large w3-text-lime"></i>' . putItInASpan(getPrivilege($profile_account_id)) . makeEditable($allowEdit, "profile_privilege") . '</p>';
                     } ?>
 
-                    <?php if (isset($_SESSION["account_ID"]) && $_SESSION["profile_ID"] != $_SESSION["account_ID"]) {
+                    <?php if (isset($_SESSION["account_ID"]) && $profile_account_id != $_SESSION["account_ID"]) {
                         $disabled = "";
                         if (hasAlreadySentRequest($profile_account_id)) { $disabled = "disabled=''"; }
                         echo "<hr><button id='request' " . $disabled . " class='w3-button w3-block w3-dark-grey w3-margin-bottom' onclick='sendMentorshipRequest()'>+ Connect</button>";
@@ -1005,7 +1005,7 @@ function formatPendingMentorships($profile_account_id) {
                         echo '<hr><p class="w3-display-container" id="profile_resume"><button class="w3-button w3-half w3-lime w3-cell" type="button" name="upload" onclick="document.getElementById(\'uploadResumeModal\').style.display=\'block\'">Upload Resume</button><a class="w3-button w3-half w3-lime w3-cell" type="button" name="download" href="resume.php">Download Resume</a><br>';
                     } ?>
 
-                    <?php if (isset($_SESSION["account_ID"]) && getAccountTypeFromAccountID($_SESSION["account_ID"]) > 1) {
+                    <?php if (isset($_SESSION["account_ID"]) && $type > 1) {
                         echo "<div id='adminActionBox'>";
                         echo formatAdminPairingBox();
                         echo "</div>";

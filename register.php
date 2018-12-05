@@ -85,7 +85,7 @@ if(isset($_SESSION['email'])){
             <p>
                 <label>Date of Birth</label>
             </p>
-            <input class="w3-input w3-border" type="date" name="dob" required>
+            <input class="w3-input w3-border" type="text" name="dob" id="dob" required>
 
             <p>
                 <label>Phone number<span class="w3-text-red">*</span></label>
@@ -161,14 +161,14 @@ if(isset($_SESSION['email'])){
     </div>
 </div>
 
-<!-- polyfill for browsers that don't support date entry -->
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="http://cdn.jsdelivr.net/webshim/1.12.4/extras/modernizr-custom.js"></script>
-<script src="http://cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-    webshims.setOptions('waitReady', false);
-    webshims.setOptions('forms-ext', {type: 'date'});
-    webshims.setOptions('forms-ext', {type: 'time'});
-    webshims.polyfill('forms forms-ext');
+    $(function() {
+        $("#dob").datepicker({
+            changeYear: true,
+            dateFormat: "yy-mm-dd",
+            yearRange: "1940:2018"
+        });
+    });
 </script>

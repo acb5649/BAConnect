@@ -98,7 +98,7 @@ class User extends Account {
         if (!is_null($this->address)) {
             return $this->address->city . ", " . $this->address->state;
         } else {
-            return "Over the Rainbow";
+            return "";
         }
     }
 
