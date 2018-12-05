@@ -93,7 +93,7 @@ if (isset($_SESSION["account_ID"])) {
     }
 }
 
-if (isset($_POST['delete']) && isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
+if (isset($_POST['delete']) && !isset($_POST['submit']) && isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
     if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
         deleteAccount($profile_account_id);
 
@@ -478,7 +478,7 @@ function formatDegreesEditable($degrees, $profile_account_ID) {
         $result .= '<input type="hidden" id="degree_ID" name="degree_ID" value="' . $degree[4] . '">';
         $result .= '<input type="hidden" id="user" name="user" value="' . $profile_account_ID . '">';
         $result .= '<button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Edit</button>';
-        $result .= '<button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button>';
+        $result .= '<button type="button" class="w3-button w3-third w3-red w3-section" onclick="deleteHistoryItem(\'degree\', ' . $degree[4] . ')">Delete</button>';
         $result .= '<hr></form>';
     }
     return $result;
@@ -513,7 +513,7 @@ function formatJobsEditable($jobs, $profile_account_ID) {
         $result .= '<input type="hidden" id="job_ID" name="job_ID" value="' . $job[4] . '">';
         $result .= '<input type="hidden" id="user" name="user" value="' . $profile_account_ID . '">';
         $result .= '<button type="submit" name="submit" class="w3-button w3-third w3-lime w3-section">Edit</button>';
-        $result .= '<button type="button" class="w3-button w3-third w3-red w3-section" onclick="">Delete</button>';
+        $result .= '<button type="button" class="w3-button w3-third w3-red w3-section" onclick="deleteHistoryItem(\'job\', ' . $job[4] . ')">Delete</button>';
         $result .= '<hr></form>';
     }
     return $result;
@@ -797,6 +797,32 @@ function formatPendingMentorships($profile_account_id) {
             };
             xmlhttp.open("GET", "profile.php?action=addEmptyDegree&user=<?php echo $profile_account_id?>", true);
             xmlhttp.send();
+        }
+
+        function deleteHistoryItem(type, id) {
+            if (type == "job") {
+                let xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        //document.getElementById("jobs").innerHTML = this.responseText;
+                    }
+                };
+
+                xmlhttp.open("POST", "profile.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("submit=&delete=&job_id=" + id);
+            } else if (type == "degree") {
+                let xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        //document.getElementById("degrees").innerHTML = this.responseText;
+                    }
+                };
+
+                xmlhttp.open("POST", "profile.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("submit=&delete=&degree_id=" + id);
+            }
         }
 
         function exitEditState(id) {
