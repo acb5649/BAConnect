@@ -7,7 +7,7 @@ if (isset($_POST['register'])) {
     $error = false;
     $msg = "";
 
-    $requiredPOSTFieldNames = array('password', 'confirmedPassword', 'username', 'firstName', 'lastName', 'email', 'gender', 'phoneNumber', 'status', 'preference', 'state', 'country', 'numDegs', 'numJobs');
+    $requiredPOSTFieldNames = array('password', 'confirmedPassword', 'username', 'firstName', 'lastName', 'email', 'gender', 'phoneNumber', 'status', 'preference', 'state', 'country', 'numDegs', 'numJobs', 'dob');
     $optionalPOSTFieldNames = array('middleName', 'street', 'street2', 'city', 'postcode', 'facebook', 'twitter', 'linkedin');
 
     foreach ($requiredPOSTFieldNames as $req) {
@@ -145,7 +145,7 @@ if (isset($_POST['register'])) {
     $con = null;
 
     if ($error == false) {
-        $user = new User($_SESSION['username'], $_SESSION['password'], $_SESSION['firstName'], $_SESSION['middleName'], $_SESSION['lastName'], $_SESSION['email'], $_SESSION['gender'], $_SESSION['phoneNumber'], $_SESSION['status'], $_SESSION['preference']);
+        $user = new User($_SESSION['username'], $_SESSION['password'], $_SESSION['firstName'], $_SESSION['middleName'], $_SESSION['lastName'], $_SESSION['email'], $_SESSION['gender'], $_SESSION['phoneNumber'], $_SESSION['status'], $_SESSION['preference'], $_SESSION['dob']);
         $address = new Address($_SESSION['street'], $_SESSION['street2'], $_SESSION['city'], $_SESSION['postcode'], $_SESSION['state'], $_SESSION['country']);
         registerUser($user, $address, $degree, $work, $picturePath, $resumePath);
         //header("Location: created.php");

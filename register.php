@@ -83,6 +83,11 @@ if(isset($_SESSION['email'])){
             <input class="w3-input w3-border" type="text" maxlength="50" value="" name="postcode" id="postcode"/>
 
             <p>
+                <label>Date of Birth</label>
+            </p>
+            <input class="w3-input w3-border" type="date" name="dob" required>
+
+            <p>
                 <label>Phone number<span class="w3-text-red">*</span></label>
             </p>
             <input class="w3-input w3-border" type="tel" value="" name="phoneNumber"/>
@@ -155,3 +160,15 @@ if(isset($_SESSION['email'])){
         </form>
     </div>
 </div>
+
+<!-- polyfill for browsers that don't support date entry -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.jsdelivr.net/webshim/1.12.4/extras/modernizr-custom.js"></script>
+<script src="http://cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"></script>
+<script>
+    webshims.setOptions('waitReady', false);
+    webshims.setOptions('forms-ext', {type: 'date'});
+    webshims.setOptions('forms-ext', {type: 'time'});
+    webshims.polyfill('forms forms-ext');
+</script>

@@ -20,10 +20,11 @@ class User extends Account {
     public $phoneNumber;
     public $status;
     public $preference;
+    public $dob;
 
     public $address;
 
-    function __construct($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phoneNumber, $status, $preference, $address = null) {
+    function __construct($username, $password, $firstName, $middleName, $lastName, $email, $gender, $phoneNumber, $status, $preference, $dob, $address = null) {
         parent::__construct($username, $password);
 
         $this->firstName = $firstName;
@@ -34,6 +35,7 @@ class User extends Account {
         $this->phoneNumber = $phoneNumber;
         $this->status = $status;
         $this->preference = $preference;
+        $this->dob = $dob;
 
         $this->address = $address;
     }
@@ -47,13 +49,20 @@ class User extends Account {
         $con = null;
         if ($row != null) {
             $addr = new Address($row['street_address'], $row['street_address2'], $row['city'], $row['post_code'], $row['state_name'], $row['country']);
-            return new self($row['username'], $row['password'], $row['first_name'], $row['middle_name'], $row['last_name'], $row['email_address'], $row['gender'], $row['phone_number'], $row['status'], $addr);
+            return new self($row['username'], $row['password'], $row['first_name'], $row['middle_name'], $row['last_name'], $row['email_address'], $row['gender'], $row['phone_number'], $row['status'], $row['dob'], $addr);
         } else {
-            $addr = new Address("", "", "", "", 1, 1);
-            updateUserAddress($account_id, $addr);
-            registerNewPhoneNumber($account_id, 0);
+            $con = Connection::connect();
+            $stmt = $con->prepare("SELECT * FROM Account where account_ID = ?");
+            $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $acc = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            return User::fromID($account_id);
+            $stmt = $con->prepare("SELECT * FROM Information where account_ID = ?");
+            $stmt->bindValue(1, $account_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $info = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return new self($acc['username'], $acc['password'], $info['first_name'], $info['middle_name'], $info['last_name'], $info['email_address'], $info['gender'], $info['phone_number'], $info['status'], $info['dob']);
         }
     }
 
@@ -89,7 +98,7 @@ class User extends Account {
         if (!is_null($this->address)) {
             return $this->address->city . ", " . $this->address->state;
         } else {
-            return "";
+            return "Over the Rainbow";
         }
     }
 
