@@ -22,13 +22,9 @@ function formatSearch() {
 	$users = getSearchResults();
 	global $type;
 	if ($type == 1) {
-		$tableColumns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
-	}
-	elseif ($type == 2) {
-		$tableColumns = array('account_ID', 'state', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'gender_desc', 'email_address', 'phone_number', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
-	}
-	elseif ($type == 3) {
-		$tableColumns = array('account_ID', 'state', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'gender_desc', 'email_address', 'phone_number', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
+		$tableColumns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
+	} elseif ($type > 1) {
+		$tableColumns = array('account_ID', 'state', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'gender_desc', 'email_address', 'phone_number', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields', 'registration_date');
 	}
 	$result = "<table id='searchResults' class='display'><thead><tr>";
 	foreach($tableColumns as $column) {
