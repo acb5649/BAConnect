@@ -9,6 +9,7 @@ if (isset($_REQUEST["action"]) || isset($_REQUEST["delete"])) {
     if (isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
         if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
             // user is editing own account
+            $allowEdit = TRUE;
             $profile_account_id = $_SESSION["profile_ID"];
         } elseif ($type > 2) {
             // user is an admin, not a coordinator, performing an edit action
@@ -355,12 +356,12 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "addEmptyDegree") {
 }
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == "getFormattedDegrees") {
-    echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>' . formatDegrees(getDegrees($profile_account_id)) . makeHistoryElementEditable($allowEdit, "degrees");
+    echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>' . formatDegrees(getDegrees($profile_account_id)) . makeHistoryElementEditable(true, "degrees");
     die();
 }
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == "getFormattedJobs") {
-    echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>' . formatJobs(getJobs($profile_account_id)) . makeHistoryElementEditable($allowEdit, "jobs");
+    echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>' . formatJobs(getJobs($profile_account_id)) . makeHistoryElementEditable(true, "jobs");
     die();
 }
 
@@ -450,7 +451,7 @@ function formatDegrees($degrees) {
     $result = "";
     foreach($degrees as $degree) {
         $result .= '<hr><div class="w3-container w3-margin-bottom"><h5 class="w3-opacity">';
-        $result .= $degree[1] . " / " . $degree[0];
+        $result .= $degree[5] . " in " . $degree[1] . " / " . $degree[0];
         $result .= '</h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
         $result .= $degree[3] . " - " . $degree[2];
         $result .= '</h6></div>';
@@ -751,9 +752,9 @@ function formatPendingMentorships($profile_account_id) {
             };
 
             if (id == "jobs") {
-                xmlhttp.open("GET", "profile.php?action=getEditableFormattedJobs&user=<?php echo $profile_account_id?>" , true);
+                xmlhttp.open("GET", "profile.php?action=getEditableFormattedJobs", true);
             } else if (id == "degrees") {
-                xmlhttp.open("GET", "profile.php?action=getEditableFormattedDegrees&user=<?php echo $profile_account_id?>", true);
+                xmlhttp.open("GET", "profile.php?action=getEditableFormattedDegrees", true);
             }
 
             xmlhttp.send();
@@ -768,9 +769,9 @@ function formatPendingMentorships($profile_account_id) {
             };
 
             if (id == "jobs") {
-                xmlhttp.open("GET", "profile.php?action=getFormattedJobs&user=<?php echo $profile_account_id?>", true);
+                xmlhttp.open("GET", "profile.php?action=getFormattedJobs", true);
             } else if (id == "degrees") {
-                xmlhttp.open("GET", "profile.php?action=getFormattedDegrees&user=<?php echo $profile_account_id?>", true);
+                xmlhttp.open("GET", "profile.php?action=getFormattedDegrees", true);
             }
 
             xmlhttp.send();

@@ -9,8 +9,8 @@ function formatDegreesAndJobs($degrees, $jobs) {
     $result = "";
 
     foreach($degrees as $degree) {
-        $result = $result . "<p style='margin:0.5em;'><span class='w3-text-lime'><i class='fa fa-graduation-cap'></i><b> " . $degree[3] . "-" .$degree[2] . "</b></span> " . $degree[1] ."</p>";
-        $result = $result . "<p style='margin:0.5em;'>" . $degree[0] . "</p>";
+        $result = $result . "<p style='margin:0.5em;'><span class='w3-text-lime'><i class='fa fa-graduation-cap'></i><b> " . $degree[3] . "-" .$degree[2] . "</b></span> " . $degree[0] ."</p>";
+        $result = $result . "<p style='margin:0.5em;'><span class=''><b>" . $degree[5] . "</b></span> in " . $degree[1] . "</p>";
     }
 
     if (count($jobs) == 0) {

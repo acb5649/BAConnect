@@ -716,7 +716,12 @@ function getDegrees($account_id) {
 
     $degrees = array();
     foreach ($result as $degree) {
-        array_push($degrees, array($degree['school'], $degree['major'], $degree['graduation_year'], $degree['enrollment_year'], $degree['degree_ID']));
+        $stmt = $con->prepare("SELECT degree FROM `Degree Types` where degree_type_id = ?");
+        $stmt->bindValue(1, $degree['degree_type_ID'], PDO::PARAM_INT);
+        $stmt->execute();
+        $deg_type = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        array_push($degrees, array($degree['school'], $degree['major'], $degree['graduation_year'], $degree['enrollment_year'], $degree['degree_ID'], $deg_type['degree']));
     }
     $con = null;
     return $degrees;
