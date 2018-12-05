@@ -58,6 +58,13 @@ if(isset($_SESSION["profile_ID"])){
 
     if($result != null){
         $con = null;
+
+        $_SESSION['title'] = "Invalid Profile";
+        $_SESSION['msg'] = "I'm sorry, but that profile has been deleted.";
+        $_SESSION['nextModal'] = "";
+        $_SESSION['success'] = FALSE;
+        $_SESSION['inputs'] = null;
+
         header("Location: index.php");
         die();
     }
