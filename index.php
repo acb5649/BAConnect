@@ -242,6 +242,7 @@ if(isset($_REQUEST['match']) && isset($_REQUEST['mentor']) && isset($_REQUEST['m
 
 </div>
 </body>
+<script src="js/search.js"></script>
 <script>
     $(window).on("load", function(){
         continuallyLoadCards(30, -1);
