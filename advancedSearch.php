@@ -10,7 +10,7 @@ if ($type < 1) {
 function getSearchResults() {
 	$con = Connection::connect();
 
-	$stmt = $con->prepare("SELECT * FROM UserAddressGenderJobsDegreesView");
+	$stmt = $con->prepare("SELECT * FROM `UserAddressGenderJobsDegreesView` WHERE active = 1");
 	$stmt->execute();
 	$list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -97,7 +97,7 @@ function formatSearch() {
 					}' ?>
 				]
 			});
-			
+
 			table.columns().every( function () {
 				var that = this;
 
@@ -127,4 +127,3 @@ function formatSearch() {
 
 </body>
 </html>
-
