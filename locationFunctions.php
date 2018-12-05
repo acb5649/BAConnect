@@ -482,7 +482,7 @@ function editState($newName, $ID){
         return $report;
     }
 
-    if($stateName == ""){
+    if($newName == ""){
         $report = new Report("Invalid State Name", "Please enter a state name", "addState", FALSE);
         return $report;
     }
