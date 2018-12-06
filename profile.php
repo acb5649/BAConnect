@@ -235,6 +235,9 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
             $stmt = $con->prepare("DELETE FROM `Job History` where job_ID = ?");
             $stmt->bindValue(1, Input::int($_POST['job_ID']), PDO::PARAM_INT);
             $stmt->execute();
+            $con = null;
+            echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Work Experience</h2>' . formatJobs(getJobs($profile_account_id)) . makeHistoryElementEditable(true, "jobs");
+            die();
         } else {
             if ($_POST['job_ID'] == -1) {
                 // adding new degree
@@ -264,6 +267,9 @@ if (isset($_POST['submit']) && isset($_FILES['profile'])) {
             $stmt = $con->prepare("DELETE FROM `Degrees` where degree_ID = ?");
             $stmt->bindValue(1, Input::int($_POST['degree_ID']), PDO::PARAM_INT);
             $stmt->execute();
+            $con = null;
+            echo '<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-lime"></i>Education</h2>' . formatDegrees(getDegrees($profile_account_id)) . makeHistoryElementEditable(true, "degrees");
+            die();
         } else {
             if ($_POST['degree_ID'] == -1) {
                 // adding new degree
@@ -802,7 +808,8 @@ function formatPendingMentorships($profile_account_id) {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
-                        location.reload();
+                        //location.reload();
+                        document.getElementById("jobs").innerHTML = this.responseText;
                     }
                 };
 
@@ -813,7 +820,8 @@ function formatPendingMentorships($profile_account_id) {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
-                        location.reload();
+                        //location.reload();
+                        document.getElementById("degrees").innerHTML = this.responseText;
                     }
                 };
 
