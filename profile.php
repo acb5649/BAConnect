@@ -804,24 +804,24 @@ function formatPendingMentorships($profile_account_id) {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
-                        //document.getElementById("jobs").innerHTML = this.responseText;
+                        location.reload();
                     }
                 };
 
                 xmlhttp.open("POST", "profile.php", true);
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlhttp.send("submit=&delete=&job_id=" + id);
+                xmlhttp.send("submit=&delete=&job_ID=" + id);
             } else if (type == "degree") {
                 let xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
-                        //document.getElementById("degrees").innerHTML = this.responseText;
+                        location.reload();
                     }
                 };
 
                 xmlhttp.open("POST", "profile.php", true);
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlhttp.send("submit=&delete=&degree_id=" + id);
+                xmlhttp.send("submit=&delete=&degree_ID=" + id);
             }
         }
 
