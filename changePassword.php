@@ -27,7 +27,7 @@ if (isset($_POST['submit'])) {
 
     //$email = urlencode($email);
 
-    if (($pw_1 == $pw_2) && ($email == $_SESSION['email'])) {
+    if (($pw_1 == $pw_2) && (strcasecmp($email, $_SESSION['email']) === 0)) {
         $report = changePassword($_SESSION['email'], $_SESSION['code'], $pw_1);
         unset($_SESSION['email']);
         unset($_SESSION['code']);
@@ -49,7 +49,7 @@ if (isset($_POST['submit'])) {
 
         if($pw_1 != $pw_2){
             $_SESSION['msg'] = "Passwords were not the same";
-        } else if($email != $_SESSION['email']){
+        } else if(strcasecmp($email, $_SESSION['email']) != 0) {
             $_SESSION['msg'] = "Incorrect Email: " . $email . " does not match " . $_SESSION['email'];
         } else {
             $_SESSION['msg'] = "An unknown error has occured";
