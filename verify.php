@@ -8,7 +8,7 @@ $verifyType = filter_input(INPUT_GET, "type");
 
 if ($code && $email) {
     if ($verifyType == "reg") {
-        if (verifyCode($code, $email)) {
+        if (verifyCode($code, $email, 'reg')) {
             $con = Connection::connect();
             $stmt = $con->prepare("select account_ID from Information where email_address = ?");
             $stmt->bindValue(1, $email, PDO::PARAM_STR);
@@ -45,7 +45,7 @@ if ($code && $email) {
             die;
         }
     } elseif ($verifyType == "reset") {
-        if (verifyCode($code, $email)) {
+        if (verifyCode($code, $email, 'reset')) {
             $_SESSION['email'] = $email;
             $_SESSION['code'] = $code;
             header("Location: changePassword.php");

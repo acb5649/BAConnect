@@ -205,7 +205,7 @@ function resetPassword($email) {
 }
 
 function changePassword($email, $code, $newPassword) {
-    if (verifyCode($code, $email)) {
+    if (verifyCode($code, $email, 'reset')) {
         $con = Connection::connect();
         if($con == null){
             $report = new Report("Database Error", "Could not secure connection.", "changePassModal", FALSE);
@@ -314,20 +314,33 @@ function makeCode($email) {
     return hash('md5', $email) . substr(str_shuffle(str_repeat($x='0123456789abcdef', ceil(18/strlen($x)) )), 1, 18);
 }
 
-function verifyCode($code, $email) {
+function verifyCode($code, $email, $type) {
     $hash = hash('md5', $email);
     $codeHash = substr($code, 0, 32);
 
     if ($hash == $codeHash) {
-        $con = Connection::connect();
-        $stmt = $con->prepare("select account_ID from `Password Recovery` where code = ?");
-        $stmt->bindValue(1, $code, PDO::PARAM_STR);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if($row == null){
-            return false;
-        } else {
-            return true;
+        if ($type == 'reset') {
+            $con = Connection::connect();
+            $stmt = $con->prepare("select account_ID from `Password Recovery` where code = ?");
+            $stmt->bindValue(1, $code, PDO::PARAM_STR);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if($row == null){
+                return false;
+            } else {
+                return true;
+            }
+        } elseif ($type == 'reg') {
+            $con = Connection::connect();
+            $stmt = $con->prepare("select account_ID from `Registration` where registration_code = ?");
+            $stmt->bindValue(1, $code, PDO::PARAM_STR);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if($row == null){
+                return false;
+            } else {
+                return true;
+            }
         }
     } else {
         return false;
