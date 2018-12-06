@@ -317,7 +317,21 @@ function makeCode($email) {
 function verifyCode($code, $email) {
     $hash = hash('md5', $email);
     $codeHash = substr($code, 0, 32);
-    return ($hash == $codeHash);
+
+    if ($hash == $codeHash) {
+        $con = Connection::connect();
+        $stmt = $con->prepare("select account_ID from `Password Recovery` where code = ?");
+        $stmt->bindValue(1, $code, PDO::PARAM_STR);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($row == null){
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 
 function deleteAccount($account_id){
