@@ -3,7 +3,7 @@
 
     require_once "session.php";
 
-    if($type < 3){
+    if($type < 2){
         header("Location:index.php");
         die;
     }
