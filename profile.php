@@ -457,7 +457,13 @@ function formatDegrees($degrees) {
         $result .= '<hr><div class="w3-container w3-margin-bottom"><h5 class="w3-opacity">';
         $result .= $degree[5] . " in " . $degree[1] . " / " . $degree[0];
         $result .= '</h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
-        $result .= $degree[3] . " - " . $degree[2];
+        if($degree[2] == 0000){
+            $result .= $degree[3] . " - present";
+        }
+        else{
+            $result .= $degree[3] . " - " . $degree[2];
+        }
+
         $result .= '</h6></div>';
     }
     return $result;
