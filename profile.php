@@ -5,7 +5,7 @@ require_once "database.php";
 $allowEdit = FALSE;
 $trustedUser = FALSE;
 
-if (isset($_REQUEST["action"]) || isset($_REQUEST["delete"])) {
+if (isset($_REQUEST["action"]) || isset($_REQUEST["delete"]) || isset($_POST['submit'])) {
     if (isset($_SESSION["profile_ID"]) && isset($_SESSION["account_ID"])) {
         if ($_SESSION["profile_ID"] == $_SESSION["account_ID"]) {
             // user is editing own account
