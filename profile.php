@@ -494,7 +494,11 @@ function formatJobs($jobs) {
         $result .= '<hr><div class="w3-container w3-margin-bottom"><h5 class="w3-opacity">';
         $result .= $job[1] . " / " . $job[0];
         $result .= '</h5><h6 class="w3-text-lime"><i class="fa fa-calendar fa-fw w3-margin-right"></i>';
-        $result .= $job[2] . " - " . $job[3];
+        if ($job[3] == 0000) {
+            $result .= $job[2] . " - present";
+        } else {
+            $result .= $job[2] . " - " . $job[3];
+        }
         $result .= '</h6></div>';
     }
     return $result;
