@@ -22,11 +22,11 @@ function formatSearch() {
 	$users = getSearchResults();
 	global $type;
 	if ($type == 1) {
-		$tableColumns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
-		$tableNames = array('Country', 'State', 'City', 'Post Code', 'First Name', 'Middle Name', 'Last Name', 'Gender', 'Facebook', 'Linkedin', 'Twitter', 'Institutions', 'Majors', 'Degrees', 'Employers', 'Professional Fields');
+		$tableColumns = array('country', 'state_name', 'city', 'post_code', 'first_name', 'middle_name', 'last_name', 'gender_desc', 'status', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields');
+		$tableNames = array('Country', 'State', 'City', 'Post Code', 'First Name', 'Middle Name', 'Last Name', 'Gender', 'Status', 'Facebook', 'Linkedin', 'Twitter', 'Institutions', 'Majors', 'Degrees', 'Employers', 'Professional Fields');
 	} elseif ($type > 1) {
-		$tableColumns = array('account_ID', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'dob', 'gender_desc', 'email_address', 'phone_number', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields', 'registration_date');
-        $tableNames = array('account_ID', 'Country', 'State', 'City', 'Post Code', 'Street Address 1', 'Street Address 2', 'Username', 'Frozen', 'First Name', 'Middle Name', 'Last Name', 'Birth Date', 'Gender', 'Email Address', 'Phone Number', 'Facebook', 'Linkedin', 'Twitter', 'Institutions', 'Majors', 'Degrees', 'Employers', 'Professional Fields', 'Registration Date');
+		$tableColumns = array('account_ID', 'country', 'state_name', 'city', 'post_code', 'street_address', 'street_address2', 'username', 'frozen', 'first_name', 'middle_name' ,'last_name', 'dob', 'gender_desc', 'status', 'email_address', 'phone_number', 'facebook', 'linkedin', 'twitter', 'schools', 'majors', 'degrees', 'employers', 'profession_fields', 'registration_date');
+        $tableNames = array('account_ID', 'Country', 'State', 'City', 'Post Code', 'Street Address 1', 'Street Address 2', 'Username', 'Frozen', 'First Name', 'Middle Name', 'Last Name', 'Birth Date', 'Gender', 'Status', 'Email Address', 'Phone Number', 'Facebook', 'Linkedin', 'Twitter', 'Institutions', 'Majors', 'Degrees', 'Employers', 'Professional Fields', 'Registration Date');
 	}
 	$result = "<table id='searchResults' class='display'><thead><tr>";
 	foreach($tableNames as $column) {
@@ -36,7 +36,15 @@ function formatSearch() {
 	foreach($users as $user) {
 		$result .= '<tr>';
 		foreach($tableColumns as $column) {
-			$result .= '<th><h6><a href="profile.php?user=' . $user['account_ID'] . '">' . $user[$column] . '</a></h6></th>';
+		    if ($column == 'status') {
+		        $status = "Student";
+		        if ($user[$column] == 1) {
+                    $status = "Working Professional";
+                }
+                $result .= '<th><h6><a href="profile.php?user=' . $user['account_ID'] . '">' . $status . '</a></h6></th>';
+            } else {
+                $result .= '<th><h6><a href="profile.php?user=' . $user['account_ID'] . '">' . $user[$column] . '</a></h6></th>';
+            }
 		}
 		$result .= '</tr>';
 	}
