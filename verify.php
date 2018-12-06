@@ -45,10 +45,22 @@ if ($code && $email) {
             die;
         }
     } elseif ($verifyType == "reset") {
-        $_SESSION['email'] = $email;
-        $_SESSION['code'] = $code;
-        header("Location: changePassword.php");
-        die();
+        if (verifyCode($code, $email)) {
+            $_SESSION['email'] = $email;
+            $_SESSION['code'] = $code;
+            header("Location: changePassword.php");
+            die();
+        } else {
+            $report = new Report("Error", "Your activation code isn't valid. Your account may have already been activated.", "", FALSE);
+
+            $_SESSION['title'] = $report->title;
+            $_SESSION['msg'] = $report->msg;
+            $_SESSION['nextModal'] = $report->nextModal;
+            $_SESSION['success'] = $report->success;
+            $_SESSION['inputs'] = $report->inputs;
+            header("Location: index.php");
+            die;
+        }
     }
 } else {
 

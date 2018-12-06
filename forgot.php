@@ -3,15 +3,35 @@ require_once "database.php";
 require_once "session.php";
 
 if(isset($_POST["security"]) && isset($_POST["email"])){
-    $_SESSION['recovery_email'] = Input::email($_POST['email']);
-    $report = new Report("Security Audit", "Please answer your security questions to reset the account for " . $_SESSION['email'], "securityModal", true);
-    $_SESSION['title'] = $report->title;
-    $_SESSION['msg'] = $report->msg;
-    $_SESSION['nextModal'] = $report->nextModal;
-    $_SESSION['success'] = $report->success;
-    $_SESSION['inputs'] = $report->inputs;
-    header('Location: index.php');
-    die;
+
+    $email = Input::email($_POST["email"]);
+    $con = Connection::connect();
+    $stmt = $con->prepare("SELECT * FROM RecoveryQuestions WHERE account_ID = ?");
+    $stmt->bindValue(1, getAccountIDFromEmail($email), PDO::PARAM_STR);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+
+    if (count($result) > 0) {
+        $_SESSION['recovery_email'] = $email;
+        $report = new Report("Security Audit", "Please answer your security questions to reset the account for " . $email, "securityModal", true);
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        header('Location: index.php');
+        die;
+    } else {
+        $report = resetPassword($email);
+        $_SESSION['title'] = $report->title;
+        $_SESSION['msg'] = $report->msg;
+        $_SESSION['nextModal'] = $report->nextModal;
+        $_SESSION['success'] = $report->success;
+        $_SESSION['inputs'] = $report->inputs;
+        unset($_SESSION['recovery_email']);
+        header("Location: index.php");
+        die();
+    }
 }
 ?>
 

@@ -188,7 +188,7 @@ if (isset($_SESSION['recovery_email'])) {
             }
         }
         if ($continue != 0 || $countSet === 0) {
-            $report = resetPassword($_POST['email']);
+            $report = resetPassword($_SESSION['recovery_email']);
             $_SESSION['title'] = $report->title;
             $_SESSION['msg'] = $report->msg;
             $_SESSION['nextModal'] = $report->nextModal;
