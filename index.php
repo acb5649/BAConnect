@@ -35,11 +35,11 @@ if (isset($_POST['register'])) {
 
     $work = array();
     for ($jobNum = 0; $jobNum < $_SESSION['numJobs']; $jobNum++) {
-        foreach (array('employerName_' . $degreeNum, 'jobTitle' . $degreeNum, 'startYear_' . $degreeNum, 'endYear_' . $degreeNum) as $req) {
+        foreach (array('employerName_' . $jobNum, 'jobTitle_' . $jobNum, 'startYear_' . $jobNum, 'endYear_' . $jobNum) as $req) {
             $_SESSION[$req] = (isset($_REQUEST[$req]) ? $_SESSION[$req] = Input::str($_POST[$req]) : $_SESSION[$req] = "");
         }
-        if ($_SESSION['employerName_' . $degreeNum] != "" && $_SESSION['jobTitle' . $degreeNum] != "") {
-            $work[$jobNum] = new WorkHistoryEntry($_SESSION['employerName_' . $degreeNum], $_SESSION['jobTitle' . $degreeNum], $_SESSION['startYear_' . $degreeNum], $_SESSION['endYear_' . $degreeNum]);
+        if ($_SESSION['employerName_' . $jobNum] != "" && $_SESSION['jobTitle_' . $jobNum] != "") {
+            $work[$jobNum] = new WorkHistoryEntry($_SESSION['employerName_' . $jobNum], $_SESSION['jobTitle_' . $jobNum], $_SESSION['startYear_' . $jobNum], $_SESSION['endYear_' . $jobNum]);
         }
     }
 
