@@ -29,6 +29,8 @@ if (isset($_POST['submit'])) {
 
     if (($pw_1 == $pw_2) && ($email == $_SESSION['email'])) {
         $report = changePassword($_SESSION['email'], $_SESSION['code'], $pw_1);
+        unset($_SESSION['email']);
+        unset($_SESSION['code']);
         $_SESSION['title'] = $report->title;
         $_SESSION['msg'] = $report->msg;
         $_SESSION['nextModal'] = $report->nextModal;
@@ -48,7 +50,7 @@ if (isset($_POST['submit'])) {
         if($pw_1 != $pw_2){
             $_SESSION['msg'] = "Passwords were not the same";
         } else if($email != $_SESSION['email']){
-            $_SESSION['msg'] = "Incorrect Email";
+            $_SESSION['msg'] = "Incorrect Email: " . $email . " does not match " . $_SESSION['email'];
         } else {
             $_SESSION['msg'] = "An unknown error has occured";
         }

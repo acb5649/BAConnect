@@ -1,7 +1,7 @@
 <?php
 require_once "dbhelper.php";
 if(isset($_SESSION['email'])){
-    $_SESSION['email']= "";
+    //$_SESSION['email']= "";
 }
 ?>
 
